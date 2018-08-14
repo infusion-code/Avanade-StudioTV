@@ -4,9 +4,12 @@
     
         <StackLayout Orientation="Horizontal">
             <StackLayout Margin="1">
-                <Label Text="{Binding title}" MinimumHeightRequest="20" Margin="2" FontSize="15" LineBreakMode="WordWrap" FontAttributes="Bold" />
-                <Label Text="{Binding description}" LineBreakMode="WordWrap" Margin="2" HeightRequest="30" FontSize="12" FontAttributes="Italic" />
-            </StackLayout>
+                <Label Text="{Binding Title}" MinimumHeightRequest="20" Margin="2" FontSize="15" LineBreakMode="WordWrap" FontAttributes="Bold" />
+                <Image Source="{Binding Thumbnail[0].Url}" HeightRequest = "100" />
+                <Label Text="{Binding Description}" LineBreakMode="WordWrap" Margin="2" HeightRequest="30" FontSize="12" FontAttributes="Italic" />
+                <Label Text="{Binding Author}" LineBreakMode="WordWrap" Margin="2" HeightRequest="30" FontSize="12" FontAttributes="Italic" />
+        
+         </StackLayout>
             <StackLayout WidthRequest="10">
             </StackLayout>
         </StackLayout>

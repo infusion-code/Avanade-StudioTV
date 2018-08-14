@@ -15,7 +15,7 @@ namespace AvanadeStudioTV.Views
                 RSSFeedViewModelObject = new RSSFeedViewModel(Navigation);
 
 
-                Title = "RSS Feeds";
+                Title = "Avanade Studio TV";
                 BindingContext = RSSFeedViewModelObject;
             }
          

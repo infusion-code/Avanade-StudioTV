@@ -27,7 +27,7 @@ namespace AvanadeStudioTV.Network
             }
         }
 
-        public async Task<List<FeedItem>> GetSyncFeedAsync()
+        public async Task<List<Item>> GetSyncFeedAsync()
         {
             if (this.IsConnected())
             {
@@ -37,7 +37,7 @@ namespace AvanadeStudioTV.Network
                 String response_string = await response.Content.ReadAsStringAsync();
                 FeedItemParser parser = new FeedItemParser();
                 // List<FeedItem> list = await Task.Run(() => parser.ParseFeed(response_string));
-                List<FeedItem> list = await Task.Run(() => parser.ParseFeed(response_string));
+                List<Item> list = await Task.Run(() => parser.ParseFeed(response_string));
                 return list;
             }
             return null;

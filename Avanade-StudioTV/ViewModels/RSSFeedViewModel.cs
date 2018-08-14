@@ -9,7 +9,7 @@ namespace AvanadeStudioTV.ViewModels
 {
     public class RSSFeedViewModel : INotifyPropertyChanged
     {
-        public ObservableCollection<FeedItem> FeedList
+        public ObservableCollection<Item> FeedList
         {
             get => feedList;
             set
@@ -23,9 +23,9 @@ namespace AvanadeStudioTV.ViewModels
             }
         }
 
-        private FeedItem selectedItem = null;
+        private Item selectedItem = null;
         private INavigation Navigation;
-        public FeedItem SelectedItem
+        public Item SelectedItem
         {
             get => selectedItem;
             set
@@ -38,7 +38,7 @@ namespace AvanadeStudioTV.ViewModels
                 }
             }
         }
-        ObservableCollection<FeedItem> feedList = null;
+        ObservableCollection<Item> feedList = null;
         public event PropertyChangedEventHandler PropertyChanged;
 
         public RSSFeedViewModel(INavigation navigation)
@@ -50,8 +50,8 @@ namespace AvanadeStudioTV.ViewModels
         public async void GetNewsFeedAsync()
         {
             NetworkManager manager = NetworkManager.Instance;
-            List<FeedItem> list = await manager.GetSyncFeedAsync();
-            FeedList = new ObservableCollection<FeedItem>(list);
+            List<Item> list = await manager.GetSyncFeedAsync();
+            FeedList = new ObservableCollection<Item>(list);
         }
 
         protected void OnPropertyChanged(string propertyName)
