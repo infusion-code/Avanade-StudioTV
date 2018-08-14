@@ -5,19 +5,22 @@ namespace AvanadeStudioTV.Views
 {
     public partial class RSSReaderPage : ContentPage
     {
-        
-            RSSFeedViewModel RSSFeedViewModelObject;
 
-            public RSSReaderPage()
-            {
-                InitializeComponent();
+        RSSFeedViewModel RSSFeedViewModelObject;
 
-                RSSFeedViewModelObject = new RSSFeedViewModel(Navigation);
+        public RSSReaderPage(MasterPage Master)
+        {
+            InitializeComponent();
+
+            RSSFeedViewModelObject = new RSSFeedViewModel(Navigation, Master);
 
 
-                Title = "Avanade Studio TV";
-                BindingContext = RSSFeedViewModelObject;
-            }
-         
+            Title = "Avanade Studio TV";
+            BindingContext = RSSFeedViewModelObject;
+
+            this.IsBusy = true;
+        }
+
+
     }
 }

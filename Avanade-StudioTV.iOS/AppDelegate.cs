@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 
 using Foundation;
+using Octane.Xamarin.Forms.VideoPlayer.iOS;
 using UIKit;
 
 namespace Avanade_StudioTV.iOS
@@ -23,6 +24,11 @@ namespace Avanade_StudioTV.iOS
         public override bool FinishedLaunching(UIApplication app, NSDictionary options)
         {
             global::Xamarin.Forms.Forms.Init();
+
+            //TODO Trial Mode only allows 15 seconds of playback see
+            //https://github.com/adamfisher/Xamarin.Forms.VideoPlayer/blob/master/GettingStarted.md
+            FormsVideoPlayer.Init(); 
+
             LoadApplication(new App());
 
             return base.FinishedLaunching(app, options);

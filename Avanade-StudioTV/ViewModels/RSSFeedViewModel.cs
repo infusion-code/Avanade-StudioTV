@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using AvanadeStudioTV.Views;
 using AvanadeStudioTV.Models;
 using AvanadeStudioTV.Network;
 using Xamarin.Forms;
@@ -9,6 +10,9 @@ namespace AvanadeStudioTV.ViewModels
 {
     public class RSSFeedViewModel : INotifyPropertyChanged
     {
+       
+        public MasterPage Master { get; set; }
+
         public ObservableCollection<Item> FeedList
         {
             get => feedList;
@@ -23,6 +27,8 @@ namespace AvanadeStudioTV.ViewModels
             }
         }
 
+      
+
         private Item selectedItem = null;
         private INavigation Navigation;
         public Item SelectedItem
@@ -34,15 +40,16 @@ namespace AvanadeStudioTV.ViewModels
                 {
                     selectedItem = value;
                     OnPropertyChanged("SelectedItem");
-                    OpenWebPage();
+                    OpenVideoPage();
                 }
             }
         }
         ObservableCollection<Item> feedList = null;
         public event PropertyChangedEventHandler PropertyChanged;
 
-        public RSSFeedViewModel(INavigation navigation)
+        public RSSFeedViewModel(INavigation navigation, MasterPage master)
         {
+            this.Master = master;
             this.GetNewsFeedAsync();
             Navigation = navigation;
         }
@@ -59,11 +66,14 @@ namespace AvanadeStudioTV.ViewModels
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
-        private void OpenWebPage()
+        private void OpenVideoPage()
         {
-            //TODO 
-            //WebPage page = new WebPage(selectedItem.guid);
-           // Navigation.PushAsync(page);
+
+
+            this.Master.videoPage.PlayVideo(selectedItem.Enclosure.Url);
+            this.Master.videoPage.ForceLayout();
+
+
         }
     }
 }

@@ -7,6 +7,7 @@ using Android.Views;
 using Android.Widget;
 using Android.OS;
 using Android;
+using Octane.Xamarin.Forms.VideoPlayer.Android;
 
 namespace Avanade_StudioTV.Droid
 {
@@ -24,6 +25,10 @@ namespace Avanade_StudioTV.Droid
 
             //init libraries
             Xamarin.Essentials.Platform.Init(this, bundle);
+
+            //TODO Trial Mode only allows 15 seconds of playback see
+            //https://github.com/adamfisher/Xamarin.Forms.VideoPlayer/blob/master/GettingStarted.md
+            FormsVideoPlayer.Init(); 
 
             LoadApplication(new App());
         }

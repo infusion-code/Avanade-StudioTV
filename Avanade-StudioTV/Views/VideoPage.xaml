@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:o="clr-namespace:Octane.Xamarin.Forms.VideoPlayer;assembly=Octane.Xamarin.Forms.VideoPlayer"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" x:Class="AvanadeStudioTV.Views.VideoPage">
+   <!-- <ContentPage.Content>
+        <StackLayout Orientation = "Vertical"> 
+        <Image x:Name = "LaunchImage"  HeightRequest = "200" Source = "AvanadeLogoBig.jpg" />
+         <o:VideoPlayer x:Name="videoPlayer"  AutoPlay="True" IsVisible = "false" />
+          </StackLayout>
+    </ContentPage.Content> -->
+
+  <ContentPage.Content>
+    
+       <WebView x:Name = "VideoWebView" />
+        
+    </ContentPage.Content>
+</ContentPage>

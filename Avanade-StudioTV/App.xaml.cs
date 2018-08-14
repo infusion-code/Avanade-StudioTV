@@ -12,7 +12,7 @@ namespace Avanade_StudioTV
         {
             InitializeComponent();
 
-            MainPage = new NavigationPage(new RSSReaderPage());
+            MainPage = new MasterPage();
         }
 
         protected override void OnStart()

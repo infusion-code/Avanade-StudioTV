@@ -151,6 +151,9 @@
     <PackageReference Include="Xamarin.Essentials">
       <Version>0.9.1-preview</Version>
     </PackageReference>
+    <PackageReference Include="Octane.Xam.VideoPlayer">
+      <Version>2.2.0</Version>
+    </PackageReference>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.CSharp.targets" />
   <ItemGroup>
@@ -158,5 +161,8 @@
       <Project>{6A99738B-F702-4BB2-BA12-ECC87FD6B401}</Project>
       <Name>Avanade-StudioTV</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="Resources\AvanadeLogoBig.jpg" />
   </ItemGroup>
 </Project>
