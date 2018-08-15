@@ -8,7 +8,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Avanade-StudioTV.iOS", "Ava
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Avanade-StudioTV", "Avanade-StudioTV\Avanade-StudioTV.csproj", "{6A99738B-F702-4BB2-BA12-ECC87FD6B401}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Avanade-StudioTV.UWP", "..\Avanade-StudioTV.UWP\Avanade-StudioTV.UWP\Avanade-StudioTV.UWP.csproj", "{64D5C884-B01D-43C7-93F6-A25572E3DD5A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Avanade-StudioTV.UWP", "Avanade-StudioTV.UWP\Avanade-StudioTV.UWP\Avanade-StudioTV.UWP.csproj", "{64D5C884-B01D-43C7-93F6-A25572E3DD5A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
