@@ -142,7 +142,7 @@
     </PackageReference>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\Avanade-StudioTV\Avanade-StudioTV.csproj">
+    <ProjectReference Include="..\Avanade-StudioTV\Avanade-StudioTV.csproj">
       <Project>{6a99738b-f702-4bb2-ba12-ecc87fd6b401}</Project>
       <Name>Avanade-StudioTV</Name>
     </ProjectReference>
