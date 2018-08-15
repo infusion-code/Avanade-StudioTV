@@ -8,7 +8,7 @@
                 <Image Source ="AvanadeLogoBig.jpg" HeightRequest = "50" />
                 <Label Text="Video Playlist" LineBreakMode="WordWrap" Margin="2" HeightRequest="30" FontSize="10" FontAttributes="Italic" />
             </StackLayout>
-            <ListView x:Name="FeedListView" CachingStrategy="RecycleElement" SelectedItem="{Binding SelectedItem}" ItemsSource="{Binding FeedList}" HasUnevenRows="true">
+            <ListView x:Name="FeedListView" CachingStrategy="RecycleElement" SelectedItem="{Binding SelectedItem, Mode=TwoWay}" ItemsSource="{Binding FeedList}"  HasUnevenRows="true">
                 <ListView.ItemTemplate>
                     <DataTemplate>
                         <Cell:FeedCell>

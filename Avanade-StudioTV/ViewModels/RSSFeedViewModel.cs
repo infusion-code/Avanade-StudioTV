@@ -5,6 +5,7 @@ using AvanadeStudioTV.Views;
 using AvanadeStudioTV.Models;
 using AvanadeStudioTV.Network;
 using Xamarin.Forms;
+using System;
 
 namespace AvanadeStudioTV.ViewModels
 {
@@ -12,6 +13,8 @@ namespace AvanadeStudioTV.ViewModels
     {
        
         public MasterPage Master { get; set; }
+
+        public List<string> Playlist { get; set; }
 
         public ObservableCollection<Item> FeedList
         {
@@ -40,7 +43,7 @@ namespace AvanadeStudioTV.ViewModels
                 {
                     selectedItem = value;
                     OnPropertyChanged("SelectedItem");
-                    OpenVideoPage();
+                   OpenVideoPage();
                 }
             }
         }
@@ -66,14 +69,24 @@ namespace AvanadeStudioTV.ViewModels
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
-        private void OpenVideoPage()
+        private  void OpenVideoPage()
         {
+            this.Master.videoPage.ResetEvents();
+
+            this.Master.videoPage.VideoCompleted += VideoPage_VideoCompleted;
 
 
             this.Master.videoPage.PlayVideo(selectedItem.Enclosure.Url);
             this.Master.videoPage.ForceLayout();
 
 
+        }
+
+        private void VideoPage_VideoCompleted()
+        {
+            var index = FeedList.IndexOf(SelectedItem) ;
+            this.SelectedItem = FeedList[index +1];
+            this.Master.ReaderPage.FeedView.ScrollTo(SelectedItem,ScrollToPosition.MakeVisible,true);
         }
     }
 }

@@ -7,7 +7,7 @@ namespace AvanadeStudioTV.Views
 {
     public partial class MasterPage : MasterDetailPage
     {
-        RSSReaderPage ReaderPage;
+        public RSSReaderPage ReaderPage;
         public VideoPage videoPage { get; set; }
 
         public MasterPage()

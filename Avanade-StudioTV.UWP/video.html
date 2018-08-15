@@ -1,0 +1,77 @@
+﻿<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <link href="https://vjs.zencdn.net/7.1.0/video-js.css" rel="stylesheet">
+
+
+
+
+    <script src="https://code.jquery.com/jquery-1.9.1.min.js"></script>
+    <script>
+      /*  $(document).ready(function () {
+            PlayVideo('http://ch9northcentralus.blob.core.windows.net/mfupload/74e198e87a7d4796b7e4a929015e9cbf/secdevopskit.mp4');
+        });*/
+
+
+    </script>
+
+    <meta charset="utf-8" />
+    <title></title>
+</head>
+<body>
+    <video id="myPlayer" class="video-js" >
+        <!--<source src="http://ch9northcentralus.blob.core.windows.net/mfupload/74e198e87a7d4796b7e4a929015e9cbf/secdevopskit.mp4">-->
+        <p class="vjs-no-js">
+            To view this video please enable JavaScript, and consider upgrading to a web browser that
+            <a href="https://videojs.com/html5-video-support/" target="_blank">supports HTML5 video</a>
+        </p>
+    </video>
+
+    <script src="https://vjs.zencdn.net/7.1.0/video.js"></script>
+    <script type="text/javascript">
+        function PlayVideo(url) {
+
+         
+
+            options = {
+                autoplay: true,
+                preload: true,
+                controls: true,
+                fluid: true
+
+            };
+            var player = videojs('myPlayer', options);
+            player.src(url);
+            
+           
+            player.ready(function () {
+               player.load();
+                var promise = player.play();
+
+                player.on('ended', function () {
+                    alert('video is done!');
+                    RaiseEndedEvent();
+                });
+                
+            });
+        }
+
+        function RaiseEndedEvent() {
+
+        //callback for C#
+
+        }
+
+        function FullScreen() {
+            
+            var player = videojs('myPlayer');
+            player.ready(function () {
+                player.requestFullScreen();
+            });
+
+           
+        }
+    </script>
+</body>
+</html>

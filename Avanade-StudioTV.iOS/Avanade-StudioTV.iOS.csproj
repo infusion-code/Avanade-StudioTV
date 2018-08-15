@@ -174,4 +174,10 @@
   <ItemGroup>
     <BundleResource Include="Resources\AvanadeLogoBig.jpg" />
   </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="Resources\AvanadeStudioIntro.mp4" />
+  </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="Resources\video.html" />
+  </ItemGroup>
 </Project>

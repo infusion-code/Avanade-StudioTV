@@ -10,8 +10,8 @@
     </ContentPage.Content> -->
 
   <ContentPage.Content>
-    
-         <fwv:FormsWebView x:Name = "VideoWebView" />
+
+        <fwv:FormsWebView x:Name = "VideoWebView" Source="video.html" ContentType="LocalFile"   />
         
     </ContentPage.Content>
 </ContentPage>

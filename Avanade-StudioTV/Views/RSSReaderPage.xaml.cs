@@ -7,10 +7,13 @@ namespace AvanadeStudioTV.Views
     {
 
         RSSFeedViewModel RSSFeedViewModelObject;
+        public ListView FeedView { get; set; }
 
         public RSSReaderPage(MasterPage Master)
         {
             InitializeComponent();
+
+            FeedView = this.FeedListView;
 
             RSSFeedViewModelObject = new RSSFeedViewModel(Navigation, Master);
 

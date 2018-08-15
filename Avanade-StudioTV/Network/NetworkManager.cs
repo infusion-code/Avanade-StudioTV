@@ -14,7 +14,7 @@ namespace AvanadeStudioTV.Network
     public class NetworkManager
     {
         public static NetworkManager network_manager = new NetworkManager();
-        public static string network_url = "https://s.ch9.ms/Shows/OEMTV/feed"; //"https://s.ch9.ms/Feeds/RSS";  //https://s.ch9.ms/Shows/OEMTV/feed
+        public static string network_url = "https://s.ch9.ms/Shows/XamarinShow/feed/mp4high"; //"https://s.ch9.ms/Shows/OEMTV/feed"; //"https://s.ch9.ms/Feeds/RSS";  //https://s.ch9.ms/Shows/OEMTV/feed
         private NetworkManager()
         {
         }
