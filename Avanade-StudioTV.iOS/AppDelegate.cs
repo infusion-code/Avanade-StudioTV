@@ -6,6 +6,7 @@ using Foundation;
 using LabelHtml.Forms.Plugin.iOS;
 using Octane.Xamarin.Forms.VideoPlayer.iOS;
 using UIKit;
+using Xam.Plugin.WebView.iOS;
 
 namespace Avanade_StudioTV.iOS
 {
@@ -25,6 +26,7 @@ namespace Avanade_StudioTV.iOS
         public override bool FinishedLaunching(UIApplication app, NSDictionary options)
         {
             HtmlLabelRenderer.Initialize();
+            FormsWebViewRenderer.Initialize();
             global::Xamarin.Forms.Forms.Init();
 
             //TODO Trial Mode only allows 15 seconds of playback see

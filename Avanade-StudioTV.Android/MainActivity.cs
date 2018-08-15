@@ -8,6 +8,8 @@ using Android.Widget;
 using Android.OS;
 using Android;
 using Octane.Xamarin.Forms.VideoPlayer.Android;
+using LabelHtml.Forms.Plugin.Droid;
+using Xam.Plugin.WebView.Droid;
 
 namespace Avanade_StudioTV.Droid
 {
@@ -21,6 +23,7 @@ namespace Avanade_StudioTV.Droid
 
             base.OnCreate(bundle);
 
+            FormsWebViewRenderer.Initialize();
             HtmlLabelRenderer.Initialize();
             global::Xamarin.Forms.Forms.Init(this, bundle);
 
