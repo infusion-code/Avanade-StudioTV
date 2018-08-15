@@ -6,8 +6,7 @@ using Windows.ApplicationModel.Activation;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Navigation;
- 
-
+using Xam.Plugin.WebView.UWP;
 
 namespace Avanade_StudioTV.UWP
 {
@@ -45,6 +44,9 @@ namespace Avanade_StudioTV.UWP
                 rootFrame.NavigationFailed += OnNavigationFailed;
 
                 var rendererAssemblies = new[] { typeof(HtmlLabelRenderer).GetTypeInfo().Assembly };
+
+                //webview: https://github.com/SKLn-Rad/Xam.Plugin.Webview
+                FormsWebViewRenderer.Initialize();
                 Xamarin.Forms.Forms.Init(e);
 
                 HtmlLabelRenderer.Initialize();
