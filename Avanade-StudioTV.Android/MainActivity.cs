@@ -21,6 +21,7 @@ namespace Avanade_StudioTV.Droid
 
             base.OnCreate(bundle);
 
+            HtmlLabelRenderer.Initialize();
             global::Xamarin.Forms.Forms.Init(this, bundle);
 
             //init libraries
@@ -28,7 +29,7 @@ namespace Avanade_StudioTV.Droid
 
             //TODO Trial Mode only allows 15 seconds of playback see
             //https://github.com/adamfisher/Xamarin.Forms.VideoPlayer/blob/master/GettingStarted.md
-            FormsVideoPlayer.Init(); 
+            //FormsVideoPlayer.Init(); 
 
             LoadApplication(new App());
         }

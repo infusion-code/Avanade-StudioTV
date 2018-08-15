@@ -5,6 +5,7 @@ using System.Xml;
 using AvanadeStudioTV.Models;
 using System.Xml.Serialization;
 using System.IO;
+using System.Linq;
 
 namespace AvanadeStudioTV.Network
 {
@@ -58,9 +59,28 @@ namespace AvanadeStudioTV.Network
                 FeedObject = (Rss)serializer.Deserialize(reader);
             }
 
+           // FeedObject = ScrubObject(FeedObject);
             return FeedObject.Channel.Item;
 
         }
 
+        private Rss ScrubObject(Rss feedObject)
+        {
+            Rss FeedObject = new Rss();
+
+            FeedObject.Channel = new Channel();
+            FeedObject.Channel.Item = new List<Item>();
+
+            foreach (var item in feedObject.Channel.Item)
+            {
+                var nItem = new Item();
+                nItem = item;
+                nItem.Thumbnail = new List<Thumbnail>();
+                nItem.Thumbnail.Add(item.Thumbnail.Find( t=>t.Width == "220"));
+                FeedObject.Channel.Item.Add(nItem);
+            }
+
+            return FeedObject;
+        }
     }
 }

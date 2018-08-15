@@ -4,14 +4,21 @@ using Xamarin.Forms;
 
 namespace AvanadeStudioTV.Views
 {
-   
-        public partial class FeedCell : ViewCell
-        {
 
-            public FeedCell()
-            {
-                InitializeComponent();
-            }
+    public partial class FeedCell : ViewCell
+    {
+
+        public FeedCell()
+        {
+            InitializeComponent();
+
         }
-   
+
+        protected override void OnBindingContextChanged()
+        {
+            base.OnBindingContextChanged();
+ 
+        }
+    }
+
 }
