@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:video="clr-namespace:FormsVideoLibrary"
             xmlns:fwv="clr-namespace:Xam.Plugin.WebView.Abstractions;assembly=Xam.Plugin.WebView.Abstractions" 
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" x:Class="AvanadeStudioTV.Views.VideoPage">
    <!-- <ContentPage.Content>
@@ -10,8 +11,9 @@
     </ContentPage.Content> -->
 
   <ContentPage.Content>
-
-        <fwv:FormsWebView x:Name = "VideoWebView" Source="video.html" ContentType="LocalFile"   />
-        
+        <StackLayout>
+        <!--<fwv:FormsWebView x:Name = "VideoWebView" Source="video.html" ContentType="LocalFile"   />-->
+            <video:VideoPlayer x:Name="VideoPlayerView" Source="https://archive.org/download/BigBuckBunny_328/BigBuckBunny_512kb.mp4" />
+        </StackLayout>
     </ContentPage.Content>
 </ContentPage>

@@ -45,6 +45,8 @@ namespace Avanade_StudioTV.UWP
 
                 var rendererAssemblies = new[] { typeof(HtmlLabelRenderer).GetTypeInfo().Assembly };
 
+                var rendererVideoAssemblies = new[] { typeof(FormsWebViewRenderer).GetTypeInfo().Assembly };
+
                 //webview: https://github.com/SKLn-Rad/Xam.Plugin.Webview
                 FormsWebViewRenderer.Initialize();
                 Xamarin.Forms.Forms.Init(e);

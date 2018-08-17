@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using Octane.Xamarin.Forms.VideoPlayer;
+
+using FormsVideoLibrary;
 
 using Xamarin.Forms;
 
@@ -20,10 +21,14 @@ namespace AvanadeStudioTV.Views
            
             InitializeComponent();
 
-            VideoWebView.OnContentLoaded += VideoWebView_OnContentLoaded;
+            //  VideoWebView.OnContentLoaded += VideoWebView_OnContentLoaded;
 
-            VideoWebView.AddLocalCallback("RaiseEndedEvent", LoadNextVideo);
+            //VideoWebView.AddLocalCallback("RaiseEndedEvent", LoadNextVideo);
+
+            var x = VideoPlayerView;
+             
         }
+   
 
         private void LoadNextVideo(string obj)
         {
@@ -56,6 +61,14 @@ namespace AvanadeStudioTV.Views
             base.OnAppearing();
 
 
+            
+
+
+            VideoPlayerView.Source = VideoSource.FromResource("AvanadeStudioIntro.mp4");
+            VideoPlayerView.Play();
+            
+
+
         }
       
         public  async void PlayVideo(string url)
@@ -64,13 +77,19 @@ namespace AvanadeStudioTV.Views
             String pv = "PlayVideo('" + Source + "');";
             Device.BeginInvokeOnMainThread(() =>
             {
-                 VideoWebView.InjectJavascriptAsync(pv);
-              
-                
+                //  VideoWebView.InjectJavascriptAsync(pv);
 
+                VideoPlayerView.Source = VideoSource.FromUri(url);
+                VideoPlayerView.Play();
+                VideoPlayerView.VideoEnded += VideoPlayerView_VideoEnded;
             });
    
              
+        }
+
+        private void VideoPlayerView_VideoEnded(object sender, EventArgs e)
+        {
+            VideoCompleted?.Invoke();
         }
 
         /// <summary>
