@@ -101,11 +101,11 @@
     <AndroidResource Include="Resources\drawable\AvanadeLogoBig.jpg" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="FormsVideoLibrary\" />
     <Folder Include="Resources\drawable-hdpi\" />
     <Folder Include="Resources\drawable-xhdpi\" />
     <Folder Include="Resources\drawable-xxhdpi\" />
     <Folder Include="Resources\drawable-xxxhdpi\" />
-    <Folder Include="FormsVideoLibrary\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Avanade-StudioTV\Avanade-StudioTV.csproj">
@@ -118,6 +118,9 @@
   </ItemGroup>
   <ItemGroup>
     <AndroidAsset Include="Assets\video.html" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\drawable\BlackGradBack.png" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
 </Project>
