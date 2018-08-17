@@ -2,18 +2,14 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:video="clr-namespace:FormsVideoLibrary"
             xmlns:fwv="clr-namespace:Xam.Plugin.WebView.Abstractions;assembly=Xam.Plugin.WebView.Abstractions" 
-             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" x:Class="AvanadeStudioTV.Views.VideoPage">
-   <!-- <ContentPage.Content>
-        <StackLayout Orientation = "Vertical"> 
-        <Image x:Name = "LaunchImage"  HeightRequest = "200" Source = "AvanadeLogoBig.jpg" />
-         <o:VideoPlayer x:Name="videoPlayer"  AutoPlay="True" IsVisible = "false" />
-          </StackLayout>
-    </ContentPage.Content> -->
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" x:Class="AvanadeStudioTV.Views.VideoPage"
+             BackgroundImage = "BlackGradBack.png">
+ 
 
   <ContentPage.Content>
-        <StackLayout>
-        <!--<fwv:FormsWebView x:Name = "VideoWebView" Source="video.html" ContentType="LocalFile"   />-->
-            <video:VideoPlayer x:Name="VideoPlayerView" Source="https://archive.org/download/BigBuckBunny_328/BigBuckBunny_512kb.mp4" />
+        <StackLayout x:Name = "VideoStack">
+         <!--<fwv:FormsWebView x:Name = "VideoWebView" Source="video.html" ContentType="LocalFile"   />-->
+            <video:VideoPlayer x:Name="VideoPlayerView" />
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>

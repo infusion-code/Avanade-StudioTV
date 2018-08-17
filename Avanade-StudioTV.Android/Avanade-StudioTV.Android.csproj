@@ -72,8 +72,6 @@
     </PackageReference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="FormsVideoLibrary\VideoPicker.cs" />
-    <Compile Include="FormsVideoLibrary\VideoPlayerRenderer.cs" />
     <Compile Include="MainActivity.cs" />
     <Compile Include="Resources\Resource.Designer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -107,6 +105,7 @@
     <Folder Include="Resources\drawable-xhdpi\" />
     <Folder Include="Resources\drawable-xxhdpi\" />
     <Folder Include="Resources\drawable-xxxhdpi\" />
+    <Folder Include="FormsVideoLibrary\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Avanade-StudioTV\Avanade-StudioTV.csproj">

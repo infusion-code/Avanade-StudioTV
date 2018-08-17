@@ -4,7 +4,6 @@ using System.Linq;
 
 using Foundation;
 using LabelHtml.Forms.Plugin.iOS;
-using Octane.Xamarin.Forms.VideoPlayer.iOS;
 using UIKit;
 using Xam.Plugin.WebView.iOS;
 

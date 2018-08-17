@@ -11,6 +11,17 @@ using UIKit;
 using Xamarin.Forms;
 using Xamarin.Forms.Platform.iOS;
 
+/*=================
+ * 
+ * 
+ * 
+ *  Aug 17 2018:  NOT USED in iOS  or ANDROID - Currently we are using a Web View to load/play video on iOS and Android 
+ *   Reason: webview works well to load a skinnable video player on mobile platforms EXCEPT UWP - on UWP needed to use the native Media Element 
+ * 
+ * 
+ * ===================
+ */
+
 [assembly: ExportRenderer(typeof(FormsVideoLibrary.VideoPlayer), 
                           typeof(FormsVideoLibrary.iOS.VideoPlayerRenderer))]
 
@@ -43,6 +54,12 @@ namespace FormsVideoLibrary.iOS
 
                     // Use the View from the controller as the native control
                     SetNativeControl(_playerViewController.View);
+
+                    // Subscribe to video end notification
+                    player.ActionAtItemEnd = AVPlayerActionAtItemEnd.None;
+                    var VideoEndToken = NSNotificationCenter.DefaultCenter.AddObserver(AVPlayerItem.DidPlayToEndTimeNotification, VideoDidFinishPlaying, player.CurrentItem);
+
+
                 }
 
                 SetAreTransportControlsEnabled();
@@ -61,6 +78,11 @@ namespace FormsVideoLibrary.iOS
                 args.OldElement.PauseRequested -= OnPauseRequested;
                 args.OldElement.StopRequested -= OnStopRequested;
             }
+        }
+
+        private void VideoDidFinishPlaying(NSNotification obj)
+        {
+            Element.NotifyVideoEnded();
         }
 
         protected override void Dispose(bool disposing)

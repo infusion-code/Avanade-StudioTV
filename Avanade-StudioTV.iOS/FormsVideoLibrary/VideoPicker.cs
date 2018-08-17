@@ -3,6 +3,17 @@ using System.Threading.Tasks;
 using UIKit;
 using Xamarin.Forms;
 
+/*=================
+ * 
+ * 
+ * 
+ *   Aug 17 2018:  NOT USED in iOS  or ANDROID - Currently we are using a Web View to load/play video on iOS and Android 
+ *   Reason: webview works well to load a skinnable video player on mobile platforms EXCEPT UWP - on UWP needed to use the native Media Element 
+ * 
+ * 
+ * ===================
+ */
+
 [assembly: Dependency(typeof(FormsVideoLibrary.iOS.VideoPicker))]
 
 namespace FormsVideoLibrary.iOS

@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using Xam.Plugin.WebView;
+using Xam.Plugin.WebView.Abstractions;
 
 using FormsVideoLibrary;
 
@@ -15,17 +17,32 @@ namespace AvanadeStudioTV.Views
   
         public string Source { get; set; }
 
+        public FormsWebView VideoWebView;
+
         public VideoPage(string source)
         {
             Source = source;
            
             InitializeComponent();
 
-            //  VideoWebView.OnContentLoaded += VideoWebView_OnContentLoaded;
+            if (Device.RuntimePlatform != Device.UWP) {
 
-            //VideoWebView.AddLocalCallback("RaiseEndedEvent", LoadNextVideo);
+                VideoPlayerView.IsEnabled = false;
+                VideoPlayerView.IsVisible = false;
 
-            var x = VideoPlayerView;
+                VideoWebView = new FormsWebView();
+                VideoWebView.Source = "video.html";
+                VideoWebView.ContentType = Xam.Plugin.WebView.Abstractions.Enumerations.WebViewContentType.LocalFile;
+                VideoStack.Children.Add(VideoWebView);
+
+               VideoWebView.OnContentLoaded += VideoWebView_OnContentLoaded;
+
+               VideoWebView.AddLocalCallback("RaiseEndedEvent", LoadNextVideo);
+
+               }
+
+
+            
              
         }
    
@@ -71,17 +88,22 @@ namespace AvanadeStudioTV.Views
 
         }
       
-        public  async void PlayVideo(string url)
+        public async void PlayVideo(string url)
         {
             Source = url;
             String pv = "PlayVideo('" + Source + "');";
             Device.BeginInvokeOnMainThread(() =>
             {
-                //  VideoWebView.InjectJavascriptAsync(pv);
-
-                VideoPlayerView.Source = VideoSource.FromUri(url);
-                VideoPlayerView.Play();
-                VideoPlayerView.VideoEnded += VideoPlayerView_VideoEnded;
+                if (Device.RuntimePlatform != Device.UWP)
+                {
+                         VideoWebView.InjectJavascriptAsync(pv);
+                }
+                else
+                {
+                    VideoPlayerView.Source = VideoSource.FromUri(url);
+                    VideoPlayerView.Play();
+                    VideoPlayerView.VideoEnded += VideoPlayerView_VideoEnded;
+                }
             });
    
              

@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ViewCell xmlns="http://xamarin.com/schemas/2014/forms"
-         
+        
           xmlns:html="clr-namespace:LabelHtml.Forms.Plugin.Abstractions;assembly=HtmlLabel.Forms.Plugin"
           xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" x:Class="AvanadeStudioTV.Views.FeedCell">
 
-    <StackLayout Orientation="Horizontal">
+    <StackLayout BackgroundColor = "Gray" Orientation="Horizontal">
         <StackLayout Margin="1">
-            <Label Text="{Binding Title}" MinimumHeightRequest="30" Margin="2" FontSize="13" LineBreakMode="WordWrap" FontAttributes="Bold" />
+            <Label Text="{Binding Title}" MinimumHeightRequest="30" Margin="2" FontSize="13" TextColor = "White" LineBreakMode="WordWrap" FontAttributes="Bold" />
             <Image Source="{Binding Thumbnail[2].Url}" HeightRequest = "120" />
-            <Label x:Name="DescLabel" Text="{Binding Summary}"  LineBreakMode="WordWrap" Margin="2" HeightRequest="30" FontSize="11"   />
-            <Label Text="{Binding Author}" LineBreakMode="WordWrap" Margin="2" HeightRequest="30" FontSize="10" FontAttributes="Italic" />
+            <Label x:Name="DescLabel" Text="{Binding Summary}" TextColor = "White"  LineBreakMode="WordWrap" Margin="2" HeightRequest="30" FontSize="11"   />
+            <Label Text="{Binding Author}"  LineBreakMode="WordWrap" Margin="2" HeightRequest="30" FontSize="10" TextColor = "White"  FontAttributes="Italic" />
 
         </StackLayout>
         <StackLayout WidthRequest="10">

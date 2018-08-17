@@ -2,9 +2,22 @@
 using System.Threading.Tasks;
 using Android.Content;
 using Xamarin.Forms;
+using Avanade_StudioTV.Droid;
  
 // Need application's MainActivity
-using AvanadeStudioTV.Droid;
+ 
+
+
+/*=================
+ * 
+ * 
+ * 
+ *  Aug 17 2018:  NOT USED in iOS  or ANDROID - Currently we are using a Web View to load/play video on iOS and Android 
+ *   Reason: webview works well to load a skinnable video player on mobile platforms EXCEPT UWP - on UWP needed to use the native Media Element 
+ * 
+ * 
+ * ===================
+ */
 
 [assembly: Dependency(typeof(FormsVideoLibrary.Droid.VideoPicker))]
 

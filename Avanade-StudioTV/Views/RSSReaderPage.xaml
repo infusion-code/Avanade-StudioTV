@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms" xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
              x:Class="AvanadeStudioTV.Views.RSSReaderPage" 
-             xmlns:Cell="clr-namespace:AvanadeStudioTV.Views">
+             xmlns:Cell="clr-namespace:AvanadeStudioTV.Views" BackgroundImage ="AvanadeLogoBig.jpg" >
     <ContentPage.Content>
-        <StackLayout Margin="0,5,0,0" Orientation="Vertical">
+        <StackLayout Margin="0,5,0,0" Orientation="Vertical" >
             <StackLayout Margin="0,0,0,0">
-                <Image Source ="AvanadeLogoBig.jpg" HeightRequest = "50" />
-                <Label Text="Video Playlist" LineBreakMode="WordWrap" Margin="2" HeightRequest="30" FontSize="10" FontAttributes="Italic" />
+              <!--  <Image Source ="AvanadeLogoBig.jpg" HeightRequest = "50" />-->
+                <Label Text="Video Playlist" LineBreakMode="WordWrap" Margin="2" HeightRequest="30" FontSize="10" TextColor = "White" FontAttributes="Italic" />
             </StackLayout>
-            <ListView x:Name="FeedListView" CachingStrategy="RecycleElement" SelectedItem="{Binding SelectedItem, Mode=TwoWay}" ItemsSource="{Binding FeedList}"  HasUnevenRows="true">
+            <ListView  x:Name="FeedListView" CachingStrategy="RecycleElement" SelectedItem="{Binding SelectedItem, Mode=TwoWay}" ItemsSource="{Binding FeedList}"  HasUnevenRows="true">
                 <ListView.ItemTemplate>
                     <DataTemplate>
                         <Cell:FeedCell>
