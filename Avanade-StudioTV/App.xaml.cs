@@ -24,6 +24,10 @@ namespace Avanade_StudioTV
 		private void InitalizeData()
 		{
 			var realm = Realm.GetInstance();
+
+
+			System.Diagnostics.Debug.WriteLine($"Realm is located at: {realm.Config.DatabasePath}");
+
 			var RssFeeds = realm.All<RSSFeedData>();
 
 			if (RssFeeds.AsRealmCollection<RSSFeedData>().Count <1)
