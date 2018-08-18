@@ -1,24 +1,30 @@
 ﻿using System;
-using System;
 using System.Collections.Generic;
 using System.Diagnostics.Contracts;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Xamarin.Essentials;
- 
+using Realms;
+
 
 using AvanadeStudioTV.Models;
+using AvanadeStudioTV.Database;
+using System.Runtime.Serialization;
+using System.Linq;
 
 namespace AvanadeStudioTV.Network
 {
     public class NetworkManager
     {
         public static NetworkManager network_manager = new NetworkManager();
-        public static string network_url = "https://s.ch9.ms/Shows/XamarinShow/feed/mp4"; //"https://s.ch9.ms/Shows/This+Week+On+Channel+9/feed/mp4"; // "https://s.ch9.ms/Shows/XamarinShow/feed/mp4high"; //"https://s.ch9.ms/Shows/OEMTV/feed"; //"https://s.ch9.ms/Feeds/RSS";  //https://s.ch9.ms/Shows/OEMTV/feed
         private NetworkManager()
         {
-        }
+			 
 
+			 
+		
+		}
+		
         public static NetworkManager Instance
         {
             get
@@ -31,7 +37,7 @@ namespace AvanadeStudioTV.Network
         {
             if (this.IsConnected())
             {
-                Uri uri = new Uri(network_url);
+				var uri =  new Uri(GetUrl());
                 HttpClient client = new HttpClient();
                 HttpResponseMessage response = await client.GetAsync(uri);
                 String response_string = await response.Content.ReadAsStringAsync();
@@ -43,7 +49,14 @@ namespace AvanadeStudioTV.Network
             return null;
         }
 
-        public bool IsConnected()
+		private  string GetUrl()
+		{
+			var realm = Realm.GetInstance();
+			var feed =  realm.All<RSSFeedData>().FirstOrDefault();
+			return feed.url;
+		}
+
+		public bool IsConnected()
         {
             var current = Connectivity.NetworkAccess;
 
