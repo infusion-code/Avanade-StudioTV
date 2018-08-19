@@ -1,14 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms" xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
              x:Class="AvanadeStudioTV.Views.RSSReaderPage" 
-             xmlns:Cell="clr-namespace:AvanadeStudioTV.Views"  >
+             xmlns:Cell="clr-namespace:AvanadeStudioTV.Views" BackgroundImage="BlackGradBack.png"  >
     <ContentPage.Content>
         <StackLayout Margin="0,0,0,0" Orientation="Vertical"  >
-            <StackLayout Margin="0,0,0,0">
-                <Image Source ="AvLeftHeader.png" HeightRequest = "200" />
-                <Label Text="Video Playlist" LineBreakMode="WordWrap" Margin="2" HeightRequest="30" FontSize="12" TextColor = "White"   />
+            <StackLayout Margin="0,0,0,0" BackgroundColor="Transparent" >
+                <Image Source ="AvLeftHeader.png" Aspect="AspectFill" />
+                <!--<Label Text="&#xf041;" Style="{Binding FontAwesome}" TextColor="White" FontSize="Medium"/>-->
+   
+                <Label Text="Current Video Feed:" LineBreakMode="WordWrap" Margin="2" HeightRequest="20" BackgroundColor="Transparent" FontSize="12" TextColor = "White"   />
             </StackLayout>
-            <ListView  x:Name="FeedListView" CachingStrategy="RecycleElement" SelectedItem="{Binding SelectedItem, Mode=TwoWay}" ItemsSource="{Binding FeedList}"  HasUnevenRows="true">
+            <ListView BackgroundColor="Transparent" Margin="0,5,0,0" x:Name="FeedListView" CachingStrategy="RecycleElement" SelectedItem="{Binding SelectedItem, Mode=TwoWay}" ItemsSource="{Binding FeedList}"  HasUnevenRows="true">
                 <ListView.ItemTemplate>
                     <DataTemplate>
                         <Cell:FeedCell>
@@ -18,4 +20,16 @@
             </ListView>
         </StackLayout>
     </ContentPage.Content>
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <OnPlatform x:Key="FontAwesomeString" x:TypeArguments="x:String">
+                <On Platform="iOS" Value="FontAwesome" />
+                <On Platform="Android" Value="FontAwesome400.otf#FontAwesome" />
+                <On Platform="UWP, WinRT, WinPhone" Value="Assets/Fonts/Font Awesome 5 Free-Regular-400.otf#Font Awesome 5 Free Regular" />
+            </OnPlatform>
+            <Style x:Key="FontAwesome" TargetType="Label">
+                <Setter Property="FontFamily" Value="{StaticResource FontAwesomeString}" />
+            </Style>
+        </ResourceDictionary>
+    </ContentPage.Resources>
 </ContentPage>

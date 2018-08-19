@@ -21,7 +21,7 @@ namespace AvanadeStudioTV.Views
             Title = "Avanade Studio TV";
             BindingContext = RSSFeedViewModelObject;
 
-            this.IsBusy = true;
+             
         }
 
 

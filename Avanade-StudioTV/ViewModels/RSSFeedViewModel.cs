@@ -75,6 +75,7 @@ namespace AvanadeStudioTV.ViewModels
 
             this.Master.videoPage.VideoCompleted += VideoPage_VideoCompleted;
 
+			this.Master.videoPage.ViewModel.SelectedItem = selectedItem;
 
             this.Master.videoPage.PlayVideo(selectedItem.Enclosure.Url);
             this.Master.videoPage.ForceLayout();

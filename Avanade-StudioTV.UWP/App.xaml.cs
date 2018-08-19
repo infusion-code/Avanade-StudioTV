@@ -3,6 +3,7 @@ using System;
 using System.Reflection;
 using Windows.ApplicationModel;
 using Windows.ApplicationModel.Activation;
+using Windows.ApplicationModel.Core;
 using Windows.UI.ViewManagement;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
@@ -81,14 +82,25 @@ namespace Avanade_StudioTV.UWP
 
                 Window.Current.Activate();
             }
-        }
 
-        /// <summary>
-        /// Invoked when Navigation to a certain page fails
-        /// </summary>
-        /// <param name="sender">The Frame which failed navigation</param>
-        /// <param name="e">Details about the navigation failure</param>
-        void OnNavigationFailed(object sender, NavigationFailedEventArgs e)
+
+			this.ExtendAcrylicIntoTitleBar();
+		}
+
+		private void ExtendAcrylicIntoTitleBar()
+		{
+			CoreApplication.GetCurrentView().TitleBar.ExtendViewIntoTitleBar = true;
+			var titleBar = ApplicationView.GetForCurrentView().TitleBar;
+			titleBar.ButtonBackgroundColor = Windows.UI.Colors.Transparent;
+			titleBar.ButtonInactiveBackgroundColor = Windows.UI.Colors.Transparent;
+		}
+
+		/// <summary>
+		/// Invoked when Navigation to a certain page fails
+		/// </summary>
+		/// <param name="sender">The Frame which failed navigation</param>
+		/// <param name="e">Details about the navigation failure</param>
+		void OnNavigationFailed(object sender, NavigationFailedEventArgs e)
         {
             throw new Exception("Failed to load Page " + e.SourcePageType.FullName);
         }

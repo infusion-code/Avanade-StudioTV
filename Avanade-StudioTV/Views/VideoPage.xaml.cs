@@ -7,6 +7,8 @@ using Xam.Plugin.WebView.Abstractions;
 using FormsVideoLibrary;
 
 using Xamarin.Forms;
+using AvanadeStudioTV.Models;
+using AvanadeStudioTV.ViewModels;
 
 namespace AvanadeStudioTV.Views
 {
@@ -14,6 +16,7 @@ namespace AvanadeStudioTV.Views
     {
         public event VideoCompletedHandler VideoCompleted;
         public delegate void VideoCompletedHandler();
+		public VideoPageViewModel ViewModel;
   
         public string Source { get; set; }
 
@@ -42,9 +45,11 @@ namespace AvanadeStudioTV.Views
                }
 
 
-            
-             
-        }
+			ViewModel = new VideoPageViewModel();
+			this.BindingContext = ViewModel;
+
+
+		}
    
 
         private void LoadNextVideo(string obj)
@@ -77,11 +82,11 @@ namespace AvanadeStudioTV.Views
         {
             base.OnAppearing();
 
+ 
 
-            
 
 
-            VideoPlayerView.Source = VideoSource.FromResource("AvanadeStudioIntro.mp4");
+			VideoPlayerView.Source = VideoSource.FromResource("AvanadeStudioIntro.mp4");
             VideoPlayerView.Play();
             
 

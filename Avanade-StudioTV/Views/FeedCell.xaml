@@ -2,18 +2,23 @@
 <ViewCell xmlns="http://xamarin.com/schemas/2014/forms"
         
           xmlns:html="clr-namespace:LabelHtml.Forms.Plugin.Abstractions;assembly=HtmlLabel.Forms.Plugin"
-          xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" x:Class="AvanadeStudioTV.Views.FeedCell">
+          xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" x:Class="AvanadeStudioTV.Views.FeedCell" >
 
-    <StackLayout BackgroundColor = "Gray" Orientation="Horizontal">
-        <StackLayout Margin="1">
-            <Label Text="{Binding Title}" MinimumHeightRequest="30" Margin="2" FontSize="13" TextColor = "White" LineBreakMode="WordWrap" FontAttributes="Bold" />
-            <Image Source="{Binding Thumbnail[2].Url}" HeightRequest = "120" />
-            <Label x:Name="DescLabel" Text="{Binding Summary}" TextColor = "White"  LineBreakMode="WordWrap" Margin="2" HeightRequest="30" FontSize="11"   />
-            <Label Text="{Binding Author}"  LineBreakMode="WordWrap" Margin="2" HeightRequest="30" FontSize="10" TextColor = "White"  FontAttributes="Italic" />
+       <Grid  HeightRequest="300"  BackgroundColor ="#545860">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="20*" />
+                <RowDefinition Height="70*" />
+                <!--<RowDefinition Height="10*" />-->
+                <RowDefinition Height="10*" />
+            </Grid.RowDefinitions>
+           
 
-        </StackLayout>
-        <StackLayout WidthRequest="10">
-        </StackLayout>
-    </StackLayout>
+         <Label Grid.Row="0" Text="{Binding Title}" VerticalOptions="Start"  Margin="2" FontSize="13" TextColor = "White" LineBreakMode="WordWrap" FontAttributes="Bold" />
+        <Image Grid.Row="1" Source="{Binding Thumbnail[2].Url}" VerticalOptions="StartAndExpand"  Aspect="AspectFill" />
+        <!--<Label Grid.Row="2" x:Name="DescLabel" Text="{Binding Summary}" VerticalOptions="StartAndExpand"  TextColor = "White"  LineBreakMode="WordWrap" Margin="2"  FontSize="11"   />-->
+        <Label Grid.Row="2" Text="{Binding Author}" VerticalOptions="Start"  LineBreakMode="WordWrap" Margin="2"   FontSize="10" TextColor = "White"  FontAttributes="Italic" />
 
+
+        </Grid>
+     
 </ViewCell>
