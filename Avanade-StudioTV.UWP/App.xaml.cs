@@ -10,6 +10,7 @@ using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Navigation;
 using Xam.Plugin.WebView.UWP;
 
+[assembly: Xamarin.Forms.Platform.UWP.ExportRenderer(typeof(Xam.Plugin.WebView.Abstractions.FormsWebView), typeof(Xam.Plugin.WebView.UWP.FormsWebViewRenderer))]
 namespace Avanade_StudioTV.UWP
 {
     /// <summary>

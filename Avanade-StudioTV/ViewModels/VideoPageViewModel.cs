@@ -6,13 +6,14 @@ using AvanadeStudioTV.Models;
 using AvanadeStudioTV.Network;
 using Xamarin.Forms;
 using System;
+ 
 
 namespace AvanadeStudioTV.ViewModels
 {
     public class VideoPageViewModel : INotifyPropertyChanged
     {
 
-
+		
 		private MasterDetailPage Master;
 
         private Item selectedItem = null;
