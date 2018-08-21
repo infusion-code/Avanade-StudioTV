@@ -97,6 +97,8 @@
     <BundleResource Include="Resources\Font Awesome 5 Free-Regular-400.otf">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </BundleResource>
+    <BundleResource Include="Resources\StudioTVcircle.png" />
+    <BundleResource Include="Resources\AvLeftHeader.png" />
   </ItemGroup>
   <ItemGroup>
     <InterfaceDefinition Include="Resources\LaunchScreen.storyboard" />
