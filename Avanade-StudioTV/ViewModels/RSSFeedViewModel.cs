@@ -6,13 +6,19 @@ using AvanadeStudioTV.Models;
 using AvanadeStudioTV.Network;
 using Xamarin.Forms;
 using System;
+using System.Windows.Input;
 
 namespace AvanadeStudioTV.ViewModels
 {
     public class RSSFeedViewModel : INotifyPropertyChanged
     {
-       
-        public MasterPage Master { get; set; }
+		ICommand openSettingsPage;
+
+		public ICommand OpenSettingsPage
+		{
+			get { return openSettingsPage; }
+		}
+		public MasterPage Master { get; set; }
 
         public List<string> Playlist { get; set; }
 
@@ -30,10 +36,10 @@ namespace AvanadeStudioTV.ViewModels
             }
         }
 
-      
+		private INavigation Navigation;
 
-        private Item selectedItem = null;
-        private INavigation Navigation;
+		private Item selectedItem = null;
+     
         public Item SelectedItem
         {
             get => selectedItem;
@@ -55,14 +61,24 @@ namespace AvanadeStudioTV.ViewModels
             this.Master = master;
             this.GetNewsFeedAsync();
             Navigation = navigation;
-        }
+			openSettingsPage = new Command(OnOpenSettingsPage);
+		}
 
-        public async void GetNewsFeedAsync()
+		void OnOpenSettingsPage( )
+		{
+			var settings = new SettingsPage(this.Master, this.Navigation);
+			this.Navigation.PushModalAsync(settings);
+		}
+
+		public async void GetNewsFeedAsync()
         {
             NetworkManager manager = NetworkManager.Instance;
             List<Item> list = await manager.GetSyncFeedAsync();
             FeedList = new ObservableCollection<Item>(list);
-        }
+
+			//start first video
+			this.SelectedItem = FeedList[0];
+		}
 
         protected void OnPropertyChanged(string propertyName)
         {

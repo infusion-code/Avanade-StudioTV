@@ -6,16 +6,34 @@ using Realms;
 
 namespace AvanadeStudioTV.Database
 {
-    class RSSFeedData: RealmObject
+   public class RSSFeedData: RealmObject
 	{
-		public string ChannelName { get; set; }
+		public string ChannelName { get; set; }  //Title
 		public string Desc { get; set; }
 	
 		public string url { get; set; }
+
+		public string imageUrl { get; set; }
 
 		public DateTimeOffset LastModified { get; set; }
 
 		 
  
+	}
+
+	//View Model Object (not presisted in Realm)
+	public class RSSFeedViewData
+	{
+		public string ChannelName { get; set; }  //Title
+		public string Desc { get; set; }
+
+		public string url { get; set; }
+
+		public string imageUrl { get; set; }
+
+		public DateTimeOffset LastModified { get; set; }
+
+
+
 	}
 }

@@ -26,7 +26,10 @@ namespace FormsVideoLibrary.UWP
                 if (Control == null)
                 {
                     MediaElement mediaElement = new MediaElement();
-                    SetNativeControl(mediaElement);
+					mediaElement.Stretch = Stretch.Uniform;
+					
+
+					SetNativeControl(mediaElement);
 
                     mediaElement.MediaOpened += OnMediaElementMediaOpened;
                     mediaElement.CurrentStateChanged += OnMediaElementCurrentStateChanged;

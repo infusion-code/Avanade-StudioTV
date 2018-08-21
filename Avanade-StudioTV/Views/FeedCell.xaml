@@ -4,19 +4,19 @@
           xmlns:html="clr-namespace:LabelHtml.Forms.Plugin.Abstractions;assembly=HtmlLabel.Forms.Plugin"
           xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" x:Class="AvanadeStudioTV.Views.FeedCell" >
 
-       <Grid  HeightRequest="300"  BackgroundColor ="#545860">
+       <Grid  HeightRequest="240"  BackgroundColor ="#545860">
             <Grid.RowDefinitions>
-                <RowDefinition Height="20*" />
-                <RowDefinition Height="70*" />
+                <RowDefinition Height="15*" />
+                <RowDefinition Height="65*" />
                 <!--<RowDefinition Height="10*" />-->
                 <RowDefinition Height="10*" />
             </Grid.RowDefinitions>
            
 
-         <Label Grid.Row="0" Text="{Binding Title}" VerticalOptions="Start"  Margin="2" FontSize="13" TextColor = "White" LineBreakMode="WordWrap" FontAttributes="Bold" />
+         <Label Grid.Row="0" Text="{Binding Title}" VerticalOptions="StartAndExpand"  Margin="2" FontSize="14" TextColor = "White" LineBreakMode="WordWrap" FontAttributes="Bold" />
         <Image Grid.Row="1" Source="{Binding Thumbnail[2].Url}" VerticalOptions="StartAndExpand"  Aspect="AspectFill" />
         <!--<Label Grid.Row="2" x:Name="DescLabel" Text="{Binding Summary}" VerticalOptions="StartAndExpand"  TextColor = "White"  LineBreakMode="WordWrap" Margin="2"  FontSize="11"   />-->
-        <Label Grid.Row="2" Text="{Binding Author}" VerticalOptions="Start"  LineBreakMode="WordWrap" Margin="2"   FontSize="10" TextColor = "White"  FontAttributes="Italic" />
+        <Label Grid.Row="2" Text="{Binding Author}" VerticalOptions="Start"   Margin="2"   FontSize="10" TextColor = "White"  FontAttributes="Italic" />
 
 
         </Grid>

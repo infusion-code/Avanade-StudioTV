@@ -5,7 +5,13 @@
     <ContentPage.Content>
         <StackLayout Margin="0,0,0,0" Orientation="Vertical"  >
             <StackLayout Margin="0,0,0,0" BackgroundColor="Transparent" >
-                <Image Source ="AvLeftHeader.png" Aspect="AspectFill" />
+                <Image Source ="AvLeftHeader.png" Aspect="AspectFill" >
+                    <Image.GestureRecognizers>
+                        <TapGestureRecognizer
+            Command="{Binding OpenSettingsPage}"
+             />
+                    </Image.GestureRecognizers>
+                </Image>
                 <!--<Label Text="&#xf041;" Style="{Binding FontAwesome}" TextColor="White" FontSize="Medium"/>-->
    
                 <Label Text="Current Video Feed:" LineBreakMode="WordWrap" Margin="2" HeightRequest="20" BackgroundColor="Transparent" FontSize="12" TextColor = "White"   />

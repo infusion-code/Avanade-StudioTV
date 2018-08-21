@@ -17,8 +17,14 @@ namespace AvanadeStudioTV.Views
         public event VideoCompletedHandler VideoCompleted;
         public delegate void VideoCompletedHandler();
 		public VideoPageViewModel ViewModel;
-  
-        public string Source { get; set; }
+
+		//This setting switches back and forth between using a Native Video Player or Web Based Video Player inUWP:
+		//Reason: Because of known issue with Video Player not rendering in UWP.Release config had to add for a native player -
+		//issue was fixed so swiching back to Web based video player for all platforms for now:
+		public const bool UseNativePlayerOnUWP = true;
+		public bool UseWebPlayer;
+
+		public string Source { get; set; }
 
         public FormsWebView VideoWebView;
 
@@ -28,7 +34,10 @@ namespace AvanadeStudioTV.Views
            
             InitializeComponent();
 
-            if (Device.RuntimePlatform != Device.UWP) {
+			SetUseNativePlayer();
+
+
+		   if (UseWebPlayer) {
 
                 VideoPlayerView.IsEnabled = false;
                 VideoPlayerView.IsVisible = false;
@@ -50,9 +59,28 @@ namespace AvanadeStudioTV.Views
 
 
 		}
-   
 
-        private void LoadNextVideo(string obj)
+		private void SetUseNativePlayer()
+		{
+			UseWebPlayer = true;
+		  switch (Device.RuntimePlatform)
+			{
+				case Device.UWP:
+					if (UseNativePlayerOnUWP)
+						UseWebPlayer = false;
+					break;
+				case Device.iOS:
+					UseWebPlayer = true;
+					break;
+				case Device.Android:
+					UseWebPlayer = true;
+					break;
+
+
+			}
+		}
+		
+		private void LoadNextVideo(string obj)
         {
             if (VideoCompleted != null)
             {
@@ -82,12 +110,19 @@ namespace AvanadeStudioTV.Views
         {
             base.OnAppearing();
 
- 
 
 
 
-			VideoPlayerView.Source = VideoSource.FromResource("AvanadeStudioIntro.mp4");
-            VideoPlayerView.Play();
+
+			if (!UseWebPlayer)
+			{
+				VideoPlayerView.HeightRequest = VideoStack.Height;
+				VideoPlayerView.WidthRequest = VideoStack.WidthRequest;
+				VideoPlayerView.VerticalOptions = LayoutOptions.FillAndExpand;
+				VideoPlayerView.Source = VideoSource.FromResource("AvanadeStudioIntro.mp4");
+				 
+				VideoPlayerView.Play(); 
+			}
             
 
 
@@ -99,22 +134,26 @@ namespace AvanadeStudioTV.Views
             String pv = "PlayVideo('" + Source + "');";
             Device.BeginInvokeOnMainThread(() =>
             {
-                if (Device.RuntimePlatform != Device.UWP)
-                {
-                         VideoWebView.InjectJavascriptAsync(pv);
-                }
-                else
-                {
-                    VideoPlayerView.Source = VideoSource.FromUri(url);
-                    VideoPlayerView.Play();
-                    VideoPlayerView.VideoEnded += VideoPlayerView_VideoEnded;
-                }
-            });
+				 if (UseWebPlayer)
+				{
+					VideoWebView.InjectJavascriptAsync(pv);
+					VideoWebView.InjectJavascriptAsync("RemoveScrolling();");
+				}
+				else
+				{
+					
+					VideoPlayerView.Source = VideoSource.FromUri(url);
+					VideoPlayerView.Play();
+					VideoPlayerView.VideoEnded += VideoPlayerView_VideoEnded;
+				}
+			});
    
              
         }
 
-        private void VideoPlayerView_VideoEnded(object sender, EventArgs e)
+	 
+
+		private void VideoPlayerView_VideoEnded(object sender, EventArgs e)
         {
             VideoCompleted?.Invoke();
         }
