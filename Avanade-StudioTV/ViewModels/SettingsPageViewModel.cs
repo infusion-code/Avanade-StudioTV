@@ -10,6 +10,7 @@ using System.Windows.Input;
 using AvanadeStudioTV.Database;
 using Realms;
 using System.Linq;
+using Avanade_StudioTV;
 
 namespace AvanadeStudioTV.ViewModels
 {
@@ -100,23 +101,9 @@ namespace AvanadeStudioTV.ViewModels
 
         public SettingsPageViewModel(INavigation navigation, MasterPage master)
         {
-			var realm = Realm.GetInstance();
 
-			var RssFeeds = realm.All<RSSFeedData>().ToList<RSSFeedData>();
 
-			this.FeedList = new ObservableCollection<RSSFeedViewData>();
 
-			//map Realm object to Non Realm object
-			foreach (RSSFeedData r in RssFeeds)
-			{
-				RSSFeedViewData n = new RSSFeedViewData();
-				n.ChannelName = r.ChannelName;
-				n.Desc = r.Desc;
-				n.url = r.url;
-				n.imageUrl = r.imageUrl;
-
-				this.FeedList.Add(n);
-			}
 
  
  
@@ -147,10 +134,14 @@ namespace AvanadeStudioTV.ViewModels
 
 		public async void GetNewsFeedAsync()
         {
-            NetworkManager manager = NetworkManager.Instance;
-           List<Item> list = await manager.GetSyncFeedAsync();
-            
-        }
+			var result = await App.DataManager.GetDataFromNetwork();
+
+		   var list =  App.DataManager.CurrentPlaylist;
+
+			this.FeedList = new ObservableCollection<RSSFeedViewData>(App.DataManager.AllFeeds);
+
+
+		}
 
         protected void OnPropertyChanged(string propertyName)
         {

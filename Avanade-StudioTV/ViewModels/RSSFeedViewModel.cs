@@ -7,6 +7,8 @@ using AvanadeStudioTV.Network;
 using Xamarin.Forms;
 using System;
 using System.Windows.Input;
+using AvanadeStudioTV.Database;
+using Avanade_StudioTV;
 
 namespace AvanadeStudioTV.ViewModels
 {
@@ -22,7 +24,11 @@ namespace AvanadeStudioTV.ViewModels
 
         public List<string> Playlist { get; set; }
 
-        public ObservableCollection<Item> FeedList
+	
+
+
+		ObservableCollection<Item> feedList = null;
+		public ObservableCollection<Item> FeedList
         {
             get => feedList;
             set
@@ -37,6 +43,23 @@ namespace AvanadeStudioTV.ViewModels
         }
 
 		private INavigation Navigation;
+
+
+		private Channel currentChannel = null;
+
+		public Channel CurrentChannel
+		{
+			get => currentChannel;
+			set
+			{
+				if (currentChannel != value)
+				{
+					currentChannel = value;
+					OnPropertyChanged("CurrentChannel");
+					 
+				}
+			}
+		}
 
 		private Item selectedItem = null;
      
@@ -53,7 +76,7 @@ namespace AvanadeStudioTV.ViewModels
                 }
             }
         }
-        ObservableCollection<Item> feedList = null;
+     
         public event PropertyChangedEventHandler PropertyChanged;
 
         public RSSFeedViewModel(INavigation navigation, MasterPage master)
@@ -71,16 +94,29 @@ namespace AvanadeStudioTV.ViewModels
 		}
 
 		public async void GetNewsFeedAsync()
-        {
-            NetworkManager manager = NetworkManager.Instance;
-            List<Item> list = await manager.GetSyncFeedAsync();
-            FeedList = new ObservableCollection<Item>(list);
+		{
+			var connected = await App.DataManager.GetDataFromNetwork();
+			List<Item> list = App.DataManager.CurrentPlaylist;
 
-			//start first video
-			this.SelectedItem = FeedList[0];
+			CurrentChannel = App.DataManager.CurrentChannel;
+
+			if (list != null)
+			{
+				FeedList = new ObservableCollection<Item>(list);
+
+				//start first video
+				this.SelectedItem = FeedList[0];
+			}
+
+			else ShowErrorMessage();
 		}
 
-        protected void OnPropertyChanged(string propertyName)
+		private void ShowErrorMessage()
+		{
+			this.Master.DisplayAlert("Error", "Could not connect to Feed Data", "OK");
+		}
+
+		protected void OnPropertyChanged(string propertyName)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }

@@ -94,9 +94,7 @@
     <None Include="Entitlements.plist" />
     <None Include="Info.plist" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <BundleResource Include="Resources\Font Awesome 5 Free-Regular-400.otf">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </BundleResource>
+    <BundleResource Include="Resources\FontAwesome4.otf" />
   </ItemGroup>
   <ItemGroup>
     <InterfaceDefinition Include="Resources\LaunchScreen.storyboard" />

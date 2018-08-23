@@ -11,9 +11,9 @@ namespace AvanadeStudioTV.Network
 {
     public class FeedItemParser
     {
-    
+		public Rss Channel9RSSDATA { get; set; }
 
-            public FeedItemParser()
+		public FeedItemParser()
             {
             }
 
@@ -51,19 +51,21 @@ namespace AvanadeStudioTV.Network
                 return null;
             }
 
-            Rss FeedObject = new Rss();
+			Channel9RSSDATA = new Rss();
             XmlSerializer serializer = new XmlSerializer(typeof(Rss));
 
             using (var reader = new StringReader(response))
             {
-                FeedObject = (Rss)serializer.Deserialize(reader);
+				Channel9RSSDATA = (Rss)serializer.Deserialize(reader);
             }
 
            // FeedObject = ScrubObject(FeedObject);
-            return FeedObject.Channel.Item;
+            return Channel9RSSDATA.Channel.Item;
 
         }
 
+
+		//not used
         private Rss ScrubObject(Rss feedObject)
         {
             Rss FeedObject = new Rss();

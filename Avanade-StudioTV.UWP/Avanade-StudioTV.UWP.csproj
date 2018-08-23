@@ -107,7 +107,7 @@
       <SubType>Designer</SubType>
     </AppxManifest>
     <Content Include="AddChannelButton.PNG" />
-    <Content Include="Assets\Fonts\Font Awesome 5 Free-Regular-400.otf">
+    <Content Include="Assets\Fonts\FontAwesome4.otf">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <None Include="Avanade-StudioTV.UWP_TemporaryKey.pfx" />

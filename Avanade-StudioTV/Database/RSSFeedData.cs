@@ -17,8 +17,10 @@ namespace AvanadeStudioTV.Database
 
 		public DateTimeOffset LastModified { get; set; }
 
-		 
- 
+		public bool isActiveFeed { get; set; }
+
+
+
 	}
 
 	//View Model Object (not presisted in Realm)
@@ -32,6 +34,8 @@ namespace AvanadeStudioTV.Database
 		public string imageUrl { get; set; }
 
 		public DateTimeOffset LastModified { get; set; }
+
+		public bool isActiveFeed { get; set; }
 
 
 
