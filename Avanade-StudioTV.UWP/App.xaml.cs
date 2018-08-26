@@ -35,7 +35,9 @@ namespace Avanade_StudioTV.UWP
         /// <param name="e">Details about the launch request and process.</param>
         protected override void OnLaunched(LaunchActivatedEventArgs e)
         {
-            Frame rootFrame = Window.Current.Content as Frame;
+
+
+			Frame rootFrame = Window.Current.Content as Frame;
 
             // Do not repeat app initialization when the Window already has content,
             // just ensure that the window is active
@@ -63,8 +65,15 @@ namespace Avanade_StudioTV.UWP
                     //TODO: Load state from previously suspended application
                 }
 
-                // Place the frame in the current Window
-                Window.Current.Content = rootFrame;
+				if (e.PreviousExecutionState != ApplicationExecutionState.Running)
+				{
+					bool loadState = (e.PreviousExecutionState == ApplicationExecutionState.Terminated);
+					ExtendedSplash extendedSplash = new ExtendedSplash(e.SplashScreen, loadState);
+					Window.Current.Content = extendedSplash;
+				}
+
+				// Place the frame in the current Window
+				Window.Current.Content = rootFrame;
             }
 
             if (e.PrelaunchActivated == false)

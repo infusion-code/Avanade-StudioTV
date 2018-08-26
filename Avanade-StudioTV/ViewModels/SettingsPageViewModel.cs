@@ -23,6 +23,33 @@ namespace AvanadeStudioTV.ViewModels
 
 		ICommand closeSettingsPage;
 
+		private bool _isChecked;
+		private string _textCheckBox;
+
+		public bool IsChecked
+		{
+			get => _isChecked;
+			set
+			{
+				_isChecked = value;
+				TextCheckBox = _isChecked ? "Is Playing" : "Is Playing";
+				OnPropertyChanged("IsChecked");
+			}
+		}
+
+		public string TextCheckBox
+		{
+			get => _textCheckBox;
+			set
+			{
+				_textCheckBox = value;
+				OnPropertyChanged("TextCheckBox");
+			}
+		}
+
+
+		public Command OnCheckedChanged { get; set; }
+
 		public ICommand CloseSettingsPage
 		{
 			get { return closeSettingsPage; }
