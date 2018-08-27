@@ -1,24 +1,32 @@
 ﻿using System;
-using System;
 using System.Collections.Generic;
 using System.Diagnostics.Contracts;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Xamarin.Essentials;
- 
+using Realms;
+
 
 using AvanadeStudioTV.Models;
+using AvanadeStudioTV.Database;
+using System.Runtime.Serialization;
+using System.Linq;
 
 namespace AvanadeStudioTV.Network
 {
     public class NetworkManager
     {
         public static NetworkManager network_manager = new NetworkManager();
-        public static string network_url = "https://s.ch9.ms/Shows/XamarinShow/feed/mp4high"; //"https://s.ch9.ms/Shows/OEMTV/feed"; //"https://s.ch9.ms/Feeds/RSS";  //https://s.ch9.ms/Shows/OEMTV/feed
+
+		public Channel channel { get; set; }
         private NetworkManager()
         {
-        }
+			 
 
+			 
+		
+		}
+		
         public static NetworkManager Instance
         {
             get
@@ -27,23 +35,35 @@ namespace AvanadeStudioTV.Network
             }
         }
 
-        public async Task<List<Item>> GetSyncFeedAsync()
+        public async Task<List<Item>> GetSyncFeedAsync(string url)
         {
             if (this.IsConnected())
             {
-                Uri uri = new Uri(network_url);
-                HttpClient client = new HttpClient();
-                HttpResponseMessage response = await client.GetAsync(uri);
-                String response_string = await response.Content.ReadAsStringAsync();
-                FeedItemParser parser = new FeedItemParser();
-                // List<FeedItem> list = await Task.Run(() => parser.ParseFeed(response_string));
-                List<Item> list = await Task.Run(() => parser.ParseFeed(response_string));
-                return list;
+				try
+				{
+					var uri = new Uri(url);
+					HttpClient client = new HttpClient();
+					HttpResponseMessage response = await client.GetAsync(uri);
+					String response_string = await response.Content.ReadAsStringAsync();
+					FeedItemParser parser = new FeedItemParser();
+
+					List<Item> list = await Task.Run(() => parser.ParseFeed(response_string));
+					channel = parser.Channel9RSSDATA.Channel;
+					return list;
+				}
+				catch (Exception e)
+				{
+					//TODO add exception handling
+					return null;
+				}
             }
             return null;
         }
+ 
 
-        public bool IsConnected()
+ 
+
+		public bool IsConnected()
         {
             var current = Connectivity.NetworkAccess;
 

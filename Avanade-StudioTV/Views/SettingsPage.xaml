@@ -1,0 +1,61 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+              xmlns:controls="clr-namespace:AvanadeStudioTV.Views"
+             x:Class="AvanadeStudioTV.Views.SettingsPage" BackgroundImage="BlackGradBack.png"  >
+    <ContentPage.Content>
+        <StackLayout>
+            <Label Text="Video Player Settings" TextColor="WhiteSmoke"
+                VerticalOptions="CenterAndExpand" 
+                HorizontalOptions="CenterAndExpand" />
+            <Button Text="CLOSE" FontSize="Medium" TextColor="WhiteSmoke" Command="{Binding CloseSettingsPage}"  />
+            <Frame HasShadow="True" CornerRadius="25"   Margin= "100,10,400,0" BackgroundColor="Transparent" BorderColor="WhiteSmoke">
+                 
+                    <StackLayout Orientation="Horizontal" HorizontalOptions="FillAndExpand" VerticalOptions="Start">
+                    <Image Source ="https://sec.ch9.ms/content/feedimage.png"   Aspect="AspectFit" HeightRequest="100" />
+                    <Grid VerticalOptions="CenterAndExpand" HorizontalOptions="StartAndExpand" Margin= "40,0,0,0">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="20*" />
+                                <RowDefinition Height="20*" />
+                                <RowDefinition Height="40*" />
+                                <RowDefinition Height="20*" />
+                        </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="60*" />
+                                <ColumnDefinition Width="40*" />
+                                <ColumnDefinition Width="10*" />
+                                
+                            </Grid.ColumnDefinitions>
+                        <Label Grid.Row="0" Grid.Column="0" Margin="2,0,0,0" VerticalOptions="End"  HorizontalOptions="Start" TextColor="WhiteSmoke" Text="Channel 9 Show Description:" FontSize="11"></Label>
+                        <Entry Grid.Row="1" Grid.Column="0" WidthRequest="400" BackgroundColor="White" TextColor="Black"  Margin="2,0,0,0" VerticalOptions="Start"  HorizontalOptions="Start"   Text="{Binding NewFeed.Desc} " FontSize="Small"></Entry>
+
+                        <Label Grid.Row="2" Grid.Column="0" Margin="2,5,0,0" VerticalOptions="End"  HorizontalOptions="Start" TextColor="WhiteSmoke" Text="RSS Feed URL:" FontSize="11"></Label>
+                        <Entry Grid.Row="3" Grid.Column="0" WidthRequest="400" BackgroundColor="White" TextColor="Black"  Margin="2,0,0,0" VerticalOptions="Start"  HorizontalOptions="Start"   Text="{Binding NewFeed.url} " FontSize="Small"></Entry>
+
+
+                        <controls:Checkbox  Grid.Row="1" Grid.Column="1" Margin="2,0,0,0"  
+                                VerticalOptions="StartAndExpand" 
+                                HorizontalOptions="StartAndExpand" 
+                                Checked="{Binding NewFeed.isActiveFeed}" 
+                                Text="{Binding TextCheckBox}" 
+                                Command="{Binding OnCheckedChanged}">
+                            </controls:Checkbox>
+
+                        <Button Grid.Row="3" Grid.Column="1" Margin="2,0,0,0"  HeightRequest="80" WidthRequest="100" HorizontalOptions="StartAndExpand" VerticalOptions="StartAndExpand" FontSize="13" FontAttributes="Bold" BackgroundColor="Transparent" Text="Add Channel" TextColor="WhiteSmoke" Command="{Binding AddFeedCommand}" />
+                       
+                    </Grid>
+
+                    </StackLayout>
+                 
+            </Frame>
+            <ListView BackgroundColor="Transparent" Margin= "100,10,400,0" x:Name="FeedListView" CachingStrategy="RecycleElement" SelectedItem="{Binding SelectedItem, Mode=TwoWay}" ItemsSource="{Binding FeedList}"  HasUnevenRows="true">
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <controls:SettingsCell>
+                        </controls:SettingsCell>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>

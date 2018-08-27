@@ -3,11 +3,14 @@ using System;
 using System.Reflection;
 using Windows.ApplicationModel;
 using Windows.ApplicationModel.Activation;
+using Windows.ApplicationModel.Core;
+using Windows.UI.ViewManagement;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Navigation;
 using Xam.Plugin.WebView.UWP;
 
+[assembly: Xamarin.Forms.Platform.UWP.ExportRenderer(typeof(Xam.Plugin.WebView.Abstractions.FormsWebView), typeof(Xam.Plugin.WebView.UWP.FormsWebViewRenderer))]
 namespace Avanade_StudioTV.UWP
 {
     /// <summary>
@@ -32,7 +35,9 @@ namespace Avanade_StudioTV.UWP
         /// <param name="e">Details about the launch request and process.</param>
         protected override void OnLaunched(LaunchActivatedEventArgs e)
         {
-            Frame rootFrame = Window.Current.Content as Frame;
+
+
+			Frame rootFrame = Window.Current.Content as Frame;
 
             // Do not repeat app initialization when the Window already has content,
             // just ensure that the window is active
@@ -44,6 +49,8 @@ namespace Avanade_StudioTV.UWP
                 rootFrame.NavigationFailed += OnNavigationFailed;
 
                 var rendererAssemblies = new[] { typeof(HtmlLabelRenderer).GetTypeInfo().Assembly };
+
+                var rendererVideoAssemblies = new[] { typeof(FormsWebViewRenderer).GetTypeInfo().Assembly };
 
                 //webview: https://github.com/SKLn-Rad/Xam.Plugin.Webview
                 FormsWebViewRenderer.Initialize();
@@ -58,8 +65,15 @@ namespace Avanade_StudioTV.UWP
                     //TODO: Load state from previously suspended application
                 }
 
-                // Place the frame in the current Window
-                Window.Current.Content = rootFrame;
+				if (e.PreviousExecutionState != ApplicationExecutionState.Running)
+				{
+					bool loadState = (e.PreviousExecutionState == ApplicationExecutionState.Terminated);
+					ExtendedSplash extendedSplash = new ExtendedSplash(e.SplashScreen, loadState);
+					Window.Current.Content = extendedSplash;
+				}
+
+				// Place the frame in the current Window
+				Window.Current.Content = rootFrame;
             }
 
             if (e.PrelaunchActivated == false)
@@ -72,16 +86,31 @@ namespace Avanade_StudioTV.UWP
                     rootFrame.Navigate(typeof(MainPage), e.Arguments);
                 }
                 // Ensure the current window is active
+
+                ApplicationView.PreferredLaunchWindowingMode = ApplicationViewWindowingMode.PreferredLaunchViewSize;
+                 
+
                 Window.Current.Activate();
             }
-        }
 
-        /// <summary>
-        /// Invoked when Navigation to a certain page fails
-        /// </summary>
-        /// <param name="sender">The Frame which failed navigation</param>
-        /// <param name="e">Details about the navigation failure</param>
-        void OnNavigationFailed(object sender, NavigationFailedEventArgs e)
+
+			this.ExtendAcrylicIntoTitleBar();
+		}
+
+		private void ExtendAcrylicIntoTitleBar()
+		{
+			CoreApplication.GetCurrentView().TitleBar.ExtendViewIntoTitleBar = true;
+			var titleBar = ApplicationView.GetForCurrentView().TitleBar;
+			titleBar.ButtonBackgroundColor = Windows.UI.Colors.Transparent;
+			titleBar.ButtonInactiveBackgroundColor = Windows.UI.Colors.Transparent;
+		}
+
+		/// <summary>
+		/// Invoked when Navigation to a certain page fails
+		/// </summary>
+		/// <param name="sender">The Frame which failed navigation</param>
+		/// <param name="e">Details about the navigation failure</param>
+		void OnNavigationFailed(object sender, NavigationFailedEventArgs e)
         {
             throw new Exception("Failed to load Page " + e.SourcePageType.FullName);
         }

@@ -1,17 +1,57 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:video="clr-namespace:FormsVideoLibrary"
             xmlns:fwv="clr-namespace:Xam.Plugin.WebView.Abstractions;assembly=Xam.Plugin.WebView.Abstractions" 
-             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" x:Class="AvanadeStudioTV.Views.VideoPage">
-   <!-- <ContentPage.Content>
-        <StackLayout Orientation = "Vertical"> 
-        <Image x:Name = "LaunchImage"  HeightRequest = "200" Source = "AvanadeLogoBig.jpg" />
-         <o:VideoPlayer x:Name="videoPlayer"  AutoPlay="True" IsVisible = "false" />
-          </StackLayout>
-    </ContentPage.Content> -->
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" x:Class="AvanadeStudioTV.Views.VideoPage"
+             BackgroundImage = "BlackGradBack.png">
+ 
 
   <ContentPage.Content>
+        <Grid VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="85*" />
+                <RowDefinition Height="15*" />
+            </Grid.RowDefinitions>
+            <StackLayout x:Name = "VideoStack" Grid.Row="0">
+                <!--<fwv:FormsWebView x:Name = "VideoWebView" Source="video.html" ContentType="LocalFile"   />-->
+                <video:VideoPlayer x:Name="VideoPlayerView" />
+            </StackLayout>
+            <Frame HasShadow="False" Grid.Row="1" CornerRadius="25" Padding="2" BackgroundColor="Transparent">
+                <Frame HasShadow="False" CornerRadius="23" BackgroundColor= "Transparent" Padding="12">
+                    <StackLayout Orientation="Horizontal" HorizontalOptions="FillAndExpand" VerticalOptions="Start">
+                        <Image Source ="StudioTVcircle.png"   Aspect="AspectFill" />
+                        <Grid VerticalOptions="CenterAndExpand" HorizontalOptions="StartAndExpand">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="60*" />
+                                <RowDefinition Height="20*" />
+                                <RowDefinition Height="20*" />
+                                <!--<RowDefinition Height="30*" />-->
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="15*" />
+                                <ColumnDefinition Width="40*" />
+                                <ColumnDefinition Width="20*" />
+                                <ColumnDefinition Width="20*" />
+                            </Grid.ColumnDefinitions>
+                            <Label Grid.Row="0" Grid.Column="0" Margin="2,0,0,0" VerticalOptions="End"  HorizontalOptions="Start" TextColor="WhiteSmoke" Text="Now Playing:" FontSize="Small"></Label>
+                            <Label Grid.Row="0" Grid.Column="1" Margin="2,0,0,0" VerticalOptions="End"  HorizontalOptions="Start"  TextColor="WhiteSmoke" Text="{Binding SelectedItem.Title} " FontSize="Small"></Label>
 
-        <fwv:FormsWebView x:Name = "VideoWebView" Source="video.html" ContentType="LocalFile"   />
-        
+                            <!--<Label Grid.Row="1"  Grid.Column="0" Margin="10,0,0,0" TextColor="WhiteSmoke" Text="Channel:" FontSize="Small"></Label>
+                            <Label Grid.Row="1" Grid.Column="1" Margin="2,0,0,0" TextColor="WhiteSmoke" Text="{Binding SelectedItem.Category2} " FontSize="Small"></Label>-->
+
+                            <Label Grid.Row="1"  Grid.Column="0" Margin="2,0,0,0" VerticalOptions="Start"  HorizontalOptions="Start"  TextColor="WhiteSmoke" Text="Author:" FontSize="12"></Label>
+                            <Label Grid.Row="1" Grid.Column="1" Margin="2,0,0,0" VerticalOptions="Start"  HorizontalOptions="Start"  TextColor="WhiteSmoke" Text="{Binding SelectedItem.Author} " FontSize="12"></Label>
+
+
+                            <Label Grid.Row="2"  Grid.Column="0" Margin="2,0,0,0" VerticalOptions="Start"  HorizontalOptions="Start"  TextColor="WhiteSmoke" Text="Publish Date:" FontSize="12"></Label>
+                            <Label Grid.Row="2" Grid.Column="1" Margin="2,0,0,0" VerticalOptions="Start"  HorizontalOptions="Start"  TextColor="WhiteSmoke" Text="{Binding SelectedItem.PubDate, StringFormat='{0:d}'}  " FontSize="12"></Label>
+
+
+                        </Grid>
+
+                    </StackLayout>
+                </Frame>
+            </Frame>
+        </Grid>
     </ContentPage.Content>
 </ContentPage>

@@ -6,17 +6,30 @@ using AvanadeStudioTV.Models;
 using AvanadeStudioTV.Network;
 using Xamarin.Forms;
 using System;
+using System.Windows.Input;
+using AvanadeStudioTV.Database;
+using Avanade_StudioTV;
+using System.Linq;
 
 namespace AvanadeStudioTV.ViewModels
 {
     public class RSSFeedViewModel : INotifyPropertyChanged
     {
-       
-        public MasterPage Master { get; set; }
+		ICommand openSettingsPage;
+
+		public ICommand OpenSettingsPage
+		{
+			get { return openSettingsPage; }
+		}
+		public MasterPage Master { get; set; }
 
         public List<string> Playlist { get; set; }
 
-        public ObservableCollection<Item> FeedList
+	
+
+
+		ObservableCollection<Item> feedList = null;
+		public ObservableCollection<Item> FeedList
         {
             get => feedList;
             set
@@ -30,10 +43,27 @@ namespace AvanadeStudioTV.ViewModels
             }
         }
 
-      
+		private INavigation Navigation;
 
-        private Item selectedItem = null;
-        private INavigation Navigation;
+
+		private Channel currentChannel = null;
+
+		public Channel CurrentChannel
+		{
+			get => currentChannel;
+			set
+			{
+				if (currentChannel != value)
+				{
+					currentChannel = value;
+					OnPropertyChanged("CurrentChannel");
+					 
+				}
+			}
+		}
+
+		private Item selectedItem = null;
+     
         public Item SelectedItem
         {
             get => selectedItem;
@@ -47,7 +77,7 @@ namespace AvanadeStudioTV.ViewModels
                 }
             }
         }
-        ObservableCollection<Item> feedList = null;
+     
         public event PropertyChangedEventHandler PropertyChanged;
 
         public RSSFeedViewModel(INavigation navigation, MasterPage master)
@@ -55,16 +85,47 @@ namespace AvanadeStudioTV.ViewModels
             this.Master = master;
             this.GetNewsFeedAsync();
             Navigation = navigation;
-        }
+			openSettingsPage = new Command(OnOpenSettingsPage);
 
-        public async void GetNewsFeedAsync()
-        {
-            NetworkManager manager = NetworkManager.Instance;
-            List<Item> list = await manager.GetSyncFeedAsync();
-            FeedList = new ObservableCollection<Item>(list);
-        }
+			//Subscibe to insert expenses
+			MessagingCenter.Subscribe<string>(this, "Update", (obj) =>
+			{
+				this.GetNewsFeedAsync();
+			});
+		}
 
-        protected void OnPropertyChanged(string propertyName)
+		void OnOpenSettingsPage( )
+		{
+			var settings = new SettingsPage(this.Master, this.Navigation, this);
+			this.Navigation.PushModalAsync(settings);
+		}
+
+		public async void GetNewsFeedAsync()
+		{
+			var connected = await App.DataManager.GetDataFromNetwork();
+			List<Item> list = App.DataManager.CurrentPlaylist;
+
+			CurrentChannel = App.DataManager.CurrentChannel;
+
+			if (list != null)
+			{
+				
+				FeedList = new ObservableCollection<Item>(list);
+				 
+
+				//start first video
+				this.SelectedItem = FeedList[0];
+			}
+
+			else ShowErrorMessage();
+		}
+
+		private void ShowErrorMessage()
+		{
+			this.Master.DisplayAlert("Error", "Could not connect to Feed Data", "OK");
+		}
+
+		protected void OnPropertyChanged(string propertyName)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
@@ -75,6 +136,7 @@ namespace AvanadeStudioTV.ViewModels
 
             this.Master.videoPage.VideoCompleted += VideoPage_VideoCompleted;
 
+			this.Master.videoPage.ViewModel.SelectedItem = selectedItem;
 
             this.Master.videoPage.PlayVideo(selectedItem.Enclosure.Url);
             this.Master.videoPage.ForceLayout();
@@ -85,8 +147,17 @@ namespace AvanadeStudioTV.ViewModels
         private void VideoPage_VideoCompleted()
         {
             var index = FeedList.IndexOf(SelectedItem) ;
-            this.SelectedItem = FeedList[index +1];
-            this.Master.ReaderPage.FeedView.ScrollTo(SelectedItem,ScrollToPosition.MakeVisible,true);
+			if (FeedList.ElementAtOrDefault(index + 1) != null)
+			{
+				this.SelectedItem = FeedList[index + 1];
+			}
+			//Loop playlist 
+			//TODO need implement multiple playlists here
+			else
+			{
+				this.SelectedItem = FeedList[0];
+			}
+			this.Master.ReaderPage.FeedView.ScrollTo(SelectedItem,ScrollToPosition.MakeVisible,true);
         }
     }
 }

@@ -1,14 +1,33 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms" xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
              x:Class="AvanadeStudioTV.Views.RSSReaderPage" 
-             xmlns:Cell="clr-namespace:AvanadeStudioTV.Views">
+             xmlns:Cell="clr-namespace:AvanadeStudioTV.Views" BackgroundImage="BlackGradBack.png"  >
     <ContentPage.Content>
-        <StackLayout Margin="0,5,0,0" Orientation="Vertical">
-            <StackLayout Margin="0,0,0,0">
-                <Image Source ="AvanadeLogoBig.jpg" HeightRequest = "50" />
-                <Label Text="Video Playlist" LineBreakMode="WordWrap" Margin="2" HeightRequest="30" FontSize="10" FontAttributes="Italic" />
+        <StackLayout Margin="0,0,0,0" Orientation="Vertical"  >
+            <StackLayout Margin="0,0,0,0" BackgroundColor="Transparent" >
+                <Image Source ="AvLeftHeader.png" Aspect="AspectFill" >
+                    <Image.GestureRecognizers>
+                        <TapGestureRecognizer
+            Command="{Binding OpenSettingsPage}"
+             />
+                    </Image.GestureRecognizers>
+                </Image>
+                <StackLayout Orientation="Horizontal">
+                    <Label Text="&#xf008;"   TextColor="WhiteSmoke" FontSize="Medium" >
+                    <Label.FontFamily>
+                        <OnPlatform 
+                        x:TypeArguments="x:String"
+                        Android="FontAwesome4.otf#FontAwesome" 
+                        iOS="FontAwesome" 
+                        WinPhone="/Assets/Fonts/FontAwesome4.otf.otf#FontAwesome" />
+                    </Label.FontFamily>
+                    </Label>
+
+                    <Label Text="Now Playing:" LineBreakMode="WordWrap" Margin="2" HeightRequest="20" BackgroundColor="Transparent" FontSize="12" TextColor = "White"   />
+                    <Label Text="{Binding CurrentChannel.Title}" LineBreakMode="WordWrap" Margin="2" HeightRequest="20" BackgroundColor="Transparent" FontSize="12" TextColor = "White"   />
+                </StackLayout>
             </StackLayout>
-            <ListView x:Name="FeedListView" CachingStrategy="RecycleElement" SelectedItem="{Binding SelectedItem, Mode=TwoWay}" ItemsSource="{Binding FeedList}"  HasUnevenRows="true">
+            <ListView BackgroundColor="Transparent" Margin="0,5,0,0" x:Name="FeedListView" CachingStrategy="RecycleElement" SelectedItem="{Binding SelectedItem, Mode=TwoWay}" ItemsSource="{Binding FeedList}"  HasUnevenRows="true">
                 <ListView.ItemTemplate>
                     <DataTemplate>
                         <Cell:FeedCell>
@@ -18,4 +37,8 @@
             </ListView>
         </StackLayout>
     </ContentPage.Content>
+    <ContentPage.Resources>
+        <ResourceDictionary>
+        </ResourceDictionary>
+    </ContentPage.Resources>
 </ContentPage>

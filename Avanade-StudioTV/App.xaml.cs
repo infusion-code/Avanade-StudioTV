@@ -2,20 +2,35 @@ using System;
 using AvanadeStudioTV.Views;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
+using Realms;
+using AvanadeStudioTV.Database;
+using System.Collections.Generic;
 
 [assembly: XamlCompilation(XamlCompilationOptions.Compile)]
 namespace Avanade_StudioTV
 {
     public partial class App : Application
     {
-        public App()
+		public static FeedManager DataManager { get; set; }
+		public App()
         {
             InitializeComponent();
+
+			InitalizeData();
 
             MainPage = new MasterPage();
         }
 
-        protected override void OnStart()
+		//using Realm to persist data - initalize if no feeds created by user first:
+		private void InitalizeData()
+		{
+
+			DataManager = FeedManager.Instance;
+
+		}
+ 
+
+		protected override void OnStart()
         {
             // Handle when your app starts
         }
