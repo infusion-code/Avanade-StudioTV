@@ -9,6 +9,7 @@ using System;
 using System.Windows.Input;
 using AvanadeStudioTV.Database;
 using Avanade_StudioTV;
+using System.Linq;
 
 namespace AvanadeStudioTV.ViewModels
 {
@@ -85,11 +86,17 @@ namespace AvanadeStudioTV.ViewModels
             this.GetNewsFeedAsync();
             Navigation = navigation;
 			openSettingsPage = new Command(OnOpenSettingsPage);
+
+			//Subscibe to insert expenses
+			MessagingCenter.Subscribe<string>(this, "Update", (obj) =>
+			{
+				this.GetNewsFeedAsync();
+			});
 		}
 
 		void OnOpenSettingsPage( )
 		{
-			var settings = new SettingsPage(this.Master, this.Navigation);
+			var settings = new SettingsPage(this.Master, this.Navigation, this);
 			this.Navigation.PushModalAsync(settings);
 		}
 
@@ -102,7 +109,9 @@ namespace AvanadeStudioTV.ViewModels
 
 			if (list != null)
 			{
+				
 				FeedList = new ObservableCollection<Item>(list);
+				 
 
 				//start first video
 				this.SelectedItem = FeedList[0];
@@ -138,8 +147,17 @@ namespace AvanadeStudioTV.ViewModels
         private void VideoPage_VideoCompleted()
         {
             var index = FeedList.IndexOf(SelectedItem) ;
-            this.SelectedItem = FeedList[index +1];
-            this.Master.ReaderPage.FeedView.ScrollTo(SelectedItem,ScrollToPosition.MakeVisible,true);
+			if (FeedList.ElementAtOrDefault(index + 1) != null)
+			{
+				this.SelectedItem = FeedList[index + 1];
+			}
+			//Loop playlist 
+			//TODO need implement multiple playlists here
+			else
+			{
+				this.SelectedItem = FeedList[0];
+			}
+			this.Master.ReaderPage.FeedView.ScrollTo(SelectedItem,ScrollToPosition.MakeVisible,true);
         }
     }
 }

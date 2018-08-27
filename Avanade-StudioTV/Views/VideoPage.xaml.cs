@@ -144,6 +144,7 @@ namespace AvanadeStudioTV.Views
 					
 					VideoPlayerView.Source = VideoSource.FromUri(url);
 					VideoPlayerView.Play();
+					
 					VideoPlayerView.VideoEnded += VideoPlayerView_VideoEnded;
 				}
 			});
@@ -156,7 +157,9 @@ namespace AvanadeStudioTV.Views
 		private void VideoPlayerView_VideoEnded(object sender, EventArgs e)
         {
             VideoCompleted?.Invoke();
-        }
+			VideoPlayerView.VideoEnded -= VideoPlayerView_VideoEnded;
+			 
+		}
 
         /// <summary>
         /// When overridden, allows the application developer to customize behavior as the <see cref="T:Xamarin.Forms.Page" /> disappears.

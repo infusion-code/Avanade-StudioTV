@@ -14,7 +14,7 @@
            
 
          <Label Grid.Row="0" Text="{Binding Title}" VerticalOptions="StartAndExpand"  Margin="2" FontSize="14" TextColor = "White" LineBreakMode="WordWrap" FontAttributes="Bold" />
-        <Image Grid.Row="1" Source="{Binding Thumbnail[2].Url}" VerticalOptions="StartAndExpand"  Aspect="AspectFill" />
+        <Image Grid.Row="1" Source="{Binding Thumbnail[0].Url}" VerticalOptions="CenterAndExpand"  Aspect="AspectFit" />
         <!--<Label Grid.Row="2" x:Name="DescLabel" Text="{Binding Summary}" VerticalOptions="StartAndExpand"  TextColor = "White"  LineBreakMode="WordWrap" Margin="2"  FontSize="11"   />-->
         <Label Grid.Row="2" Text="{Binding Author}" VerticalOptions="Start"   Margin="2"   FontSize="10" TextColor = "White"  FontAttributes="Italic" />
 

@@ -73,10 +73,39 @@ namespace AvanadeStudioTV.Database
 		public async Task<bool> GetDataFromNetwork()
 		{
 			var feed = realm.All<RSSFeedData>().Where(r => r.isActiveFeed == true).FirstOrDefault();
-			CurrentPlaylist = await NetworkService.GetSyncFeedAsync(feed.url);
+			CurrentPlaylist = ScrubPlaylist (await NetworkService.GetSyncFeedAsync(feed.url));
 			CurrentChannel = NetworkService.channel;
 			return true;
 		}
+
+		private List<Item> ScrubPlaylist(List<Item> list)
+		{
+			foreach (Item i in list)
+			{
+				var t = new Thumbnail();
+
+				t = i.Thumbnail.Find(s => s.Width == "512");
+				if (t?.Url != String.Empty)
+				{
+					i.Thumbnail.Clear();
+					i.Thumbnail.Add(t);
+				}
+
+
+			}
+			var x = list.OrderByDescending(l => DateTime.Parse(l.PubDate)).ToList();
+			return x;
+		}
+
+		public async Task<bool> ValidateChannel9FeedUrl(string url)
+		{ 
+			var feedItem = await NetworkService.GetSyncFeedAsync(url);
+			if (feedItem?.Count > 0)
+				return true;
+			else return false;
+		}
+
+
 
 		private void SetupNetworkService()
 		{
@@ -121,6 +150,12 @@ namespace AvanadeStudioTV.Database
 				 //"https://s.ch9.ms/Shows/OEMTV/feed"; 
 				 //"https://s.ch9.ms/Feeds/RSS";  
 				 //https://s.ch9.ms/Shows/OEMTV/feed
+
+			visual studio toolbox
+			https://s.ch9.ms/Shows/Visual-Studio-Toolbox/feed/mp4
+
+			AI Show
+			https://s.ch9.ms/Shows/AI-Show/feed
 				 */
 
 
