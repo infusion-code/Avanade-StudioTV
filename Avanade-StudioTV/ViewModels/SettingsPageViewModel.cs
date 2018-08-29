@@ -45,8 +45,10 @@ namespace AvanadeStudioTV.ViewModels
 			{
 				_textCheckBox = value;
 				OnPropertyChanged("TextCheckBox");
+				
 			}
 		}
+
 
 
 		public Command OnCheckedChanged { get; set; }
@@ -134,7 +136,18 @@ namespace AvanadeStudioTV.ViewModels
 
 			addFeedCommand = new Command(async () => { await AddFeed(); });
 
+			OnCheckedChanged = new Command(SetActiveFeed);
 
+		}
+
+		private void SetActiveFeed()
+		{
+			//Remove active feed flag for all other feeds (only 1 feed can be active in current UI)
+			if (SelectedItem != null && SelectedItem?.isActiveFeed == true)
+			{
+			  	FeedList?.Where(c => c.Desc != SelectedItem.Desc).ToList().ForEach(i => i.isActiveFeed = false);
+				var x = FeedList;
+			}
 		}
 
 		private async Task<bool> AddFeed()
@@ -163,8 +176,9 @@ namespace AvanadeStudioTV.ViewModels
 
 		private async Task<bool> ValidateFeed(string url)
 		{
+			
 
-		 var isValid  = await App.DataManager.ValidateChannel9FeedUrl(url);
+			var isValid  = await App.DataManager.ValidateChannel9FeedUrl(url);
 			if (isValid)
 			{ 
 			 NewFeed.ChannelName = App.DataManager.NetworkService.channel.Title;
@@ -191,6 +205,11 @@ namespace AvanadeStudioTV.ViewModels
 			SaveAsync();
 			 
 			this.Navigation.PopModalAsync();
+
+			{
+				//Reload video page with new videos
+				MessagingCenter.Send("obj", "Update");
+			}
 		}
 
 		private async void SaveAsync()
@@ -216,9 +235,7 @@ namespace AvanadeStudioTV.ViewModels
 				App.DataManager.AllFeeds = this.FeedList.ToList<RSSFeedViewData>();
 			});
 
-			{
-				MessagingCenter.Send("obj", "Update");
-			}
+	
 		}
 
 		public async void GetNewsFeedAsync()
@@ -231,6 +248,10 @@ namespace AvanadeStudioTV.ViewModels
 
 			foreach (RSSFeedViewData r in all)
 			{
+				//1. Set checkbox changed command for all feeds in FeedList
+				r.MakeActiveFeedCommand = OnCheckedChanged;
+					
+				//2. Set Delete command for all Feeds in Feedlist
 				r.DeleteCommand = new Command<RSSFeedViewData>((FeedItem) => {
 					if (FeedList.Count >1)
 					{

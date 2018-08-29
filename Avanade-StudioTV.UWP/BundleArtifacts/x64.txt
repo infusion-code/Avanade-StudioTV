@@ -1,0 +1,5 @@
+MainPackage=C:\Users\ahmed.c.khan\Documents\AvanadeProjects\Avanade-StudioTV\Avanade-StudioTV.UWP\bin\x64\Release\Avanade-StudioTV.UWP_1.0.3.0_x64.appx
+ResourcePack=C:\Users\ahmed.c.khan\Documents\AvanadeProjects\Avanade-StudioTV\Avanade-StudioTV.UWP\bin\x64\Release\Avanade-StudioTV.UWP_1.0.3.0_scale-100.appx
+ResourcePack=C:\Users\ahmed.c.khan\Documents\AvanadeProjects\Avanade-StudioTV\Avanade-StudioTV.UWP\bin\x64\Release\Avanade-StudioTV.UWP_1.0.3.0_scale-125.appx
+ResourcePack=C:\Users\ahmed.c.khan\Documents\AvanadeProjects\Avanade-StudioTV\Avanade-StudioTV.UWP\bin\x64\Release\Avanade-StudioTV.UWP_1.0.3.0_scale-150.appx
+ResourcePack=C:\Users\ahmed.c.khan\Documents\AvanadeProjects\Avanade-StudioTV\Avanade-StudioTV.UWP\bin\x64\Release\Avanade-StudioTV.UWP_1.0.3.0_scale-400.appx
