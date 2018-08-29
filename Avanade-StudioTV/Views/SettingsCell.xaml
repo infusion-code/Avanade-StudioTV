@@ -5,15 +5,15 @@
           xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" x:Class="AvanadeStudioTV.Views.SettingsCell" >
    
 
-    <Frame HasShadow="True" CornerRadius="25" HeightRequest="80"  BackgroundColor="Transparent" BorderColor="WhiteSmoke">
+    <Frame HasShadow="True" CornerRadius="25" HeightRequest="90"  BackgroundColor="Transparent" BorderColor="WhiteSmoke">
 
         <StackLayout Orientation="Horizontal" HorizontalOptions="FillAndExpand" VerticalOptions="Start">
-            <Image Source ="{Binding imageUrl}"   Aspect="AspectFit" HeightRequest="90" />
+            <Image Source ="{Binding imageUrl}"   Aspect="AspectFit" HeightRequest="110" />
             <Grid VerticalOptions="Center" HorizontalOptions="Start" Margin= "0,0,0,0">
                 <Grid.RowDefinitions>
+                    <RowDefinition Height="35*" />
                     <RowDefinition Height="20*" />
-                    <RowDefinition Height="20*" />
-                    <RowDefinition Height="20*" />
+                    <RowDefinition Height="25*" />
                     <RowDefinition Height="20*" />
                 </Grid.RowDefinitions>
                 <Grid.ColumnDefinitions>
@@ -23,20 +23,20 @@
 
                 </Grid.ColumnDefinitions>
                 <Label Grid.Row="0" Grid.Column="0" Margin="2,0,0,0" VerticalOptions="End"  HorizontalOptions="Start" TextColor="WhiteSmoke" Text="RSS Feed Channel Description:" FontSize="11"></Label>
-                <Label Grid.Row="1" Grid.Column="0" WidthRequest="500" BackgroundColor="Transparent" TextColor="WhiteSmoke"  Margin="2,0,0,0" VerticalOptions="Start"  HorizontalOptions="Start"   Text="{Binding Desc} " FontSize="13"></Label>
+                <Label Grid.Row="1" Grid.Column="0" WidthRequest="500" BackgroundColor="Transparent" TextColor="WhiteSmoke"  Margin="2,0,0,0" VerticalOptions="Start"  HorizontalOptions="Start"   Text="{Binding Desc} " FontSize="11"></Label>
 
                 <Label Grid.Row="2" Grid.Column="0" Margin="2,5,0,0" VerticalOptions="Start"  HorizontalOptions="Start" TextColor="WhiteSmoke" Text="RSS Feed URL:" FontSize="11"></Label>
-                <Label Grid.Row="3" Grid.Column="0" WidthRequest="500" BackgroundColor="Transparent" TextColor="WhiteSmoke"  Margin="2,0,0,0" VerticalOptions="Start"  HorizontalOptions="Start"   Text="{Binding url} " FontSize="13"></Label>
-                <StackLayout Orientation="Horizontal" Grid.Column="1"  >
+                <Label Grid.Row="3" Grid.Column="0" WidthRequest="500" BackgroundColor="Transparent" TextColor="WhiteSmoke"  Margin="2,0,0,0" VerticalOptions="Start"  HorizontalOptions="Start"   Text="{Binding url} " FontSize="11"></Label>
+                <StackLayout Orientation="Horizontal" Grid.Column="1" Grid.Row="0" >
                 <controls:Checkbox                     
                     VerticalOptions="CenterAndExpand" 
                     HorizontalOptions="CenterAndExpand" 
                     Checked="{Binding isActiveFeed}" 
                     Text="Is Playing" 
-                    Command="{Binding OnCheckedChanged}">
+                    Command="{Binding MakeActiveFeedCommand}">
                 </controls:Checkbox>
 
-                    <Button Text="DELETE" TextColor="WhiteSmoke" HorizontalOptions="StartAndExpand" FontAttributes="Bold" Grid.Column="3"  Command="{Binding DeleteCommand}"   CommandParameter="{Binding .}"/>
+                    <Button Text="DELETE" TextColor="WhiteSmoke" HorizontalOptions="StartAndExpand" VerticalOptions="StartAndExpand" FontAttributes="Bold" FontSize="8"   Command="{Binding DeleteCommand}"   CommandParameter="{Binding .}"/>
                 </StackLayout>
 
             </Grid>

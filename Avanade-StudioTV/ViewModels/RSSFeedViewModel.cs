@@ -87,11 +87,7 @@ namespace AvanadeStudioTV.ViewModels
             Navigation = navigation;
 			openSettingsPage = new Command(OnOpenSettingsPage);
 
-			//Subscibe to insert expenses
-			MessagingCenter.Subscribe<string>(this, "Update", (obj) =>
-			{
-				this.GetNewsFeedAsync();
-			});
+	
 		}
 
 		void OnOpenSettingsPage( )
@@ -133,11 +129,8 @@ namespace AvanadeStudioTV.ViewModels
         private  void OpenVideoPage()
         {
             this.Master.videoPage.ResetEvents();
-
             this.Master.videoPage.VideoCompleted += VideoPage_VideoCompleted;
-
 			this.Master.videoPage.ViewModel.SelectedItem = selectedItem;
-
             this.Master.videoPage.PlayVideo(selectedItem.Enclosure.Url);
             this.Master.videoPage.ForceLayout();
 

@@ -87,10 +87,11 @@ namespace Avanade_StudioTV.UWP
                 }
                 // Ensure the current window is active
 
-                ApplicationView.PreferredLaunchWindowingMode = ApplicationViewWindowingMode.PreferredLaunchViewSize;
-                 
+                ApplicationView.PreferredLaunchWindowingMode = ApplicationViewWindowingMode.FullScreen;
+				 
 
-                Window.Current.Activate();
+
+				Window.Current.Activate();
             }
 
 
