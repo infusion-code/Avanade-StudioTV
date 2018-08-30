@@ -107,10 +107,12 @@ namespace AvanadeStudioTV.ViewModels
 			{
 				
 				FeedList = new ObservableCollection<Item>(list);
-				 
+
+			 
 
 				//start first video
 				this.SelectedItem = FeedList[0];
+			 
 			}
 
 			else ShowErrorMessage();

@@ -34,7 +34,9 @@ namespace FormsVideoLibrary.UWP
                     mediaElement.MediaOpened += OnMediaElementMediaOpened;
                     mediaElement.CurrentStateChanged += OnMediaElementCurrentStateChanged;
                     mediaElement.MediaEnded += OnMediaElement_MediaEnded;
-                }
+					mediaElement.MediaFailed += MediaElement_MediaFailed;
+
+				}
 
                 SetAreTransportControlsEnabled();
                 SetSource();
@@ -55,9 +57,14 @@ namespace FormsVideoLibrary.UWP
             }
         }
 
-  
+		private void MediaElement_MediaFailed(object sender, ExceptionRoutedEventArgs e)
+		{
 
-        protected override void Dispose(bool disposing)
+			//On Error: fire video ended event to go to next video
+		   Element.NotifyVideoEnded();
+		}
+
+		protected override void Dispose(bool disposing)
         {
             if (Control != null)
             {
