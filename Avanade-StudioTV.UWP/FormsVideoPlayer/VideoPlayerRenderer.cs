@@ -27,7 +27,7 @@ namespace FormsVideoLibrary.UWP
                 {
                     MediaElement mediaElement = new MediaElement();
 					mediaElement.Stretch = Stretch.Uniform;
-					
+				
 
 					SetNativeControl(mediaElement);
 

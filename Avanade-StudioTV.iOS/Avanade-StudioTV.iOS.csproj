@@ -177,12 +177,10 @@
     <BundleResource Include="Resources\BlackGradBack.png" />
   </ItemGroup>
   <ItemGroup>
-    <BundleResource Include="Resources\AvanadeStudioIntro.mp4" />
-  </ItemGroup>
-  <ItemGroup>
     <BundleResource Include="Resources\video.html" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="FodyWeavers.xml" />
+    <BundleResource Include="Resources\AvanadeStudioIntro.mp4" />
   </ItemGroup>
 </Project>

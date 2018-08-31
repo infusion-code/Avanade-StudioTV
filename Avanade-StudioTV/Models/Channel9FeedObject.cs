@@ -128,6 +128,9 @@ namespace AvanadeStudioTV.Models
         public string CommentRss { get; set; }
         [XmlElement(ElementName = "category")]
         public List<string> Category2 { get; set; }
+
+	//Used for Listview background color
+		public string BackgroundColor = "#545860";
     }
 
     [XmlRoot(ElementName = "channel")]

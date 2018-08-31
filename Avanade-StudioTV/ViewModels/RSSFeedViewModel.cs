@@ -108,15 +108,15 @@ namespace AvanadeStudioTV.ViewModels
 				
 				FeedList = new ObservableCollection<Item>(list);
 
-			 
-
-				//start first video
 				this.SelectedItem = FeedList[0];
-			 
+			
+
 			}
 
 			else ShowErrorMessage();
 		}
+
+ 
 
 		private void ShowErrorMessage()
 		{
@@ -130,6 +130,7 @@ namespace AvanadeStudioTV.ViewModels
 
         private  void OpenVideoPage()
         {
+			this.SelectedItem.BackgroundColor = "#009999";
             this.Master.videoPage.ResetEvents();
             this.Master.videoPage.VideoCompleted += VideoPage_VideoCompleted;
 			this.Master.videoPage.ViewModel.SelectedItem = selectedItem;
@@ -139,7 +140,8 @@ namespace AvanadeStudioTV.ViewModels
 
         }
 
-        private void VideoPage_VideoCompleted()
+
+		private void VideoPage_VideoCompleted()
         {
             var index = FeedList.IndexOf(SelectedItem) ;
 			if (FeedList.ElementAtOrDefault(index + 1) != null)
