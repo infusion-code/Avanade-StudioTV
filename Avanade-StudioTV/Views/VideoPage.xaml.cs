@@ -100,13 +100,47 @@ namespace AvanadeStudioTV.Views
             
         }
 
-        /// <summary>
-        /// When overridden, allows application developers to customize behavior immediately prior to the <see cref="T:Xamarin.Forms.Page" /> becoming visible.
-        /// </summary>
-        /// <remarks>
-        /// To be added.
-        /// </remarks>
-        protected override void OnAppearing()
+		internal void PlayIntro()
+		{
+			if (!UseWebPlayer)
+			{
+				
+				VideoPlayerView.Source = VideoSource.FromResource("AvanadeStudioIntro.mp4");
+
+				VideoPlayerView.Play();
+				this.ForceLayout();
+
+				VideoPlayerView.VideoEnded += VideoPlayerView_IntroVideoEnded;
+
+			}
+		}
+
+		private void VideoPlayerView_IntroVideoEnded(object sender, EventArgs e)
+		{
+			VideoPlayerView.VideoEnded -= VideoPlayerView_IntroVideoEnded;
+
+			VideoPlayerView.Source = VideoSource.FromUri(Source);
+			VideoPlayerView.Play();
+			this.ForceLayout();
+
+			VideoPlayerView.VideoEnded += VideoPlayerView_VideoEnded;
+		}
+
+		
+		private void VideoPlayerView_VideoEnded(object sender, EventArgs e)
+		{
+			
+			VideoPlayerView.VideoEnded -= VideoPlayerView_VideoEnded;
+			VideoCompleted?.Invoke();
+		}
+
+		/// <summary>
+		/// When overridden, allows application developers to customize behavior immediately prior to the <see cref="T:Xamarin.Forms.Page" /> becoming visible.
+		/// </summary>
+		/// <remarks>
+		/// To be added.
+		/// </remarks>
+		protected override void OnAppearing()
         {
             base.OnAppearing();
 
@@ -119,9 +153,7 @@ namespace AvanadeStudioTV.Views
 				VideoPlayerView.HeightRequest = VideoStack.Height;
 				VideoPlayerView.WidthRequest = VideoStack.WidthRequest;
 				VideoPlayerView.VerticalOptions = LayoutOptions.FillAndExpand;
-				VideoPlayerView.Source = VideoSource.FromResource("AvanadeStudioIntro.mp4");
 				 
-				VideoPlayerView.Play(); 
 			}
             
 
@@ -142,9 +174,9 @@ namespace AvanadeStudioTV.Views
 				else
 				{
 					
-					VideoPlayerView.Source = VideoSource.FromUri(url);
-					VideoPlayerView.Play();
-					VideoPlayerView.VideoEnded += VideoPlayerView_VideoEnded;
+					VideoPlayerView.VideoEnded -= VideoPlayerView_VideoEnded;
+					PlayIntro();
+					
 				}
 			});
    
@@ -153,10 +185,7 @@ namespace AvanadeStudioTV.Views
 
 	 
 
-		private void VideoPlayerView_VideoEnded(object sender, EventArgs e)
-        {
-            VideoCompleted?.Invoke();
-        }
+	
 
         /// <summary>
         /// When overridden, allows the application developer to customize behavior as the <see cref="T:Xamarin.Forms.Page" /> disappears.

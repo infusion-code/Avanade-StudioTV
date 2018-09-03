@@ -4,4 +4,11 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:Avanade_StudioTV.UWP">
 
+    <!-- Used for Setting UWP Listview selected colorsee https://blog.mzikmund.com/2018/08/xamarin-forms-changing-selected-item-color-in-uwp-->
+    
+        <Application.Resources>
+        <SolidColorBrush Color="MidnightBlue" x:Key="SystemControlHighlightListAccentLowBrush" />
+        </Application.Resources>
+     
+
 </Application>

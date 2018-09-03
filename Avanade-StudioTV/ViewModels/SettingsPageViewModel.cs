@@ -10,6 +10,8 @@ using System.Windows.Input;
 using AvanadeStudioTV.Database;
 using Realms;
 using System.Linq;
+using Avanade_StudioTV;
+using System.Threading.Tasks;
 
 namespace AvanadeStudioTV.ViewModels
 {
@@ -17,22 +19,47 @@ namespace AvanadeStudioTV.ViewModels
     {
 
 		Realm db;
-		
 
+
+
+		private RSSFeedViewModel RSSViewModel;
+
+		private bool _isChecked;
+		private string _textCheckBox;
+
+		public bool IsChecked
+		{
+			get => _isChecked;
+			set
+			{
+				_isChecked = value;
+				TextCheckBox = _isChecked ? "Is Playing" : "Is Not Playing";
+				OnPropertyChanged("IsChecked");
+			}
+		}
+
+		public string TextCheckBox
+		{
+			get => _textCheckBox;
+			set
+			{
+				_textCheckBox = value;
+				OnPropertyChanged("TextCheckBox");
+				
+			}
+		}
+
+
+
+		public Command OnCheckedChanged { get; set; }
 
 		ICommand closeSettingsPage;
-
 		public ICommand CloseSettingsPage
 		{
 			get { return closeSettingsPage; }
 		}
 
-		ICommand addFeed;
-
-		public ICommand AddFeed
-		{
-			get { return addFeed; }
-		}
+	
 
 		public MasterPage Master { get; set; }
 
@@ -66,14 +93,14 @@ namespace AvanadeStudioTV.ViewModels
 				{
 					selectedItem = value;
 					OnPropertyChanged("SelectedItem");
-					ValidateFeed();
+					ValidateFeed(NewFeed.url);
 				}
 			}
 		}
 
-		private RSSFeedData newFeed = null;
+		private RSSFeedViewData newFeed = null;
 		 
-		public RSSFeedData NewFeed
+		public RSSFeedViewData NewFeed
 		{
 			get => newFeed;
 			set
@@ -82,14 +109,84 @@ namespace AvanadeStudioTV.ViewModels
 				{
 					newFeed = value;
 					OnPropertyChanged("NewFeed");
-					ValidateFeed();
+					 
 				}
 			}
 		}
 
-		private void ValidateFeed()
+		public ICommand addFeedCommand;
+		public ICommand  AddFeedCommand
 		{
-	 
+			get
+			{
+				return addFeedCommand;
+			}
+		}
+
+		public SettingsPageViewModel(INavigation navigation, MasterPage master)
+		{
+			
+			this.NewFeed = new RSSFeedViewData();
+			this.NewFeed.isActiveFeed = true;
+			this.Master = master;
+			this.GetNewsFeedAsync();
+			Navigation = navigation;
+
+			closeSettingsPage = new Command(OnCloseSettingsPage);
+
+			addFeedCommand = new Command(async () => { await AddFeed(); });
+
+			OnCheckedChanged = new Command(SetActiveFeed);
+
+		}
+
+		private void SetActiveFeed()
+		{
+			//Remove active feed flag for all other feeds (only 1 feed can be active in current UI)
+			if (SelectedItem != null && SelectedItem?.isActiveFeed == true)
+			{
+			  	FeedList?.Where(c => c.Desc != SelectedItem.Desc).ToList().ForEach(i => i.isActiveFeed = false);
+				var x = FeedList;
+			}
+		}
+
+		private async Task<bool> AddFeed()
+		{
+		 var isValid =	await ValidateFeed(NewFeed.url);
+			if (isValid)
+			{
+				NewFeed.DeleteCommand  = new Command<RSSFeedViewData>((FeedItem) => {
+					FeedList.Remove(FeedItem);
+				});
+				this.FeedList.Add(NewFeed);
+				NewFeed = new RSSFeedViewData();
+				 SaveAsync();
+				GetNewsFeedAsync();
+				return true;
+			}
+
+			else
+			{
+				await this.Master.DisplayAlert("ERROR READING FEED", "Please Correct Feed URL or Desc, Should be a valid Channel 9 RSS Feed Url with a Show Name in the Description", "OK");
+				return false;
+			}
+		}
+
+		
+
+		private async Task<bool> ValidateFeed(string url)
+		{
+			
+
+			var isValid  = await App.DataManager.ValidateChannel9FeedUrl(url);
+			if (isValid)
+			{ 
+			 NewFeed.ChannelName = App.DataManager.NetworkService.channel.Title;
+				NewFeed.imageUrl = App.DataManager.NetworkService.channel.Image.Url;
+				return true;
+			}
+
+			return false;
 		}
 
 	 
@@ -98,59 +195,85 @@ namespace AvanadeStudioTV.ViewModels
         
         public event PropertyChangedEventHandler PropertyChanged;
 
-        public SettingsPageViewModel(INavigation navigation, MasterPage master)
-        {
-			var realm = Realm.GetInstance();
 
-			var RssFeeds = realm.All<RSSFeedData>().ToList<RSSFeedData>();
 
-			this.FeedList = new ObservableCollection<RSSFeedViewData>();
-
-			//map Realm object to Non Realm object
-			foreach (RSSFeedData r in RssFeeds)
-			{
-				RSSFeedViewData n = new RSSFeedViewData();
-				n.ChannelName = r.ChannelName;
-				n.Desc = r.Desc;
-				n.url = r.url;
-				n.imageUrl = r.imageUrl;
-
-				this.FeedList.Add(n);
-			}
-
- 
- 
-			this.Master = master;
-            this.GetNewsFeedAsync();
-            Navigation = navigation;
-
-			closeSettingsPage = new Command(OnCloseSettingsPage);
-			addFeed = new Command(OnAddFeed);
-
-		}
-
-		private void OnAddFeed(object obj)
-		{
-			ValidateFeed();
-		}
+	 
 
 		private void OnCloseSettingsPage(object obj)
 		{
-			SaveUpdates();
+		 
+			SaveAsync();
+			 
 			this.Navigation.PopModalAsync();
+
+			{
+				//Reload video page with new videos
+				MessagingCenter.Send("obj", "Update");
+			}
 		}
 
-		private void SaveUpdates()
+		private async void SaveAsync()
 		{
-			 
+			if (!FeedList.Any(f => f.isActiveFeed)) FeedList[0].isActiveFeed = true;
+
+			App.DataManager.realm.Write(() =>
+			{
+				App.DataManager.realm.RemoveAll();
+
+				foreach (RSSFeedViewData r in this.FeedList)
+				{
+					var n = new RSSFeedData();
+					n.ChannelName = r.ChannelName;
+					n.url = r.url;
+					n.imageUrl = r.imageUrl;
+					n.isActiveFeed = r.isActiveFeed;
+					n.Desc = r.Desc;
+
+					App.DataManager.realm.Add(n);
+				}
+
+				App.DataManager.AllFeeds = this.FeedList.ToList<RSSFeedViewData>();
+			});
+
+	
 		}
 
 		public async void GetNewsFeedAsync()
         {
-            NetworkManager manager = NetworkManager.Instance;
-           List<Item> list = await manager.GetSyncFeedAsync();
-            
-        }
+			var result = await App.DataManager.GetDataFromNetwork();
+
+		   var list =  App.DataManager.CurrentPlaylist;
+
+			var all = new ObservableCollection<RSSFeedViewData>(App.DataManager.AllFeeds);
+
+			foreach (RSSFeedViewData r in all)
+			{
+				//1. Set checkbox changed command for all feeds in FeedList
+				r.MakeActiveFeedCommand = OnCheckedChanged;
+					
+				//2. Set Delete command for all Feeds in Feedlist
+				r.DeleteCommand = new Command<RSSFeedViewData>((FeedItem) => {
+					if (FeedList.Count >1)
+					{
+						FeedList.Remove(FeedItem);
+					    if (FeedList.Any(f=>f.isActiveFeed)) SaveAsync();
+						else //If none are marked as being active mark the first one so that we keep an active playlist
+						{
+							FeedList[0].isActiveFeed = true;
+							SaveAsync();
+						}
+					}
+
+					else
+					{
+						 this.Master.DisplayAlert("Error", "Cannot remove last Feed, Please add another feed first", "OK");
+
+					}
+				});
+			}
+
+			this.FeedList = all;
+		}
 
         protected void OnPropertyChanged(string propertyName)
         {

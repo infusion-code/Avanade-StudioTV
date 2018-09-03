@@ -28,5 +28,6 @@ namespace AvanadeStudioTV.Views
             this.Detail = Nav;
 
         }
+
     }
 }

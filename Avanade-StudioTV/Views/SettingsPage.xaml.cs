@@ -1,4 +1,5 @@
-﻿using AvanadeStudioTV.ViewModels;
+﻿using AvanadeStudioTV.Database;
+using AvanadeStudioTV.ViewModels;
 using AvanadeStudioTV.Views;
 using System;
 using System.Collections.Generic;
@@ -15,7 +16,7 @@ namespace AvanadeStudioTV.Views
 	public partial class SettingsPage : ContentPage
 	{
 	   public SettingsPageViewModel ViewModel;
-		public SettingsPage (MasterPage master, INavigation nav)
+		public SettingsPage (MasterPage master, INavigation nav, RSSFeedViewModel rvm)
 		{
 			InitializeComponent ();
 
@@ -23,5 +24,7 @@ namespace AvanadeStudioTV.Views
 			this.BindingContext = ViewModel;
 
 		}
+
+
 	}
 }

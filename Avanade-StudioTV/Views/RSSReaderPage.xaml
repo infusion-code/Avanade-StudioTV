@@ -12,9 +12,20 @@
              />
                     </Image.GestureRecognizers>
                 </Image>
-                <!--<Label Text="&#xf041;" Style="{Binding FontAwesome}" TextColor="White" FontSize="Medium"/>-->
-   
-                <Label Text="Current Video Feed:" LineBreakMode="WordWrap" Margin="2" HeightRequest="20" BackgroundColor="Transparent" FontSize="12" TextColor = "White"   />
+                <StackLayout Orientation="Horizontal">
+                    <Label Text="&#xf008;"   TextColor="WhiteSmoke" FontSize="Medium" >
+                    <Label.FontFamily>
+                        <OnPlatform 
+                        x:TypeArguments="x:String"
+                        Android="FontAwesome4.otf#FontAwesome" 
+                        iOS="FontAwesome" 
+                        WinPhone="/Assets/Fonts/FontAwesome4.otf.otf#FontAwesome" />
+                    </Label.FontFamily>
+                    </Label>
+
+                    <Label Text="Now Playing:" LineBreakMode="WordWrap" Margin="2" HeightRequest="20" BackgroundColor="Transparent" FontSize="12" TextColor = "White"   />
+                    <Label Text="{Binding CurrentChannel.Title}" LineBreakMode="WordWrap" Margin="2" HeightRequest="20" BackgroundColor="Transparent" FontSize="12" TextColor = "White"   />
+                </StackLayout>
             </StackLayout>
             <ListView BackgroundColor="Transparent" Margin="0,5,0,0" x:Name="FeedListView" CachingStrategy="RecycleElement" SelectedItem="{Binding SelectedItem, Mode=TwoWay}" ItemsSource="{Binding FeedList}"  HasUnevenRows="true">
                 <ListView.ItemTemplate>
@@ -28,14 +39,6 @@
     </ContentPage.Content>
     <ContentPage.Resources>
         <ResourceDictionary>
-            <OnPlatform x:Key="FontAwesomeString" x:TypeArguments="x:String">
-                <On Platform="iOS" Value="FontAwesome" />
-                <On Platform="Android" Value="FontAwesome400.otf#FontAwesome" />
-                <On Platform="UWP, WinRT, WinPhone" Value="Assets/Fonts/Font Awesome 5 Free-Regular-400.otf#Font Awesome 5 Free Regular" />
-            </OnPlatform>
-            <Style x:Key="FontAwesome" TargetType="Label">
-                <Setter Property="FontFamily" Value="{StaticResource FontAwesomeString}" />
-            </Style>
         </ResourceDictionary>
     </ContentPage.Resources>
 </ContentPage>
