@@ -7,6 +7,7 @@ using Xamarin.Forms;
 
 namespace AvanadeStudioTV.Database
 {
+	//Used to store each Channel
    public class RSSFeedData: RealmObject
 	{
 		public string ChannelName { get; set; }  //Title

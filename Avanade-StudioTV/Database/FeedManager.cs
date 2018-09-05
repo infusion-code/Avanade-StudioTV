@@ -12,7 +12,18 @@ namespace AvanadeStudioTV.Database
 
 	public class FeedManager
 	{
-		public RSSFeedViewData CurrentFeed { get; set; }
+
+
+		 
+
+		public const string MSDN_CHANNEL9_IMAGE_URL = "https://sec.ch9.ms/content/feedimage.png";
+
+		public const string MIXED_CHANNEL_TITLE = "Channel 9 Video Mix";
+
+		/// <summary>
+		/// Boolean to determine whether to show a set of shows from all active feeds (channels) 
+		/// </summary>
+		public bool IsMixedFeed { get; set; }
 
 		public List<RSSFeedViewData> AllFeeds { get; set; }
 		public Channel CurrentChannel { get; set; }
@@ -43,18 +54,18 @@ namespace AvanadeStudioTV.Database
 		private void SetupDatabase()
 		{
 			AllFeeds = new List<RSSFeedViewData>();
-			CurrentFeed = new RSSFeedViewData();
+			 
 			CurrentChannel = new Channel();
 			CurrentItem = new Item();
-            try
-            {
-                
-                realm = Realm.GetInstance();
-            }
-            catch (Exception ex)
-            {
-                var x = ex;
-            }
+			try
+			{
+
+				realm = Realm.GetInstance();
+			}
+			catch (Exception ex)
+			{
+				var x = ex;
+			}
 
 			var RssFeeds = realm?.All<RSSFeedData>().ToList<RSSFeedData>();
 			if (RssFeeds.Count < 1) InitalizeDataOnFirstUse();
@@ -73,18 +84,45 @@ namespace AvanadeStudioTV.Database
 
 					AllFeeds.Add(n);
 
-					if (n.isActiveFeed) CurrentFeed = n;
+					 
 				}
 			}
 		}
 
 		public async Task<bool> GetDataFromNetwork()
 		{
-			var feed = realm.All<RSSFeedData>().Where(r => r.isActiveFeed == true).FirstOrDefault();
-			CurrentPlaylist = ScrubPlaylist (await NetworkService.GetSyncFeedAsync(feed.url));
-			CurrentChannel = NetworkService.channel;
+			CurrentPlaylist = new List<Item>();
+			var Channels = realm.All<RSSFeedData>().Where(r => r.isActiveFeed == true);
+			foreach (var singleChannel in Channels)
+			{
+				var channelFeed = ScrubPlaylist(await NetworkService.GetSyncFeedAsync(singleChannel.url));
+				CurrentPlaylist.AddRange(channelFeed);
+				CurrentChannel = NetworkService.channel;
+			
+			}
+			
+			CurrentPlaylist = CurrentPlaylist.OrderByDescending(l => DateTime.Parse(l.PubDate)).ToList();
+
+			if (Channels.Count() > 1)
+			{
+				IsMixedFeed = true;
+				//Set Channel to a custom mix channel
+				var c = new Channel
+				{
+					Title = MIXED_CHANNEL_TITLE,
+					Image = new Image
+					{
+						Url = MSDN_CHANNEL9_IMAGE_URL
+					},
+
+				};
+				CurrentChannel = c;
+			}
+			else IsMixedFeed = false;
 			return true;
 		}
+
+ 
 
 		private List<Item> ScrubPlaylist(List<Item> list)
 		{
@@ -99,14 +137,15 @@ namespace AvanadeStudioTV.Database
 					i.Thumbnail.Add(t);
 				}
 
-
+				//set parent channel properties
+				i.ChannelImageUrl = NetworkService.channel.Image.Url;
+				i.ChannelTitle = NetworkService.channel.Title;
 			}
-			var x = list.OrderByDescending(l => DateTime.Parse(l.PubDate)).ToList();
-			return x;
+			return list;
 		}
 
 		public async Task<bool> ValidateChannel9FeedUrl(string url)
-		{ 
+		{
 			var feedItem = await NetworkService.GetSyncFeedAsync(url);
 			if (feedItem?.Count > 0)
 				return true;
@@ -123,8 +162,8 @@ namespace AvanadeStudioTV.Database
 
 		private void InitalizeDataOnFirstUse()
 		{
-            
-            //iOS Realm Path: /Users/ahmedkhan/Library/Developer/CoreSimulator/Devices/3B877EAC-84BB-4615-823A-8C9BAD0F6DDA/data/Containers/Data/Application/6361196D-D732-4D73-8790-9F4F77F7E873/Documents
+
+			//iOS Realm Path: /Users/ahmedkhan/Library/Developer/CoreSimulator/Devices/3B877EAC-84BB-4615-823A-8C9BAD0F6DDA/data/Containers/Data/Application/6361196D-D732-4D73-8790-9F4F77F7E873/Documents
 
 			//C:\Users\ahmed.c.khan\AppData\Local\Packages\4851a6aa-f693-4d96-bc70-404b1b69937d_5zacrfw33hrb4\LocalState\default.realm
 			System.Diagnostics.Debug.WriteLine($"Realm is located at: {realm.Config.DatabasePath}");
