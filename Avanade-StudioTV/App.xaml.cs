@@ -24,8 +24,7 @@ namespace Avanade_StudioTV
 		//using Realm to persist data - initalize if no feeds created by user first:
 		private void InitalizeData()
 		{
-
-			DataManager = FeedManager.Instance;
+        	DataManager = FeedManager.Instance;
 
 		}
  

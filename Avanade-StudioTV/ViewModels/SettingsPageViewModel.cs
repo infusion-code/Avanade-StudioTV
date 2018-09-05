@@ -136,11 +136,11 @@ namespace AvanadeStudioTV.ViewModels
 
 			addFeedCommand = new Command(async () => { await AddFeed(); });
 
-			OnCheckedChanged = new Command(SetActiveFeed);
+		//	OnCheckedChanged = new Command(SetActiveFeed);
 
 		}
 
-		private void SetActiveFeed()
+		/*private void SetActiveFeed()
 		{
 			//Remove active feed flag for all other feeds (only 1 feed can be active in current UI)
 			if (SelectedItem != null && SelectedItem?.isActiveFeed == true)
@@ -148,7 +148,7 @@ namespace AvanadeStudioTV.ViewModels
 			  	FeedList?.Where(c => c.Desc != SelectedItem.Desc).ToList().ForEach(i => i.isActiveFeed = false);
 				var x = FeedList;
 			}
-		}
+		} */
 
 		private async Task<bool> AddFeed()
 		{

@@ -128,7 +128,14 @@ namespace AvanadeStudioTV.Models
         public string CommentRss { get; set; }
         [XmlElement(ElementName = "category")]
         public List<string> Category2 { get; set; }
-    }
+
+	//Used for Listview background color
+		public string BackgroundColor = "#545860";
+
+		//Item's Parent Channel for use in mixed feeds
+		public string ChannelImageUrl { get; set; }
+		public string ChannelTitle { get; set; }
+	}
 
     [XmlRoot(ElementName = "channel")]
     public class Channel
