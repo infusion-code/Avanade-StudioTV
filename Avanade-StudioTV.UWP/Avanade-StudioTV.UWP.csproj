@@ -169,7 +169,7 @@
     <Content Include="Assets\Wide310x150Logo.scale-400.png" />
     <Content Include="AvanadeLogoBig.jpg" />
     <Content Include="AvanadeStudioIntro.mp4" />
-    <Content Include="AvLeftHeader.png" />
+    <Content Include="AvLeftHeaderRedOld.png" />
     <Content Include="BlackGradBack.png" />
     <Content Include="CellBack.png" />
     <Content Include="Checked.png" />
@@ -181,7 +181,9 @@
     <Content Include="Assets\Square44x44Logo.scale-200.png" />
     <Content Include="Assets\Square44x44Logo.targetsize-24_altform-unplated.png" />
     <Content Include="Assets\Wide310x150Logo.scale-200.png" />
+    <Content Include="AvLeftHeader.png" />
     <Content Include="StudioTVcircle.png" />
+    <Content Include="TitleBackground.png" />
     <Content Include="Unchecked.png" />
     <Content Include="video.html" />
   </ItemGroup>

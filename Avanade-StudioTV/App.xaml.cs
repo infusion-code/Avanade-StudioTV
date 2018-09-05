@@ -18,7 +18,16 @@ namespace Avanade_StudioTV
 
 			InitalizeData();
 
-            MainPage = new MasterPage();
+			if ((Device.Idiom == TargetIdiom.Desktop) || (Device.Idiom == TargetIdiom.TV))
+			{
+				MainPage = new FullScreenVideoPage();
+				//MainPage = new MasterPage();
+			}
+
+			else
+			{
+				MainPage = new MasterPage();
+			}
         }
 
 		//using Realm to persist data - initalize if no feeds created by user first:

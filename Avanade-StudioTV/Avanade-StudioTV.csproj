@@ -32,6 +32,9 @@
     <Compile Update="Views\SettingsCell.xaml.cs">
       <DependentUpon>SettingsCell.xaml</DependentUpon>
     </Compile>
+    <Compile Update="Views\FullScreenVideoPage.xaml.cs">
+      <DependentUpon>FullScreenVideoPage.xaml</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Update="Views\SettingsPage.xaml">
