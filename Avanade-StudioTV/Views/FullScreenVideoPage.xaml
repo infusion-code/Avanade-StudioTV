@@ -8,25 +8,28 @@
 
     <ContentPage.Content>
         <AbsoluteLayout BackgroundColor="White" x:Name="MainLayout">
-            <StackLayout x:Name = "VideoStack" AbsoluteLayout.LayoutBounds="1,1,1,1" AbsoluteLayout.LayoutFlags="All">
+            <StackLayout   x:Name = "VideoStack" AbsoluteLayout.LayoutBounds="1,1,1,1" AbsoluteLayout.LayoutFlags="All">
+
+                <video:VideoPlayer x:Name="VideoPlayerView"   />
                 <StackLayout.GestureRecognizers>
                     <TapGestureRecognizer
                 Tapped="MainScreen_Tapped"
                 NumberOfTapsRequired="1" />
                 </StackLayout.GestureRecognizers>
-                <video:VideoPlayer x:Name="VideoPlayerView" />
 
             </StackLayout>
 
-            <StackLayout x:Name="TitleView" AbsoluteLayout.LayoutBounds=".08,.9,.45,.15" AbsoluteLayout.LayoutFlags="All"
+            <StackLayout   x:Name="TitleView" AbsoluteLayout.LayoutBounds=".08,.9,.45,.15" AbsoluteLayout.LayoutFlags="All"
                          Orientation="Horizontal" HorizontalOptions="FillAndExpand" VerticalOptions="StartAndExpand">
-                
-                    <ffimageloading:CachedImage  WidthRequest="265"
+
+
+                <ffimageloading:CachedImage  WidthRequest="265"
                                                 VerticalOptions="StartAndExpand" Source="{Binding SelectedItem.ChannelImageUrl}"
                                                 ErrorPlaceholder="AvanadeWhiteLogo.PNG" LoadingPlaceholder ="AvanadeWhiteLogo.PNG"  
                                                 Aspect="AspectFit" >
-                       
-                    </ffimageloading:CachedImage>
+              
+
+                </ffimageloading:CachedImage>
 
 
                 <BoxView Margin="0,0,0,0"

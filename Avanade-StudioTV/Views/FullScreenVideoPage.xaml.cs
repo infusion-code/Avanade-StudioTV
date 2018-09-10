@@ -245,13 +245,19 @@ namespace AvanadeStudioTV.Views
 
 		private void MainScreen_Tapped(object sender, EventArgs e)
 		{
-			StopAnimatingTitles();
-			NextShowView.Opacity = 0;
-			TitleView.Opacity = 1;
-			IsInCurrentTitleMode = true;
-			StartAnimatingTitles();
-			 
 			
+ 
+				OpenSettingsPage(); 
+			
+
+ 
+		}
+
+		private void OpenSettingsPage()
+		{
+			var settings = new SettingsPage(this.Navigation);
+			this.Navigation.PushModalAsync(settings);
+
 		}
 	}
 }

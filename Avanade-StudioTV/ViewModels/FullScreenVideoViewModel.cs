@@ -145,7 +145,7 @@ namespace AvanadeStudioTV.ViewModels
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
-        private  void StartVideo()
+        public  void StartVideo()
         {
 			this.SelectedItem.BackgroundColor = "#009999";
 			VideoPage.ResetEvents();
@@ -157,7 +157,7 @@ namespace AvanadeStudioTV.ViewModels
         }
 
 
-		private void VideoPage_VideoCompleted()
+		public void VideoPage_VideoCompleted()
         {
 
 			SelectedItem = GetNextItem();
