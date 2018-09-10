@@ -60,8 +60,7 @@ namespace AvanadeStudioTV.ViewModels
 		}
 
 	
-
-		public MasterPage Master { get; set; }
+		 
 
         public List<string> Playlist { get; set; }
 
@@ -123,12 +122,12 @@ namespace AvanadeStudioTV.ViewModels
 			}
 		}
 
-		public SettingsPageViewModel(INavigation navigation, MasterPage master)
+		public SettingsPageViewModel(INavigation navigation)
 		{
 			
 			this.NewFeed = new RSSFeedViewData();
 			this.NewFeed.isActiveFeed = true;
-			this.Master = master;
+			 
 			this.GetNewsFeedAsync();
 			Navigation = navigation;
 
@@ -167,7 +166,7 @@ namespace AvanadeStudioTV.ViewModels
 
 			else
 			{
-				await this.Master.DisplayAlert("ERROR READING FEED", "Please Correct Feed URL or Desc, Should be a valid Channel 9 RSS Feed Url with a Show Name in the Description", "OK");
+				await Application.Current.MainPage.DisplayAlert("ERROR READING FEED", "Please Correct Feed URL or Desc, Should be a valid Channel 9 RSS Feed Url with a Show Name in the Description", "OK");
 				return false;
 			}
 		}
@@ -266,7 +265,7 @@ namespace AvanadeStudioTV.ViewModels
 
 					else
 					{
-						 this.Master.DisplayAlert("Error", "Cannot remove last Feed, Please add another feed first", "OK");
+						 Application.Current.MainPage.DisplayAlert("Error", "Cannot remove last Feed, Please add another feed first", "OK");
 
 					}
 				});

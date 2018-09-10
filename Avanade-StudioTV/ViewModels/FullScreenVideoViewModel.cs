@@ -13,7 +13,7 @@ using System.Linq;
 
 namespace AvanadeStudioTV.ViewModels
 {
-    public class RSSFeedViewModel : INotifyPropertyChanged
+    public class FullScreenVideoViewModel : INotifyPropertyChanged
     {
 		ICommand openSettingsPage;
 
@@ -21,7 +21,7 @@ namespace AvanadeStudioTV.ViewModels
 		{
 			get { return openSettingsPage; }
 		}
-		public MasterPage Master { get; set; }
+	
 
         public List<string> Playlist { get; set; }
 
@@ -44,6 +44,7 @@ namespace AvanadeStudioTV.ViewModels
         }
 
 		private INavigation Navigation;
+		private FullScreenVideoPage VideoPage;
 
 
 		private Channel currentChannel = null;
@@ -73,18 +74,34 @@ namespace AvanadeStudioTV.ViewModels
                 {
                     selectedItem = value;
                     OnPropertyChanged("SelectedItem");
-                   OpenVideoPage();
+                   StartVideo();
                 }
             }
         }
-     
-        public event PropertyChangedEventHandler PropertyChanged;
 
-        public RSSFeedViewModel(INavigation navigation, MasterPage master)
+		private Item nextItem = null;
+
+		public Item NextItem
+		{
+			get => nextItem;
+			set
+			{
+				if (nextItem != value)
+				{
+					nextItem = value;
+					OnPropertyChanged("NextItem");
+				}
+			}
+		}
+
+		public event PropertyChangedEventHandler PropertyChanged;
+
+        public FullScreenVideoViewModel(INavigation navigation, FullScreenVideoPage videopage)
         {
-            this.Master = master;
+           
             this.GetNewsFeedAsync();
             Navigation = navigation;
+			VideoPage = videopage;
 			openSettingsPage = new Command(OnOpenSettingsPage);
 
 	
@@ -92,7 +109,7 @@ namespace AvanadeStudioTV.ViewModels
 
 		void OnOpenSettingsPage( )
 		{
-			var settings = new SettingsPage(this.Navigation);
+			var settings = new SettingsPage( this.Navigation);
 			this.Navigation.PushModalAsync(settings);
 		}
 
@@ -109,7 +126,7 @@ namespace AvanadeStudioTV.ViewModels
 				FeedList = new ObservableCollection<Item>(list);
 
 				this.SelectedItem = FeedList[0];
-			
+				this.NextItem = GetNextItem();
 
 			}
 
@@ -120,7 +137,7 @@ namespace AvanadeStudioTV.ViewModels
 
 		private void ShowErrorMessage()
 		{
-			this.Master.DisplayAlert("Error", "Could not connect to Feed Data", "OK");
+			Application.Current.MainPage.DisplayAlert("Error", "Could not connect to Feed Data", "OK");
 		}
 
 		protected void OnPropertyChanged(string propertyName)
@@ -128,14 +145,13 @@ namespace AvanadeStudioTV.ViewModels
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
-        private  void OpenVideoPage()
+        private  void StartVideo()
         {
 			this.SelectedItem.BackgroundColor = "#009999";
-            this.Master.videoPage.ResetEvents();
-            this.Master.videoPage.VideoCompleted += VideoPage_VideoCompleted;
-			this.Master.videoPage.ViewModel.SelectedItem = selectedItem;
-            this.Master.videoPage.PlayVideo(selectedItem.Enclosure.Url);
-            this.Master.videoPage.ForceLayout();
+			VideoPage.ResetEvents();
+			VideoPage.VideoCompleted += VideoPage_VideoCompleted;
+			VideoPage.PlayVideo(selectedItem.Enclosure.Url);
+			VideoPage.ForceLayout();
 
 
         }
@@ -143,18 +159,26 @@ namespace AvanadeStudioTV.ViewModels
 
 		private void VideoPage_VideoCompleted()
         {
-            var index = FeedList.IndexOf(SelectedItem) ;
+
+			SelectedItem = GetNextItem();
+			NextItem = GetNextItem();
+
+		}
+
+		private Item  GetNextItem()
+		{
+			var index = FeedList.IndexOf(SelectedItem);
 			if (FeedList.ElementAtOrDefault(index + 1) != null)
 			{
-				this.SelectedItem = FeedList[index + 1];
+				return FeedList[index + 1];
 			}
 			//Loop playlist 
 			//TODO need implement multiple playlists here
 			else
 			{
-				this.SelectedItem = FeedList[0];
+				return FeedList[0];
 			}
-			this.Master.ReaderPage.FeedView.ScrollTo(SelectedItem,ScrollToPosition.MakeVisible,true);
-        }
-    }
+
+		}
+	}
 }

@@ -16,11 +16,11 @@ namespace AvanadeStudioTV.Views
 	public partial class SettingsPage : ContentPage
 	{
 	   public SettingsPageViewModel ViewModel;
-		public SettingsPage (MasterPage master, INavigation nav, RSSFeedViewModel rvm)
+		public SettingsPage ( INavigation nav )
 		{
 			InitializeComponent ();
 
-		   ViewModel = new SettingsPageViewModel(nav, master);
+		   ViewModel = new SettingsPageViewModel(nav);
 			this.BindingContext = ViewModel;
 
 		}

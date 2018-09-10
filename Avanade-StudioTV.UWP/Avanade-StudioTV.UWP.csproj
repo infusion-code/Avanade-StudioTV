@@ -169,6 +169,7 @@
     <Content Include="Assets\Wide310x150Logo.scale-400.png" />
     <Content Include="AvanadeLogoBig.jpg" />
     <Content Include="AvanadeStudioIntro.mp4" />
+    <Content Include="AvanadeWhiteLogo.PNG" />
     <Content Include="AvLeftHeaderRedOld.png" />
     <Content Include="BlackGradBack.png" />
     <Content Include="CellBack.png" />
@@ -216,6 +217,21 @@
     </PackageReference>
     <PackageReference Include="Xam.Plugin.WebView">
       <Version>2.1.3</Version>
+    </PackageReference>
+    <PackageReference Include="Xamarin.FFImageLoading">
+      <Version>2.4.3.840</Version>
+    </PackageReference>
+    <PackageReference Include="Xamarin.FFImageLoading.Forms">
+      <Version>2.4.3.840</Version>
+    </PackageReference>
+    <PackageReference Include="Xamarin.FFImageLoading.Svg">
+      <Version>2.4.3.840</Version>
+    </PackageReference>
+    <PackageReference Include="Xamarin.FFImageLoading.Svg.Forms">
+      <Version>2.4.3.840</Version>
+    </PackageReference>
+    <PackageReference Include="Xamarin.FFImageLoading.Transformations">
+      <Version>2.4.3.840</Version>
     </PackageReference>
     <PackageReference Include="Xamarin.Forms">
       <Version>3.1.0.697729</Version>

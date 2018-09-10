@@ -26,7 +26,8 @@ namespace Avanade_StudioTV.iOS
         {
             HtmlLabelRenderer.Initialize();
             FormsWebViewRenderer.Initialize();
-            global::Xamarin.Forms.Forms.Init();
+			FFImageLoading.Forms.Platform.CachedImageRenderer.Init();
+			global::Xamarin.Forms.Forms.Init();
 
             //TODO Trial Mode only allows 15 seconds of playback see
             //https://github.com/adamfisher/Xamarin.Forms.VideoPlayer/blob/master/GettingStarted.md

@@ -54,7 +54,8 @@ namespace Avanade_StudioTV.UWP
 
                 //webview: https://github.com/SKLn-Rad/Xam.Plugin.Webview
                 FormsWebViewRenderer.Initialize();
-                Xamarin.Forms.Forms.Init(e);
+				FFImageLoading.Forms.Platform.CachedImageRenderer.Init();
+				Xamarin.Forms.Forms.Init(e);
 
                 HtmlLabelRenderer.Initialize();
 

@@ -10,6 +10,7 @@ using Xamarin.Forms;
 using AvanadeStudioTV.Models;
 using AvanadeStudioTV.ViewModels;
 using System.Timers;
+using System.Threading.Tasks;
 
 namespace AvanadeStudioTV.Views
 {
@@ -17,38 +18,45 @@ namespace AvanadeStudioTV.Views
     {
         public event VideoCompletedHandler VideoCompleted;
         public delegate void VideoCompletedHandler();
-		public VideoPageViewModel ViewModel;
+		public FullScreenVideoViewModel ViewModel;
 		public Timer ShowTitleTimer;
 		public Timer HideTitleTimer;
+		public const double TITLE_VISIBLE_SCREEN_TIME = 10000; //10 sec
+		public const double TITLE_HIDDEN_SCREEN_TIME = 5000; //8 sec
 
 
 
 		public string Source { get; set; }
+		public bool IsInCurrentTitleMode { get; private set; }
 
-      
+
 
 		/// <summary>
 		/// UWP Full screen desktop video view (uses native UWP Media Element to play videos)
 		/// </summary>
 		/// <param name="source"></param>
-        public FullScreenVideoPage ()
+		public FullScreenVideoPage ()
         {
             Source = "http://video.ch9.ms/ch9/e38f/1c70afc7-8af1-459b-be04-bb3b6eeee38f/OnNETAzureB2CAD.mp4";
 
 
 			InitializeComponent();
 
+	 
 
 
-			ViewModel = new VideoPageViewModel();
+			ViewModel = new FullScreenVideoViewModel(Navigation, this);
 			this.BindingContext = ViewModel;
 
+			StartAnimatingTitles();
+
 			TitleView.Opacity = 0;
+			NextShowView.Opacity = 0;
 
 		}
 
 
-		
+
 		private void LoadNextVideo(string obj)
         {
             if (VideoCompleted != null)
@@ -110,16 +118,29 @@ namespace AvanadeStudioTV.Views
         {
             base.OnAppearing();
 
-			 
+			IsInCurrentTitleMode = true;
+
+
 				VideoPlayerView.HeightRequest = VideoStack.Height;
 				VideoPlayerView.WidthRequest = VideoStack.WidthRequest;
 				VideoPlayerView.VerticalOptions = LayoutOptions.FillAndExpand;
 
 			PlayVideo(this.Source);
 
+			StartAnimatingTitles();
+
+		}
+
+		private void StartAnimatingTitles()
+		{
 			SetupTimers();
 			StartShowTimer();
+		}
 
+		private void StopAnimatingTitles()
+		{
+			ShowTitleTimer.Stop();
+			HideTitleTimer.Stop();
 		}
 
 		private void SetupTimers()
@@ -128,12 +149,12 @@ namespace AvanadeStudioTV.Views
 			ShowTitleTimer = new System.Timers.Timer();
 			ShowTitleTimer.Elapsed += new ElapsedEventHandler(_ShowTitle_timer_Elapsed);
 			//5 second inteval
-			ShowTitleTimer.Interval = 5000;
+			ShowTitleTimer.Interval = TITLE_VISIBLE_SCREEN_TIME;
 
 			HideTitleTimer = new System.Timers.Timer();
 			HideTitleTimer.Elapsed += new ElapsedEventHandler(_HideTitle_timer_Elapsed);
 			//1 second
-			HideTitleTimer.Interval = 5000;
+			HideTitleTimer.Interval = TITLE_HIDDEN_SCREEN_TIME;
 
 		}
 
@@ -151,16 +172,42 @@ namespace AvanadeStudioTV.Views
 
 		private async void _ShowTitle_timer_Elapsed(object sender, ElapsedEventArgs e)
 		{
-			await TitleView.FadeTo(1, 2000, Easing.Linear);
+			await ShowView();			
 			ShowTitleTimer.Stop();
 			StartHideTimer();
-		} 
+		}
+
+		private async Task ShowView()
+		{
+			if (IsInCurrentTitleMode)
+
+			{
+				await TitleView.FadeTo(1, 2000, Easing.Linear);
+			}
+
+			else await NextShowView.FadeTo(1, 2000, Easing.Linear);
+ 
+		}
 
 		private async void _HideTitle_timer_Elapsed(object sender, ElapsedEventArgs e)
 		{
-			await TitleView.FadeTo(0, 2000, Easing.Linear);
+			await HideView();
+			
 			HideTitleTimer.Stop();
+			IsInCurrentTitleMode = !IsInCurrentTitleMode; //switch from current title to next up title
 			StartShowTimer();
+		}
+
+		private async Task HideView()
+		{
+			if (IsInCurrentTitleMode)
+
+			{
+				await TitleView.FadeTo(0, 2000, Easing.Linear);
+			}
+
+			else await NextShowView.FadeTo(0, 2000, Easing.Linear);
+
 		}
 
 		public async void PlayVideo(string url)
@@ -195,5 +242,16 @@ namespace AvanadeStudioTV.Views
             base.OnDisappearing();
             
         }
-    }
+
+		private void MainScreen_Tapped(object sender, EventArgs e)
+		{
+			StopAnimatingTitles();
+			NextShowView.Opacity = 0;
+			TitleView.Opacity = 1;
+			IsInCurrentTitleMode = true;
+			StartAnimatingTitles();
+			 
+			
+		}
+	}
 }
