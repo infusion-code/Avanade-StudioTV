@@ -7,115 +7,125 @@
 
 
     <ContentPage.Content>
-        <AbsoluteLayout BackgroundColor="White" x:Name="MainLayout">
-            <StackLayout   x:Name = "VideoStack" AbsoluteLayout.LayoutBounds="1,1,1,1" AbsoluteLayout.LayoutFlags="All">
-
-                <video:VideoPlayer x:Name="VideoPlayerView"   />
-                <StackLayout.GestureRecognizers>
-                    <TapGestureRecognizer
-                Tapped="MainScreen_Tapped"
-                NumberOfTapsRequired="1" />
-                </StackLayout.GestureRecognizers>
-
-            </StackLayout>
-
-            <StackLayout   x:Name="TitleView" AbsoluteLayout.LayoutBounds=".08,.9,.45,.15" AbsoluteLayout.LayoutFlags="All"
-                         Orientation="Horizontal" HorizontalOptions="FillAndExpand" VerticalOptions="StartAndExpand">
-
-
-                <ffimageloading:CachedImage  WidthRequest="265"
+        <AbsoluteLayout  x:Name="MainLayout">
+            <Grid   x:Name = "MainGrid" AbsoluteLayout.LayoutBounds="1,1,1,1" AbsoluteLayout.LayoutFlags="All">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="78*" />
+                    <RowDefinition Height="12*" />
+                    <RowDefinition Height="10*" />
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="3*" />
+                    <ColumnDefinition Width="55*" />
+                    <ColumnDefinition Width="42*" />
+                </Grid.ColumnDefinitions>
+                <video:VideoPlayer Grid.Row="0" Grid.Column="0" Grid.RowSpan="3" Grid.ColumnSpan="3" x:Name="VideoPlayerView"   />
+                <StackLayout  Grid.Row="1" Grid.Column="1" x:Name="TitleView"  Orientation="Horizontal" HorizontalOptions="FillAndExpand" VerticalOptions="StartAndExpand">
+                    <StackLayout.GestureRecognizers>
+                        <TapGestureRecognizer
+                        Tapped="TitleView_Tapped"
+                           NumberOfTapsRequired="1" />
+                    </StackLayout.GestureRecognizers>
+                    <ffimageloading:CachedImage  HeightRequest="250" Margin="0,0,0,0"
                                                 VerticalOptions="StartAndExpand" Source="{Binding SelectedItem.ChannelImageUrl}"
                                                 ErrorPlaceholder="AvanadeWhiteLogo.PNG" LoadingPlaceholder ="AvanadeWhiteLogo.PNG"  
                                                 Aspect="AspectFit" >
-              
-
-                </ffimageloading:CachedImage>
 
 
-                <BoxView Margin="0,0,0,0"
+                    </ffimageloading:CachedImage>
+
+
+                    <BoxView Margin="20,0,0,0"
                                VerticalOptions="FillAndExpand"
                                HorizontalOptions="Start"
                                WidthRequest="10"
                          HeightRequest="100"
                             
                                Color="{DynamicResource AvanadeOrange}"/>
-                <Grid Margin="17,0,0,0" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand">
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="5*" />
-                        <RowDefinition Height="10*" />
-                        <RowDefinition Height="85*" />
-                      
+                    <Grid Margin="17,0,0,0" VerticalOptions="StartAndExpand" HorizontalOptions="FillAndExpand">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="4*" />
+                            <RowDefinition Height="13*" />
+                            <RowDefinition Height="83*" />
 
 
 
-                    </Grid.RowDefinitions>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="90*" />
-                        <ColumnDefinition Width="10*" />
-                    </Grid.ColumnDefinitions>
-                    <Image Source ="BlackGradBack.png" Opacity=".25" Margin="3,0,0,0" Aspect="Fill" Grid.Row="0" VerticalOptions="StartAndExpand" Grid.Column="0" Grid.RowSpan="3" Grid.ColumnSpan="3" />
+
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="90*" />
+                            <ColumnDefinition Width="10*" />
+                        </Grid.ColumnDefinitions>
+                        <Image Source ="BlackGradBack.png" Opacity=".25" Margin="3,0,0,0" Aspect="Fill" Grid.Row="0" VerticalOptions="StartAndExpand" Grid.Column="0" Grid.RowSpan="3" Grid.ColumnSpan="3" />
+                        
+                        <Label Grid.Row="1" Grid.Column="0" Margin="5,0,0,0" VerticalOptions="FillAndExpand" VerticalTextAlignment="End" Style="{DynamicResource FontLabel}"   HorizontalOptions="Start" TextColor="White" Text="N O W  P L A Y I N G" FontSize="12" FontAttributes="Bold"></Label>
+                        <Label Grid.Row="2" Grid.Column="0" Margin="5,0,0,0" VerticalOptions="Center" VerticalTextAlignment="Center" Style="{DynamicResource FontLabel}"  HorizontalOptions="Start"  TextColor="White" Text="{Binding SelectedItem.Title} " FontSize="Large"></Label>
+                        <!--<Label Grid.Row="2"  Grid.Column="0" Margin="5,0,0,0" VerticalOptions="Start" Style="{DynamicResource FontLabel}"   HorizontalOptions="Start"  TextColor="White" Text="{Binding SelectedItem.ChannelTitle}" FontSize="12"></Label>-->
 
 
-                    <Label Grid.Row="1" Grid.Column="0" Margin="5,0,0,0" VerticalOptions="EndAndExpand" VerticalTextAlignment="End" Style="{DynamicResource FontLabel}"   HorizontalOptions="Start" TextColor="White" Text="N O W  P L A Y I N G" FontSize="12" FontAttributes="Bold"></Label>
-                    <Label Grid.Row="2" Grid.Column="0" Margin="5,0,0,0" VerticalOptions="Center" VerticalTextAlignment="Center" Style="{DynamicResource FontLabel}"  HorizontalOptions="Start"  TextColor="White" Text="{Binding SelectedItem.Title} " FontSize="Large"></Label>
-                    <!--<Label Grid.Row="2"  Grid.Column="0" Margin="5,0,0,0" VerticalOptions="Start" Style="{DynamicResource FontLabel}"   HorizontalOptions="Start"  TextColor="White" Text="{Binding SelectedItem.ChannelTitle}" FontSize="12"></Label>-->
-
-
-                    <!--<Label Grid.Row="1"  Grid.Column="0" Margin="10,0,0,0" TextColor="WhiteSmoke" Text="Channel:" FontSize="Small"></Label>
+                        <!--<Label Grid.Row="1"  Grid.Column="0" Margin="10,0,0,0" TextColor="WhiteSmoke" Text="Channel:" FontSize="Small"></Label>
                     <Label Grid.Row="1" Grid.Column="1" Margin="2,0,0,0" TextColor="WhiteSmoke" Text="{Binding SelectedItem.Category2} " FontSize="Small"></Label>-->
 
-                    <!--<Label Grid.Row="1" Grid.Column="1" Margin="2,0,0,0" VerticalOptions="Start" Style="{DynamicResource FontLabel}"  HorizontalOptions="Start"  TextColor="WhiteSmoke" Text="{Binding SelectedItem.Author} " FontSize="12"></Label>-->
+                        <!--<Label Grid.Row="1" Grid.Column="1" Margin="2,0,0,0" VerticalOptions="Start" Style="{DynamicResource FontLabel}"  HorizontalOptions="Start"  TextColor="WhiteSmoke" Text="{Binding SelectedItem.Author} " FontSize="12"></Label>-->
 
 
-                    <!--<Label Grid.Row="2"  Grid.Column="0" Margin="2,0,0,0" VerticalOptions="Start" Style="{DynamicResource FontLabel}"  HorizontalOptions="Start"  TextColor="WhiteSmoke" Text="Publish Date:" FontSize="12"></Label>
+                        <!--<Label Grid.Row="2"  Grid.Column="0" Margin="2,0,0,0" VerticalOptions="Start" Style="{DynamicResource FontLabel}"  HorizontalOptions="Start"  TextColor="WhiteSmoke" Text="Publish Date:" FontSize="12"></Label>
                     <Label Grid.Row="2" Grid.Column="1" Margin="2,0,0,0" VerticalOptions="Start" Style="{DynamicResource FontLabel}"  HorizontalOptions="Start"  TextColor="WhiteSmoke" Text="{Binding SelectedItem.PubDate, StringFormat='{0:d}'}  " FontSize="12"></Label>-->
 
 
-                </Grid>
+                    </Grid>
+                </StackLayout>
+                <StackLayout Grid.Row="1" Grid.Column="1"  x:Name="NextShowView"  Orientation="Horizontal" HorizontalOptions="FillAndExpand" VerticalOptions="StartAndExpand">
+                    <StackLayout.GestureRecognizers>
+                        <TapGestureRecognizer
+                        Tapped="TitleView_Tapped"
+                           NumberOfTapsRequired="1" />
+                    </StackLayout.GestureRecognizers>
 
-            </StackLayout>
-            <StackLayout x:Name="NextShowView" AbsoluteLayout.LayoutBounds=".08,.9,.45,.15" AbsoluteLayout.LayoutFlags="All"
-                         Orientation="Horizontal" HorizontalOptions="FillAndExpand" VerticalOptions="StartAndExpand">
-
-                <ffimageloading:CachedImage  WidthRequest="265"
+                    <ffimageloading:CachedImage   HeightRequest="250" Margin="0,0,0,0"
                                                 VerticalOptions="StartAndExpand" Source="{Binding NextItem.ChannelImageUrl}"
                                                 ErrorPlaceholder="AvanadeWhiteLogo.PNG" LoadingPlaceholder ="AvanadeWhiteLogo.PNG"  
                                                 Aspect="AspectFit" >
 
-                </ffimageloading:CachedImage>
+                    </ffimageloading:CachedImage>
 
 
-                <BoxView Margin="0,0,0,0"
+                    <BoxView Margin="20,0,0,0"
                                VerticalOptions="FillAndExpand"
                                HorizontalOptions="Start"
                                WidthRequest="10"
                          HeightRequest="100"
                             
                                Color="{DynamicResource AvanadeOrange}"/>
-                <Grid Margin="17,0,0,0" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand">
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="5*" />
-                        <RowDefinition Height="10*" />
-                        <RowDefinition Height="85*" />
+                    <Grid Margin="17,0,0,0" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="4*" />
+                            <RowDefinition Height="13*" />
+                            <RowDefinition Height="83*" />
 
 
 
 
-                    </Grid.RowDefinitions>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="90*" />
-                        <ColumnDefinition Width="10*" />
-                    </Grid.ColumnDefinitions>
-                    <Image Source ="BlackGradBack.png" Opacity=".25" Margin="3,0,0,0" Aspect="Fill" Grid.Row="0" VerticalOptions="StartAndExpand" Grid.Column="0" Grid.RowSpan="3" Grid.ColumnSpan="3" />
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="90*" />
+                            <ColumnDefinition Width="10*" />
+                        </Grid.ColumnDefinitions>
+                        <Image Source ="BlackGradBack.png" Opacity=".25" Margin="3,0,0,0" Aspect="Fill" Grid.Row="0" VerticalOptions="StartAndExpand" Grid.Column="0" Grid.RowSpan="3" Grid.ColumnSpan="3" />
 
 
-                    <Label Grid.Row="1" Grid.Column="0" Margin="5,0,0,0" VerticalOptions="EndAndExpand" VerticalTextAlignment="End" Style="{DynamicResource FontLabel}"   HorizontalOptions="Start" TextColor="White" Text="N E X T  U P" FontSize="14" FontAttributes="Bold"></Label>
-                    <Label Grid.Row="2" Grid.Column="0" Margin="5,0,0,0" VerticalOptions="Center" VerticalTextAlignment="Center" Style="{DynamicResource FontLabel}"  HorizontalOptions="Start"  TextColor="White" Text="{Binding NextItem.Title} " FontSize="Large"></Label>
-        
+                        <Label Grid.Row="1" Grid.Column="0" Margin="5,0,0,0" VerticalOptions="FillAndExpand" VerticalTextAlignment="End" Style="{DynamicResource FontLabel}"   HorizontalOptions="Start" TextColor="White" Text="N E X T  U P" FontSize="14" FontAttributes="Bold"></Label>
+                        <Label Grid.Row="2" Grid.Column="0" Margin="5,0,0,0" VerticalOptions="Center" VerticalTextAlignment="Center" Style="{DynamicResource FontLabel}"  HorizontalOptions="Start"  TextColor="White" Text="{Binding NextItem.Title} " FontSize="Large"></Label>
+
+
+                    </Grid>
+
+                </StackLayout>
+            </Grid>
+
+
+
       
-                </Grid>
-
-            </StackLayout>
 
         </AbsoluteLayout>
 

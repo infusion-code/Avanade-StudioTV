@@ -50,8 +50,7 @@ namespace AvanadeStudioTV.Views
 
 			StartAnimatingTitles();
 
-			TitleView.Opacity = 0;
-			NextShowView.Opacity = 0;
+
 
 		}
 
@@ -121,8 +120,8 @@ namespace AvanadeStudioTV.Views
 			IsInCurrentTitleMode = true;
 
 
-				VideoPlayerView.HeightRequest = VideoStack.Height;
-				VideoPlayerView.WidthRequest = VideoStack.WidthRequest;
+				VideoPlayerView.HeightRequest = MainGrid.Height;
+				VideoPlayerView.WidthRequest = MainGrid.WidthRequest;
 				VideoPlayerView.VerticalOptions = LayoutOptions.FillAndExpand;
 
 			PlayVideo(this.Source);
@@ -133,12 +132,17 @@ namespace AvanadeStudioTV.Views
 
 		private void StartAnimatingTitles()
 		{
+			TitleView.Opacity = 0;
+			NextShowView.Opacity = 0;
 			SetupTimers();
 			StartShowTimer();
 		}
 
 		private void StopAnimatingTitles()
 		{
+			TitleView.Opacity = 0;
+			NextShowView.Opacity = 0;
+
 			ShowTitleTimer.Stop();
 			HideTitleTimer.Stop();
 		}
@@ -240,17 +244,32 @@ namespace AvanadeStudioTV.Views
         protected override void OnDisappearing()
         {
             base.OnDisappearing();
-            
-        }
+			StopAnimatingTitles();
 
-		private void MainScreen_Tapped(object sender, EventArgs e)
+		}
+
+		private void TitleView_Tapped(object sender, EventArgs e)
 		{
-			
- 
-				OpenSettingsPage(); 
+		
+
+			if (IsInCurrentTitleMode)
+			{
+				
+				OpenSettingsPage();
+			}
+
+			else ShowNextVideo();
+
+
+		}
+
+		private void ShowNextVideo()
+		{
+		 
+			ViewModel.VideoPage_VideoCompleted();
+			ViewModel.StartVideo();
 			
 
- 
 		}
 
 		private void OpenSettingsPage()
