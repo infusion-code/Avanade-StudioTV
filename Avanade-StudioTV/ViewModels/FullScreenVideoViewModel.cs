@@ -147,14 +147,19 @@ namespace AvanadeStudioTV.ViewModels
 
         public  void StartVideo()
         {
-			this.SelectedItem.BackgroundColor = "#009999";
-			VideoPage.ResetEvents();
-			VideoPage.VideoCompleted += VideoPage_VideoCompleted;
-			VideoPage.PlayVideo(selectedItem.Enclosure.Url);
-			VideoPage.ForceLayout();
+			if (selectedItem.Enclosure?.Url != String.Empty)
+			{
+				this.SelectedItem.BackgroundColor = "#009999";
+				VideoPage.ResetEvents();
+				VideoPage.VideoCompleted += VideoPage_VideoCompleted;
+				VideoPage.PlayVideo(selectedItem.Enclosure.Url);
+				VideoPage.ForceLayout();
+			}
+
+			else VideoPage_VideoCompleted();
 
 
-        }
+		}
 
 
 		public void VideoPage_VideoCompleted()

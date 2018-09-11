@@ -96,8 +96,11 @@ namespace AvanadeStudioTV.Database
 			foreach (var singleChannel in Channels)
 			{
 				var channelFeed = ScrubPlaylist(await NetworkService.GetSyncFeedAsync(singleChannel.url));
-				CurrentPlaylist.AddRange(channelFeed);
-				CurrentChannel = NetworkService.channel;
+				if (channelFeed?.Count > 0)
+				{
+					CurrentPlaylist.AddRange(channelFeed);
+					CurrentChannel = NetworkService.channel; 
+				}
 			
 			}
 			
@@ -126,22 +129,31 @@ namespace AvanadeStudioTV.Database
 
 		private List<Item> ScrubPlaylist(List<Item> list)
 		{
-			foreach (Item i in list)
+			if (list != null)
 			{
-				var t = new Thumbnail();
+		
+				var x = list.RemoveAll(i => i.Enclosure == null);
+				var y = list.RemoveAll(i => i.Enclosure?.Url == String.Empty);
 
-				t = i.Thumbnail.Find(s => s.Width == "512");
-				if (t?.Url != String.Empty)
+				foreach (Item i in list)
 				{
-					i.Thumbnail.Clear();
-					i.Thumbnail.Add(t);
-				}
 
-				//set parent channel properties
-				i.ChannelImageUrl = NetworkService.channel.Image.Url;
-				i.ChannelTitle = NetworkService.channel.Title;
+					var t = new Thumbnail();
+
+					t = i.Thumbnail.Find(s => s.Width == "512");
+					if (t?.Url != String.Empty)
+					{
+						i.Thumbnail.Clear();
+						i.Thumbnail.Add(t);
+					}
+
+					//set parent channel properties
+					i.ChannelImageUrl = NetworkService.channel.Image.Url;
+					i.ChannelTitle = NetworkService.channel.Title;
+				}
+				return list; 
 			}
-			return list;
+			return null;
 		}
 
 		public async Task<bool> ValidateChannel9FeedUrl(string url)
