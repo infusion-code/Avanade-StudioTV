@@ -24,9 +24,23 @@ namespace AvanadeStudioTV.ViewModels
 
 		private RSSFeedViewModel RSSViewModel;
 
-		private bool _isChecked;
-		private string _textCheckBox;
+		private bool isOriginallyFullScreen;
 
+		private bool _isFullScreen;
+		public bool IsFullScreen
+		{
+			get => _isFullScreen;
+			set
+			{
+				_isFullScreen = value;
+				App.DataManager.IsFullScreenView = _isFullScreen;
+				App.DataManager.SaveFullScreenMode();
+				OnPropertyChanged("IsFullScreen");
+			}
+		}
+
+
+		private bool _isChecked;
 		public bool IsChecked
 		{
 			get => _isChecked;
@@ -38,6 +52,7 @@ namespace AvanadeStudioTV.ViewModels
 			}
 		}
 
+		private string _textCheckBox;
 		public string TextCheckBox
 		{
 			get => _textCheckBox;
@@ -122,9 +137,11 @@ namespace AvanadeStudioTV.ViewModels
 			}
 		}
 
-		public SettingsPageViewModel(INavigation navigation)
+		public SettingsPageViewModel(INavigation navigation, bool isFullScreenView)
 		{
-			
+			this.isOriginallyFullScreen = isFullScreenView;
+			this.IsFullScreen = (bool) App.DataManager.IsFullScreenView;
+
 			this.NewFeed = new RSSFeedViewData();
 			this.NewFeed.isActiveFeed = true;
 			 
@@ -171,7 +188,9 @@ namespace AvanadeStudioTV.ViewModels
 			}
 		}
 
-		
+	 
+
+
 
 		private async Task<bool> ValidateFeed(string url)
 		{
@@ -202,12 +221,43 @@ namespace AvanadeStudioTV.ViewModels
 		{
 		 
 			SaveAsync();
-			 
-			this.Navigation.PopModalAsync();
 
+			CheckAppLayout();
+ 
 			{
 				//Reload video page with new videos
 				MessagingCenter.Send("obj", "Update");
+			}
+		}
+
+		private void CheckAppLayout()
+		{
+			if (IsFullScreen)
+			{
+				if (isOriginallyFullScreen)
+				{
+					this.Navigation.PopModalAsync();
+				}
+				else
+				{
+					Application.Current.MainPage = new FullScreenVideoPage();
+				
+				}
+			}
+
+		   else
+			{
+				if (!isOriginallyFullScreen)
+				{
+					this.Navigation.PopModalAsync();
+				}
+
+				else
+				{
+					Application.Current.MainPage = new MasterPage();
+					
+				}
+
 			}
 		}
 

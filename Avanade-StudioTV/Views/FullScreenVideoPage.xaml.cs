@@ -254,7 +254,7 @@ namespace AvanadeStudioTV.Views
 
 			if (IsInCurrentTitleMode)
 			{
-				
+				//OpenFullScreenListPage()
 				OpenSettingsPage();
 			}
 
@@ -269,6 +269,13 @@ namespace AvanadeStudioTV.Views
 			ViewModel.VideoPage_VideoCompleted();
 			ViewModel.StartVideo();
 			
+
+		}
+
+		private void OpenFullScreenListPage()
+		{
+			var listPage = new FullScreenListPage();
+			this.Navigation.PushModalAsync(listPage);
 
 		}
 

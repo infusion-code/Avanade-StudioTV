@@ -6,6 +6,7 @@ using Realms;
 using System.Linq;
 using AvanadeStudioTV.Network;
 using System.Threading.Tasks;
+using Xamarin.Forms;
 
 namespace AvanadeStudioTV.Database
 {
@@ -30,6 +31,8 @@ namespace AvanadeStudioTV.Database
 		public Item CurrentItem { get; set; }
 		public List<Item> CurrentPlaylist { get; set; }
 
+		public bool? IsFullScreenView { get; set; }
+
 		public NetworkManager NetworkService { get; set; }
 
 		public Realm realm { get; set; }
@@ -48,7 +51,23 @@ namespace AvanadeStudioTV.Database
 		{
 			SetupDatabase();
 			SetupNetworkService();
+			if (Application.Current.Properties.ContainsKey("IsFullScreenView"))
+				IsFullScreenView = Application.Current.Properties["IsFullScreenView"] as bool?;
+			if (IsFullScreenView == null)
+			{
+				if ((Device.Idiom == TargetIdiom.Desktop) || (Device.Idiom == TargetIdiom.TV))
+				{
+					IsFullScreenView = true;
+					Application.Current.Properties["IsFullScreenView"] = IsFullScreenView;
+				}
+				else
+				{
+					IsFullScreenView = false;
+					Application.Current.Properties["IsFullScreenView"] = IsFullScreenView;
+				}
+			}
 
+		
 		}
 
 		private void SetupDatabase()
@@ -89,7 +108,12 @@ namespace AvanadeStudioTV.Database
 			}
 		}
 
-		public async Task<bool> GetDataFromNetwork()
+		public void SaveFullScreenMode()
+		{
+			Application.Current.Properties["IsFullScreenView"] = IsFullScreenView;
+			Application.Current.SavePropertiesAsync();
+	   }
+	public async Task<bool> GetDataFromNetwork()
 		{
 			CurrentPlaylist = new List<Item>();
 			var Channels = realm.All<RSSFeedData>().Where(r => r.isActiveFeed == true);
@@ -104,7 +128,7 @@ namespace AvanadeStudioTV.Database
 			
 			}
 			
-			CurrentPlaylist = CurrentPlaylist.OrderByDescending(l => DateTime.Parse(l.PubDate)).ToList();
+			CurrentPlaylist = CurrentPlaylist?.OrderByDescending(l => DateTime.Parse(l?.PubDate)).ToList();
 
 			if (Channels.Count() > 1)
 			{
@@ -113,7 +137,7 @@ namespace AvanadeStudioTV.Database
 				var c = new Channel
 				{
 					Title = MIXED_CHANNEL_TITLE,
-					Image = new Image
+					Image = new Models.Image
 					{
 						Url = MSDN_CHANNEL9_IMAGE_URL
 					},

@@ -183,6 +183,7 @@
     <Content Include="Assets\Square44x44Logo.targetsize-24_altform-unplated.png" />
     <Content Include="Assets\Wide310x150Logo.scale-200.png" />
     <Content Include="AvLeftHeader.png" />
+    <Content Include="StudioFlatBackground.png" />
     <Content Include="StudioTVcircle.png" />
     <Content Include="TitleBackground.png" />
     <Content Include="Unchecked.png" />

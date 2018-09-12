@@ -33,16 +33,25 @@
                         <Entry Grid.Row="3" Grid.Column="0" WidthRequest="4600" BackgroundColor="White" TextColor="Black"  Margin="2,0,0,0" VerticalOptions="Start"  HorizontalOptions="Start"   Text="{Binding NewFeed.url} " FontSize="12"></Entry>
 
 
-                        <controls:Checkbox  Grid.Row="1" Grid.Column="1" Margin="2,0,0,0"  
+                        <!--<controls:Checkbox  Grid.Row="1" Grid.Column="1" Margin="2,0,0,0"  
                                 VerticalOptions="StartAndExpand" 
                                 HorizontalOptions="StartAndExpand" 
                                 Checked="{Binding NewFeed.isActiveFeed}" 
                                 Text="{Binding TextCheckBox}" 
                                 Command="{Binding OnCheckedChanged}">
-                            </controls:Checkbox>
+                            </controls:Checkbox>-->
 
                         <Button Grid.Row="3" Grid.Column="1" Margin="2,0,0,0"  HeightRequest="80" WidthRequest="100" HorizontalOptions="StartAndExpand" VerticalOptions="StartAndExpand" FontSize="13" FontAttributes="Bold" BackgroundColor="Transparent" Text="Add Channel" TextColor="WhiteSmoke" Command="{Binding AddFeedCommand}" />
-                       
+
+
+                        <controls:Checkbox  Grid.Row="2" Grid.Column="1" Margin="2,0,0,0"  
+                                VerticalOptions="StartAndExpand" 
+                                HorizontalOptions="StartAndExpand" 
+                                Checked="{Binding IsFullScreen}" 
+                                Text="Use Full Screen Mode (On Windows)" 
+                               >
+                        </controls:Checkbox>
+
                     </Grid>
 
                     </StackLayout>

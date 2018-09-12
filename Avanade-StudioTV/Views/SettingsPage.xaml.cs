@@ -1,4 +1,5 @@
-﻿using AvanadeStudioTV.Database;
+﻿using Avanade_StudioTV;
+using AvanadeStudioTV.Database;
 using AvanadeStudioTV.ViewModels;
 using AvanadeStudioTV.Views;
 using System;
@@ -20,7 +21,7 @@ namespace AvanadeStudioTV.Views
 		{
 			InitializeComponent ();
 
-		   ViewModel = new SettingsPageViewModel(nav);
+		   ViewModel = new SettingsPageViewModel(nav, (bool) App.DataManager.IsFullScreenView);
 			this.BindingContext = ViewModel;
 
 		}

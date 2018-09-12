@@ -18,10 +18,10 @@ namespace Avanade_StudioTV
 
 			InitalizeData();
 
-			if ((Device.Idiom == TargetIdiom.Desktop) || (Device.Idiom == TargetIdiom.TV))
+			if ((bool)DataManager.IsFullScreenView)
 			{
 				MainPage = new FullScreenVideoPage();
-				//MainPage = new MasterPage();
+				
 			}
 
 			else
