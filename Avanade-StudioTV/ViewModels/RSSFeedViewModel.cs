@@ -10,6 +10,7 @@ using System.Windows.Input;
 using AvanadeStudioTV.Database;
 using Avanade_StudioTV;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace AvanadeStudioTV.ViewModels
 {
@@ -83,7 +84,7 @@ namespace AvanadeStudioTV.ViewModels
         public RSSFeedViewModel(INavigation navigation, MasterPage master)
         {
             this.Master = master;
-            this.GetNewsFeedAsync();
+        //    this.GetNewsFeedAsync();
             Navigation = navigation;
 			openSettingsPage = new Command(OnOpenSettingsPage);
 
@@ -98,14 +99,17 @@ namespace AvanadeStudioTV.ViewModels
 
 		public async void GetNewsFeedAsync()
 		{
-			var connected = await App.DataManager.GetDataFromNetwork();
+
+			var result = App.DataManager.GetDataFromNetwork();
+			await result;
+
 			List<Item> list = App.DataManager.CurrentPlaylist;
 
 			CurrentChannel = App.DataManager.CurrentChannel;
 
 			if (list != null)
 			{
-				
+				FeedList?.Clear();
 				FeedList = new ObservableCollection<Item>(list);
 
 				this.SelectedItem = FeedList[0];
@@ -130,12 +134,15 @@ namespace AvanadeStudioTV.ViewModels
 
         private  void OpenVideoPage()
         {
-			this.SelectedItem.BackgroundColor = "#009999";
-            this.Master.videoPage.ResetEvents();
-            this.Master.videoPage.VideoCompleted += VideoPage_VideoCompleted;
-			this.Master.videoPage.ViewModel.SelectedItem = selectedItem;
-            this.Master.videoPage.PlayVideo(selectedItem.Enclosure.Url);
-            this.Master.videoPage.ForceLayout();
+			if (SelectedItem != null)
+			{
+				this.SelectedItem.BackgroundColor = "#009999";
+				this.Master.videoPage.ResetEvents();
+				this.Master.videoPage.VideoCompleted += VideoPage_VideoCompleted;
+				this.Master.videoPage.ViewModel.SelectedItem = selectedItem;
+				this.Master.videoPage.PlayVideo(selectedItem.Enclosure.Url);
+				this.Master.videoPage.ForceLayout(); 
+			}
 
 
         }

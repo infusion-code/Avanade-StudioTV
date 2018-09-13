@@ -116,6 +116,7 @@ namespace AvanadeStudioTV.Views
 		protected override void OnAppearing()
         {
             base.OnAppearing();
+			ViewModel.GetNewsFeedAsync();
 
 			IsInCurrentTitleMode = true;
 

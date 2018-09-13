@@ -177,7 +177,7 @@ namespace AvanadeStudioTV.ViewModels
 				this.FeedList.Add(NewFeed);
 				NewFeed = new RSSFeedViewData();
 				 SaveAsync();
-				GetNewsFeedAsync();
+				
 				return true;
 			}
 
@@ -289,9 +289,7 @@ namespace AvanadeStudioTV.ViewModels
 
 		public async void GetNewsFeedAsync()
         {
-			var result = await App.DataManager.GetDataFromNetwork();
-
-		   var list =  App.DataManager.CurrentPlaylist;
+			//var result = await App.DataManager.GetDataFromNetwork();
 
 			var all = new ObservableCollection<RSSFeedViewData>(App.DataManager.AllFeeds);
 

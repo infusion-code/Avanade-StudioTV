@@ -116,6 +116,7 @@ namespace AvanadeStudioTV.Database
 	public async Task<bool> GetDataFromNetwork()
 		{
 			CurrentPlaylist = new List<Item>();
+			CurrentPlaylist.Clear();
 			var Channels = realm.All<RSSFeedData>().Where(r => r.isActiveFeed == true);
 			foreach (var singleChannel in Channels)
 			{

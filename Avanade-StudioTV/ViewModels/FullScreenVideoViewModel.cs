@@ -10,6 +10,7 @@ using System.Windows.Input;
 using AvanadeStudioTV.Database;
 using Avanade_StudioTV;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace AvanadeStudioTV.ViewModels
 {
@@ -98,9 +99,9 @@ namespace AvanadeStudioTV.ViewModels
 
         public FullScreenVideoViewModel(INavigation navigation, FullScreenVideoPage videopage)
         {
-           
-            this.GetNewsFeedAsync();
-            Navigation = navigation;
+
+			//this.GetNewsFeedAsync();
+			Navigation = navigation;
 			VideoPage = videopage;
 			openSettingsPage = new Command(OnOpenSettingsPage);
 
@@ -115,7 +116,8 @@ namespace AvanadeStudioTV.ViewModels
 
 		public async void GetNewsFeedAsync()
 		{
-			var connected = await App.DataManager.GetDataFromNetwork();
+			var result =  App.DataManager.GetDataFromNetwork();
+			await result;
 			List<Item> list = App.DataManager.CurrentPlaylist;
 
 			CurrentChannel = App.DataManager.CurrentChannel;

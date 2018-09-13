@@ -4,27 +4,27 @@ using Xamarin.Forms;
 
 namespace AvanadeStudioTV.Views
 {
-    public partial class RSSReaderPage : ContentPage
-    {
+	public partial class RSSReaderPage : ContentPage
+	{
 
-        RSSFeedViewModel RSSFeedViewModelObject;
-        public ListView FeedView { get; set; }
+		RSSFeedViewModel RSSFeedViewModelObject;
+		public ListView FeedView { get; set; }
 
 		public MasterPage master;
 
-        public RSSReaderPage(MasterPage Master)
-        {
-            InitializeComponent();
+		public RSSReaderPage(MasterPage Master)
+		{
+			InitializeComponent();
 
-            FeedView = this.FeedListView;
+			FeedView = this.FeedListView;
 
-            RSSFeedViewModelObject = new RSSFeedViewModel(Navigation, Master);
+			RSSFeedViewModelObject = new RSSFeedViewModel(Navigation, Master);
 
 			master = Master;
 
 
-            Title = "Avanade Studio TV";
-            BindingContext = RSSFeedViewModelObject;
+			Title = "Avanade Studio TV";
+			BindingContext = RSSFeedViewModelObject;
 
 			//Subscibe to insert expenses
 			MessagingCenter.Subscribe<string>(this, "Update", (obj) =>
@@ -37,16 +37,21 @@ namespace AvanadeStudioTV.Views
 
 		private void Reload()
 		{
-			
-
-			FeedView = this.FeedListView;
-
-			RSSFeedViewModelObject = new RSSFeedViewModel(Navigation, master);
 
 
-			Title = "Avanade Studio TV";
-			BindingContext = RSSFeedViewModelObject;
-			
+			//	FeedView = this.FeedListView;
+
+			//	RSSFeedViewModelObject.GetNewsFeedAsync();
+
+
+			//	Title = "Avanade Studio TV";
+			//	BindingContext = RSSFeedViewModelObject;
+
+		}
+
+		protected override void OnAppearing()
+		{
+			RSSFeedViewModelObject.GetNewsFeedAsync();
 		}
 	}
-}
+	}
