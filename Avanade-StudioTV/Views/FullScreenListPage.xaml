@@ -11,11 +11,121 @@
                     <RowDefinition Height="15*" />
                 </Grid.RowDefinitions>
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="3*" />
-                    <ColumnDefinition Width="55*" />
-                    <ColumnDefinition Width="42*" />
+                    <ColumnDefinition Width="03*" />
+                    <ColumnDefinition Width="72*" />
+                    <ColumnDefinition Width="22*" />
+                    <ColumnDefinition Width="03*" />
                 </Grid.ColumnDefinitions>
                 <Button Grid.Column="0" Grid.Row="0" Text="Close" TextColor="White"  Clicked="CloseButton_Clicked"></Button>
+                <Image Grid.Row="0" Grid.RowSpan="3"  Grid.ColumnSpan="4" Aspect="AspectFill" Source="StudioFooter.png"></Image>
+                <Grid Grid.Row="0" Grid.RowSpan="2" Grid.Column="2"  BackgroundColor="White">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="09*" />
+                        <RowDefinition Height="03*" />
+                        <RowDefinition Height="16*" />
+                        <RowDefinition Height="16*" />
+                        <RowDefinition Height="16*" />
+                        <RowDefinition Height="16*" />
+                        <RowDefinition Height="16*" />
+                        <RowDefinition Height="08*" />
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="40*" />
+                        <ColumnDefinition Width="60*" />
+
+                    </Grid.ColumnDefinitions>
+                    <StackLayout Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" BackgroundColor="Gray" Orientation="Horizontal" >
+                        <Label Text="Houston" Style="{DynamicResource FontLabel}" TextColor="White" FontSize="Medium"></Label> 
+                    </StackLayout>
+                    <!--Today-->
+                        <StackLayout  Grid.Row="2" Grid.Column ="0" Margin="0,0,0,0"    VerticalOptions="Center" HorizontalOptions="Center" >
+                            <Image HeightRequest="90"   Aspect="AspectFit"  Source="WeatherSunny.png" ></Image>
+                        </StackLayout>
+                    <Grid Grid.Row="2" Margin="0,5,0,0"   Grid.Column="1"  >
+                            <Grid.RowDefinitions>
+                            <RowDefinition Height="30*" />
+                            <RowDefinition Height="40*" />
+                            <RowDefinition Height="30*" />
+                        </Grid.RowDefinitions>
+                        <Label Grid.Row="0"   Text="Today"  Style="{DynamicResource FontLabel}" VerticalOptions="End"  TextColor="DimGray" FontSize="16"></Label>
+                        <StackLayout  Grid.Row="1"  Margin="0,0,0,0"   Orientation="Horizontal" VerticalOptions="Center" HorizontalOptions="Start" >
+                            <Label Text="1 0 2 &#186;" Style="{DynamicResource FontLabel}" VerticalOptions="Center" TextColor="DimGray" FontSize="38"></Label>
+                            <Label Text="8 8 &#186;" Style="{DynamicResource FontLabel}" VerticalOptions="End" TextColor="ForestGreen" FontSize="18"></Label>
+                        </StackLayout>
+                        <Label Text="3 9 &#186; C" Grid.Row="2" Style="{DynamicResource FontLabel}" VerticalOptions="Start" TextColor="DimGray" FontSize="18"></Label>
+                    </Grid>
+                    <!--Tommorrow-->
+                    <StackLayout  Grid.Row="3" Grid.Column ="0" Margin="0,0,0,0"    VerticalOptions="Center" HorizontalOptions="Center" >
+                        <Image HeightRequest="90"   Aspect="AspectFit"  Source="WeatherCloudy.png" ></Image>
+                    </StackLayout>
+                    <Grid Margin="0,5,0,0" Grid.Row="3"   Grid.Column="1"  >
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="30*" />
+                            <RowDefinition Height="40*" />
+                            <RowDefinition Height="30*" />
+                        </Grid.RowDefinitions>
+                        <Label Text="Tommorrow" Grid.Row="0"   Style="{DynamicResource FontLabel}" VerticalOptions="End"  TextColor="DimGray" FontSize="16"></Label>
+                        <StackLayout  Grid.Row="1"  Margin="0,0,0,0"   Orientation="Horizontal" VerticalOptions="Center" HorizontalOptions="Start" >
+                            <Label Text="1 0 2 &#186;" Style="{DynamicResource FontLabel}" VerticalOptions="Center" TextColor="DimGray" FontSize="38"></Label>
+                            <Label Text="8 8 &#186;" Style="{DynamicResource FontLabel}" VerticalOptions="End" TextColor="ForestGreen" FontSize="18"></Label>
+                        </StackLayout>
+                        <Label Text="3 9 &#186; C" Grid.Row="2" Style="{DynamicResource FontLabel}" VerticalOptions="Start" TextColor="DimGray" FontSize="18"></Label>
+                    </Grid>
+                    <!--Day 3-->
+                    <StackLayout  Grid.Row="4" Grid.Column ="0" Margin="0,0,0,0"    VerticalOptions="Center" HorizontalOptions="Center" >
+                        <Image HeightRequest="90"   Aspect="AspectFit"  Source="WeatherStorm.png" ></Image>
+                    </StackLayout>
+                    <Grid Margin="0,5,0,0" Grid.Row="4"   Grid.Column="1"  >
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="30*" />
+                            <RowDefinition Height="40*" />
+                            <RowDefinition Height="30*" />
+                        </Grid.RowDefinitions>
+                        <Label Text="Wednesday" Grid.Row="0"   Style="{DynamicResource FontLabel}" VerticalOptions="End"  TextColor="DimGray" FontSize="16"></Label>
+                        <StackLayout  Grid.Row="1"  Margin="0,0,0,0"   Orientation="Horizontal" VerticalOptions="Center" HorizontalOptions="Start" >
+                            <Label Text="1 0 2 &#186;" Style="{DynamicResource FontLabel}" VerticalOptions="Center" TextColor="DimGray" FontSize="38"></Label>
+                            <Label Text="8 8 &#186;" Style="{DynamicResource FontLabel}" VerticalOptions="End" TextColor="ForestGreen" FontSize="18"></Label>
+                        </StackLayout>
+                        <Label Text="3 9 &#186; C" Grid.Row="2" Style="{DynamicResource FontLabel}" VerticalOptions="Start" TextColor="DimGray" FontSize="18"></Label>
+                    </Grid>
+                    <!--Day 4-->
+                    <StackLayout  Grid.Row="5" Grid.Column ="0" Margin="0,0,0,0"    VerticalOptions="Center" HorizontalOptions="Center" >
+                        <Image HeightRequest="90"   Aspect="AspectFit"  Source="WeatherSunny.png" ></Image>
+                    </StackLayout>
+                    <Grid Margin="0,5,0,0" Grid.Row="5"   Grid.Column="1"  >
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="30*" />
+                            <RowDefinition Height="40*" />
+                            <RowDefinition Height="30*" />
+                        </Grid.RowDefinitions>
+                        <Label Text="Thursday" Grid.Row="0"   Style="{DynamicResource FontLabel}" VerticalOptions="End"  TextColor="DimGray" FontSize="16"></Label>
+                        <StackLayout  Grid.Row="1"  Margin="0,0,0,0"   Orientation="Horizontal" VerticalOptions="Center" HorizontalOptions="Start" >
+                            <Label Text="1 0 2 &#186;" Style="{DynamicResource FontLabel}" VerticalOptions="Center" TextColor="DimGray" FontSize="38"></Label>
+                            <Label Text="8 8 &#186;" Style="{DynamicResource FontLabel}" VerticalOptions="End" TextColor="ForestGreen" FontSize="18"></Label>
+                        </StackLayout>
+                        <Label Text="3 9 &#186; C" Grid.Row="2" Style="{DynamicResource FontLabel}" VerticalOptions="Start" TextColor="DimGray" FontSize="18"></Label>
+                    </Grid>
+                    <!--Day 5-->
+                    <StackLayout  Grid.Row="6" Grid.Column ="0" Margin="0,0,0,0"    VerticalOptions="Center" HorizontalOptions="Center" >
+                        <Image HeightRequest="90"   Aspect="AspectFit"  Source="WeatherCloudy.png" ></Image>
+                    </StackLayout>
+                    <Grid Margin="0,5,0,0" Grid.Row="6"   Grid.Column="1"  >
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="30*" />
+                            <RowDefinition Height="40*" />
+                            <RowDefinition Height="30*" />
+                        </Grid.RowDefinitions>
+                        <Label Text="Friday" Grid.Row="0"   Style="{DynamicResource FontLabel}" VerticalOptions="End"  TextColor="DimGray" FontSize="16"></Label>
+                        <StackLayout  Grid.Row="1"  Margin="0,0,0,0"   Orientation="Horizontal" VerticalOptions="Center" HorizontalOptions="Start" >
+                            <Label Text="1 0 2 &#186;" Style="{DynamicResource FontLabel}" VerticalOptions="Center" TextColor="DimGray" FontSize="38"></Label>
+                            <Label Text="8 8 &#186;" Style="{DynamicResource FontLabel}" VerticalOptions="End" TextColor="ForestGreen" FontSize="18"></Label>
+                        </StackLayout>
+                        <Label Text="3 9 &#186; C" Grid.Row="2" Style="{DynamicResource FontLabel}" VerticalOptions="Start" TextColor="DimGray" FontSize="18"></Label>
+                    </Grid>
+                </Grid>
+                <StackLayout  Grid.Row="2" Margin="0,-5,0,0"    Grid.Column ="2" VerticalOptions="StartAndExpand" HorizontalOptions="StartAndExpand" >
+                    <Image  Aspect="AspectFill" Opacity="70" Source="AvLeftHeader.png" ></Image>
+                </StackLayout>
             </Grid>
         </AbsoluteLayout>
     </ContentPage.Content>

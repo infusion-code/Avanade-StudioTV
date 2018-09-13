@@ -121,6 +121,9 @@
     <Content Include="Assets\Fonts\FontAwesome4.otf">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="WeatherCloudy.png" />
+    <Content Include="WeatherStorm.png" />
+    <Content Include="WeatherSunny.png" />
     <None Include="Avanade-StudioTV.UWP_TemporaryKey.pfx" />
   </ItemGroup>
   <ItemGroup>
@@ -184,6 +187,7 @@
     <Content Include="Assets\Wide310x150Logo.scale-200.png" />
     <Content Include="AvLeftHeader.png" />
     <Content Include="StudioFlatBackground.png" />
+    <Content Include="StudioFooter.png" />
     <Content Include="StudioTVcircle.png" />
     <Content Include="TitleBackground.png" />
     <Content Include="Unchecked.png" />

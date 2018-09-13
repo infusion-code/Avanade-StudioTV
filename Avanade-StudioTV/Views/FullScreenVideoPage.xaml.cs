@@ -255,8 +255,8 @@ namespace AvanadeStudioTV.Views
 
 			if (IsInCurrentTitleMode)
 			{
-				//OpenFullScreenListPage()
-				OpenSettingsPage();
+				OpenFullScreenListPage();
+				//OpenSettingsPage();
 			}
 
 			else ShowNextVideo();
