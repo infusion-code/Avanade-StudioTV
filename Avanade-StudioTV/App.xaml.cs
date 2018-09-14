@@ -18,6 +18,8 @@ namespace Avanade_StudioTV
 
 			InitalizeData();
 
+		     DataManager.GetWeatherForcast();
+
 			if ((bool)DataManager.IsFullScreenView)
 			{
 

@@ -21,6 +21,12 @@ namespace AvanadeStudioTV.Database
 
 		public const string MIXED_CHANNEL_TITLE = "Channel 9 Video Mix";
 
+		
+		public const string OPEN_WEATHER_API_KEY = "c728d330cb85928cbea65ed959eb3fbf"; //see WeatherApiConfigInformationReadme.txt for details on setup of weather API
+
+		//http://api.openweathermap.org/data/2.5/forecast?zip=77007&APPID=c728d330cb85928cbea65ed959eb3fbf
+		public const string OPEN_WEATHER_API_FORCAST_URL = "http://api.openweathermap.org/data/2.5/forecast?zip=";
+
 		/// <summary>
 		/// Boolean to determine whether to show a set of shows from all active feeds (channels) 
 		/// </summary>
@@ -34,6 +40,8 @@ namespace AvanadeStudioTV.Database
 		public bool? IsFullScreenView { get; set; }
 
 		public NetworkManager NetworkService { get; set; }
+
+		public WeatherModel WeatherForecast { get; set; }
 
 		public Realm realm { get; set; }
 
@@ -129,6 +137,18 @@ namespace AvanadeStudioTV.Database
 			ZipCode = Zip;
 			Application.Current.Properties["ZipCode"] = Zip;
 			Application.Current.SavePropertiesAsync();
+		}
+
+		public async Task <bool> GetWeatherForcast()
+		{
+			////http://api.openweathermap.org/data/2.5/forecast?zip=77007&APPID=c728d330cb85928cbea65ed959eb3fbf
+			//public const string OPEN_WEATHER_API_FORCAST_URL = "http://api.openweathermap.org/data/2.5/forecast?zip=";Op
+			var url = OPEN_WEATHER_API_FORCAST_URL + ZipCode + "&APPID=" + OPEN_WEATHER_API_KEY;
+
+			WeatherForecast = await NetworkService.GetWeatherForcastAsync(url);
+
+			if (WeatherForecast != null) return true;
+			else return false;
 		}
 
 		public async Task<bool> GetDataFromNetwork()

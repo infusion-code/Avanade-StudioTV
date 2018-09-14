@@ -6,11 +6,12 @@ using System.Threading.Tasks;
 using Xamarin.Essentials;
 using Realms;
 
-
+using AvanadeStudioTV;
 using AvanadeStudioTV.Models;
 using AvanadeStudioTV.Database;
 using System.Runtime.Serialization;
 using System.Linq;
+using Newtonsoft.Json;
 
 namespace AvanadeStudioTV.Network
 {
@@ -59,9 +60,37 @@ namespace AvanadeStudioTV.Network
             }
             return null;
         }
- 
 
- 
+		public async Task<WeatherModel> GetWeatherForcastAsync(string url)
+		{
+			////http://api.openweathermap.org/data/2.5/forecast?zip=77007&APPID=c728d330cb85928cbea65ed959eb3fbf
+		  //public const string OPEN_WEATHER_API_FORCAST_URL = "http://api.openweathermap.org/data/2.5/forecast?zip=";
+			if (this.IsConnected())
+			{
+				try
+				{
+					
+					var uri = new Uri(url);
+					HttpClient client = new HttpClient();
+					HttpResponseMessage response = await client.GetAsync(uri);
+					String responseJson = await response.Content.ReadAsStringAsync();
+
+
+					WeatherModel model = JsonConvert.DeserializeObject<WeatherModel>(responseJson);
+
+					return model;
+				}
+				catch (Exception e)
+				{
+					//TODO add exception handling
+					return null;
+				}
+			}
+			return null;
+		}
+
+
+
 
 		public bool IsConnected()
         {
