@@ -37,6 +37,9 @@ namespace AvanadeStudioTV.Database
 
 		public Realm realm { get; set; }
 
+		//for weather location
+		public string ZipCode { get; set; }
+
 		public static FeedManager feed_manager = new FeedManager();
 
 		public static FeedManager Instance
@@ -46,6 +49,8 @@ namespace AvanadeStudioTV.Database
 				return feed_manager;
 			}
 		}
+
+		public const string DEFAULTZIP = "77007"; //Houston
 
 		public FeedManager()
 		{
@@ -67,7 +72,11 @@ namespace AvanadeStudioTV.Database
 				}
 			}
 
-		
+			if (Application.Current.Properties.ContainsKey("ZipCode"))
+				ZipCode = Application.Current.Properties["ZipCode"] as string;
+			else ZipCode = DEFAULTZIP;
+
+
 		}
 
 		private void SetupDatabase()
@@ -113,7 +122,16 @@ namespace AvanadeStudioTV.Database
 			Application.Current.Properties["IsFullScreenView"] = IsFullScreenView;
 			Application.Current.SavePropertiesAsync();
 	   }
-	public async Task<bool> GetDataFromNetwork()
+
+
+		public void SaveZipCode(string Zip)
+		{
+			ZipCode = Zip;
+			Application.Current.Properties["ZipCode"] = Zip;
+			Application.Current.SavePropertiesAsync();
+		}
+
+		public async Task<bool> GetDataFromNetwork()
 		{
 			CurrentPlaylist = new List<Item>();
 			CurrentPlaylist.Clear();

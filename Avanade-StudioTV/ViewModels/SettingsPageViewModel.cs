@@ -12,6 +12,7 @@ using Realms;
 using System.Linq;
 using Avanade_StudioTV;
 using System.Threading.Tasks;
+using System.Text.RegularExpressions;
 
 namespace AvanadeStudioTV.ViewModels
 {
@@ -64,6 +65,44 @@ namespace AvanadeStudioTV.ViewModels
 			}
 		}
 
+		private string _zip;
+		public string Zip
+		{
+			get => _zip;
+			set
+			{
+				 
+				_zip = value;
+				 OnPropertyChanged("Zip");
+ 
+
+			}
+		}
+
+
+
+		private bool IsValidUSOrCanadianZipCode(string zipCode)
+		{
+			var _usZipRegEx = @"^\d{5}(?:[-\s]\d{4})?$";
+			var _caZipRegEx = @"^([ABCEGHJKLMNPRSTVXY]\d[ABCEGHJKLMNPRSTVWXYZ])\ {0,1}(\d[ABCEGHJKLMNPRSTVWXYZ]\d)$";
+
+			var validZipCode = true;
+			if ((!Regex.Match(zipCode, _usZipRegEx).Success) && (!Regex.Match(zipCode, _caZipRegEx).Success))
+			{
+				validZipCode = false;
+			}
+
+			if (!validZipCode)
+			{
+				Application.Current.MainPage.DisplayAlert("Error", "Cannot validate Zip or Postal Code, Please use a valid US or Canadian value", "OK");
+			}
+
+			return validZipCode;
+
+
+		    
+	    }
+ 
 
 
 		public Command OnCheckedChanged { get; set; }
@@ -141,6 +180,7 @@ namespace AvanadeStudioTV.ViewModels
 		{
 			this.isOriginallyFullScreen = isFullScreenView;
 			this.IsFullScreen = (bool) App.DataManager.IsFullScreenView;
+			this.Zip = App.DataManager.ZipCode;
 
 			this.NewFeed = new RSSFeedViewData();
 			this.NewFeed.isActiveFeed = true;
@@ -219,7 +259,14 @@ namespace AvanadeStudioTV.ViewModels
 
 		private void OnCloseSettingsPage(object obj)
 		{
-		 
+
+			if (IsValidUSOrCanadianZipCode(Zip))
+			{
+				App.DataManager.SaveZipCode(Zip);
+			}
+
+			else return;
+
 			SaveAsync();
 
 			CheckAppLayout();

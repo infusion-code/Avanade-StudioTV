@@ -17,6 +17,8 @@
                     <ColumnDefinition Width="03*" />
                 </Grid.ColumnDefinitions>
                 <Button Grid.Column="0" Grid.Row="0" Text="Close" TextColor="White"  Clicked="CloseButton_Clicked"></Button>
+
+                <!--WEATHER VIEW-->
                 <Image Grid.Row="0" Grid.RowSpan="3"  Grid.ColumnSpan="4" Aspect="AspectFill" Source="StudioFooter.png"></Image>
                 <Grid Grid.Row="0" Grid.RowSpan="2" Grid.Column="2"  BackgroundColor="White">
                     <Grid.RowDefinitions>
@@ -34,8 +36,10 @@
                         <ColumnDefinition Width="60*" />
 
                     </Grid.ColumnDefinitions>
-                    <StackLayout Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" BackgroundColor="Gray" Orientation="Horizontal" >
-                        <Label Text="Houston" Style="{DynamicResource FontLabel}" TextColor="White" FontSize="Medium"></Label> 
+                    <!-- CITY AND TIME LABEL-->
+                    <StackLayout Grid.Row="0" Grid.ColumnSpan="2" BackgroundColor="#CCCCCC"  Orientation="Horizontal" >
+                        <Label  Margin="25,0,0,10" VerticalOptions="Center" VerticalTextAlignment="Center" Text="HOUSTON, TX" Style="{DynamicResource FontLabel}" TextColor="White" FontAttributes="Bold" FontSize="Medium"></Label>
+                        <Label Margin="100,0,0,10" VerticalOptions="Center" VerticalTextAlignment="Center" Text="11:10 PM" Style="{DynamicResource FontLabel}" TextColor="White" FontAttributes="Bold" FontSize="Medium"></Label>
                     </StackLayout>
                     <!--Today-->
                         <StackLayout  Grid.Row="2" Grid.Column ="0" Margin="0,0,0,0"    VerticalOptions="Center" HorizontalOptions="Center" >

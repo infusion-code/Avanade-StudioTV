@@ -20,8 +20,9 @@ namespace Avanade_StudioTV
 
 			if ((bool)DataManager.IsFullScreenView)
 			{
-				MainPage = new FullScreenListPage(); //new FullScreenVideoPage();
-				
+
+				MainPage = new FullScreenListPage(); //new SettingsPage(null); // FullScreenListPage(); //new FullScreenVideoPage();
+
 			}
 
 			else
