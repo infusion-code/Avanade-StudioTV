@@ -32,6 +32,9 @@
     <Compile Remove="Models\FeedItem.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Update="Views\BigFeedCell.xaml.cs">
+      <DependentUpon>BigFeedCell.xaml</DependentUpon>
+    </Compile>
     <Compile Update="Views\SettingsCell.xaml.cs">
       <DependentUpon>SettingsCell.xaml</DependentUpon>
     </Compile>

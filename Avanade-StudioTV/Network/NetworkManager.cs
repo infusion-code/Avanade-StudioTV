@@ -63,8 +63,7 @@ namespace AvanadeStudioTV.Network
 
 		public async Task<WeatherModel> GetWeatherForcastAsync(string url)
 		{
-			////http://api.openweathermap.org/data/2.5/forecast?zip=77007&APPID=c728d330cb85928cbea65ed959eb3fbf
-		  //public const string OPEN_WEATHER_API_FORCAST_URL = "http://api.openweathermap.org/data/2.5/forecast?zip=";
+ 
 			if (this.IsConnected())
 			{
 				try

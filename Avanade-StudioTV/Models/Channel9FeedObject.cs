@@ -135,6 +135,9 @@ namespace AvanadeStudioTV.Models
 		//Item's Parent Channel for use in mixed feeds
 		public string ChannelImageUrl { get; set; }
 		public string ChannelTitle { get; set; }
+
+		public string FormattedChannelTitle { get; set; }
+		
 	}
 
     [XmlRoot(ElementName = "channel")]

@@ -22,11 +22,12 @@ namespace AvanadeStudioTV.Database
 		public const string MIXED_CHANNEL_TITLE = "Channel 9 Video Mix";
 
 		
-		public const string OPEN_WEATHER_API_KEY = "c728d330cb85928cbea65ed959eb3fbf"; //see WeatherApiConfigInformationReadme.txt for details on setup of weather API
+		public const string WEATHER_API_KEY = "25785797d7664c8582201255181609";
 
-		//http://api.openweathermap.org/data/2.5/forecast?zip=77007&APPID=c728d330cb85928cbea65ed959eb3fbf
-		public const string OPEN_WEATHER_API_FORCAST_URL = "http://api.openweathermap.org/data/2.5/forecast?zip=";
+		//https://api.apixu.com/
 
+		//https://api.apixu.com/v1/forecast.json?key=25785797d7664c8582201255181609"
+		public const string WEATHER_API_FORCAST_URL = "https://api.apixu.com/v1/forecast.json?key=";             
 		/// <summary>
 		/// Boolean to determine whether to show a set of shows from all active feeds (channels) 
 		/// </summary>
@@ -139,17 +140,19 @@ namespace AvanadeStudioTV.Database
 			Application.Current.SavePropertiesAsync();
 		}
 
-		public async Task <bool> GetWeatherForcast()
+		public async Task <bool> GetWeatherForcastAsync()
 		{
-			////http://api.openweathermap.org/data/2.5/forecast?zip=77007&APPID=c728d330cb85928cbea65ed959eb3fbf
-			//public const string OPEN_WEATHER_API_FORCAST_URL = "http://api.openweathermap.org/data/2.5/forecast?zip=";Op
-			var url = OPEN_WEATHER_API_FORCAST_URL + ZipCode + "&APPID=" + OPEN_WEATHER_API_KEY;
+			//5 day
+			var url = WEATHER_API_FORCAST_URL + WEATHER_API_KEY +"&q=" +ZipCode + "&days=5";
 
 			WeatherForecast = await NetworkService.GetWeatherForcastAsync(url);
+
 
 			if (WeatherForecast != null) return true;
 			else return false;
 		}
+
+		 
 
 		public async Task<bool> GetDataFromNetwork()
 		{
@@ -188,7 +191,7 @@ namespace AvanadeStudioTV.Database
 			return true;
 		}
 
- 
+     
 
 		private List<Item> ScrubPlaylist(List<Item> list)
 		{
@@ -213,10 +216,22 @@ namespace AvanadeStudioTV.Database
 					//set parent channel properties
 					i.ChannelImageUrl = NetworkService.channel.Image.Url;
 					i.ChannelTitle = NetworkService.channel.Title;
+					i.FormattedChannelTitle = FormatTitle(NetworkService.channel.Title);
 				}
 				return list; 
 			}
 			return null;
+		}
+
+		public string FormatTitle(string value )
+		{
+			if (  value != String.Empty)
+			{
+				var s = ( value).ToUpper();
+				return s.Aggregate(string.Empty, (c, i) => c + i + ' ');
+			}
+
+			return value;
 		}
 
 		public async Task<bool> ValidateChannel9FeedUrl(string url)
@@ -282,6 +297,8 @@ namespace AvanadeStudioTV.Database
 
 
 			}
+
+
 
 
 		}

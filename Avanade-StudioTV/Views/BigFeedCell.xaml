@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ViewCell xmlns="http://xamarin.com/schemas/2014/forms"
+        xmlns:views="clr-namespace:AvanadeStudioTV.Views.Controls"
+          xmlns:html="clr-namespace:LabelHtml.Forms.Plugin.Abstractions;assembly=HtmlLabel.Forms.Plugin"
+       
+          xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" x:Class="AvanadeStudioTV.Views.BigFeedCell" >
+  
+
+    <Grid  HeightRequest="350"  BackgroundColor ="{Binding BackgroundColor}">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="20*" />
+                <RowDefinition Height="40*" />
+                <!--<RowDefinition Height="10*" />-->
+                <RowDefinition Height="40*" />
+            </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="40*" />
+            <ColumnDefinition Width="50*" />
+            <ColumnDefinition Width="10*" />
+        </Grid.ColumnDefinitions>
+
+        <Image Grid.Row="0" Grid.Column="0" Grid.RowSpan="3" Source="{Binding Thumbnail[0].Url}" VerticalOptions="CenterAndExpand"  Aspect="AspectFit" />
+        <Label Grid.Row="0"  Grid.Column="1" FormattedText="{Binding FormattedChannelTitle}" VerticalOptions="End"   Margin="5"   FontSize="16" TextColor = "WhiteSmoke"   />
+        <Label Grid.Row="1" Grid.Column="1" Text="{Binding Title }" VerticalOptions="StartAndExpand"  Margin="5"  FontSize="42" TextColor ="WhiteSmoke"  Style="{DynamicResource FontLabel}"  LineBreakMode="WordWrap"   />
+        <!--<Label Grid.Row="2" x:Name="DescLabel" Text="{Binding Summary}" VerticalOptions="StartAndExpand"  TextColor = "White"  LineBreakMode="WordWrap" Margin="2"  FontSize="11"   />-->
+       
+
+
+        </Grid>
+  
+
+</ViewCell>

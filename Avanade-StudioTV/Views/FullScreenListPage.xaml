@@ -1,10 +1,17 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
-             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"      
+             xmlns:Cell="clr-namespace:AvanadeStudioTV.Views"
+             xmlns:views="clr-namespace:AvanadeStudioTV.Views.Controls"  
              x:Class="AvanadeStudioTV.Views.FullScreenListPage" BackgroundImage="StudioFlatBackground.png">
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <views:StringToUpperAndWideSpacingConverter x:Key="StringConverter" />
+        </ResourceDictionary>
+    </ContentPage.Resources>
     <ContentPage.Content>
         <AbsoluteLayout  x:Name="MainLayout" >
-            <Grid   x:Name = "MainGrid" AbsoluteLayout.LayoutBounds="1,1,1,1" AbsoluteLayout.LayoutFlags="All">
+            <Grid InputTransparent="False"   x:Name = "MainGrid" AbsoluteLayout.LayoutBounds="1,1,1,1" AbsoluteLayout.LayoutFlags="All">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="60*" />
                     <RowDefinition Height="25*" />
@@ -16,20 +23,31 @@
                     <ColumnDefinition Width="22*" />
                     <ColumnDefinition Width="03*" />
                 </Grid.ColumnDefinitions>
-                <Button Grid.Column="0" Grid.Row="0" Text="Close" TextColor="White"  Clicked="CloseButton_Clicked"></Button>
-
+                <!-- Temp Button for dev use only -->
+                <Button Grid.Column="0" InputTransparent="False" Grid.Row="0" Text="Close" TextColor="White" IsVisible="False" Clicked="CloseButton_Clicked"></Button>
+                <!-- MAIN LIST OF FEEDS -->
+                <Grid Grid.Column="1" InputTransparent="False" Grid.Row="0" Grid.RowSpan="2" >
+                    <ListView IsEnabled="True" InputTransparent="False"  BackgroundColor="Transparent" Margin="0,5,0,0" x:Name="FeedListView" CachingStrategy="RecycleElement" SelectedItem="{Binding SelectedItem, Mode=TwoWay}" ItemsSource="{Binding FeedList}"  HasUnevenRows="true">
+                        <ListView.ItemTemplate>
+                            <DataTemplate>
+                                <Cell:BigFeedCell>
+                                </Cell:BigFeedCell>
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+                    </ListView>
+                </Grid>
                 <!--WEATHER VIEW-->
-                <Image Grid.Row="0" Grid.RowSpan="3"  Grid.ColumnSpan="4" Aspect="AspectFill" Source="StudioFooter.png"></Image>
-                <Grid Grid.Row="0" Grid.RowSpan="2" Grid.Column="2"  BackgroundColor="White">
+                <Image Grid.Row="0" Grid.RowSpan="3" InputTransparent="True" Grid.ColumnSpan="4" Aspect="AspectFill" Source="StudioFooter.png"></Image>
+                <Grid InputTransparent="True"    Grid.Row="0" Grid.RowSpan="2" Grid.Column="2"  BackgroundColor="White">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="09*" />
                         <RowDefinition Height="03*" />
-                        <RowDefinition Height="16*" />
-                        <RowDefinition Height="16*" />
-                        <RowDefinition Height="16*" />
-                        <RowDefinition Height="16*" />
-                        <RowDefinition Height="16*" />
-                        <RowDefinition Height="08*" />
+                        <RowDefinition Height="17*" />
+                        <RowDefinition Height="17*" />
+                        <RowDefinition Height="17*" />
+                        <RowDefinition Height="17*" />
+                        <RowDefinition Height="17*" />
+                        <RowDefinition Height="03*" />
                     </Grid.RowDefinitions>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="40*" />
@@ -38,12 +56,29 @@
                     </Grid.ColumnDefinitions>
                     <!-- CITY AND TIME LABEL-->
                     <StackLayout Grid.Row="0" Grid.ColumnSpan="2" BackgroundColor="#CCCCCC"  Orientation="Horizontal" >
-                        <Label  Margin="25,0,0,10" VerticalOptions="Center" VerticalTextAlignment="Center" Text="HOUSTON, TX" Style="{DynamicResource FontLabel}" TextColor="White" FontAttributes="Bold" FontSize="Medium"></Label>
-                        <Label Margin="100,0,0,10" VerticalOptions="Center" VerticalTextAlignment="Center" Text="11:10 PM" Style="{DynamicResource FontLabel}" TextColor="White" FontAttributes="Bold" FontSize="Medium"></Label>
+                        <Label  Margin="20,0,0,10" VerticalOptions="Center" VerticalTextAlignment="Center" Text="{Binding City}" Style="{DynamicResource FontLabel}" TextColor="White" FontAttributes="Bold" FontSize="Medium"></Label>
+                        <Label x:Name="ClockLabel" Margin="60,0,0,5" VerticalOptions="Center" VerticalTextAlignment="Center"  Style="{DynamicResource FontLabel}" TextColor="White" FontAttributes="Bold" FontSize="Medium"></Label>
                     </StackLayout>
                     <!--Today-->
                         <StackLayout  Grid.Row="2" Grid.Column ="0" Margin="0,0,0,0"    VerticalOptions="Center" HorizontalOptions="Center" >
-                            <Image HeightRequest="90"   Aspect="AspectFit"  Source="WeatherSunny.png" ></Image>
+                            <Image HeightRequest="90"   Aspect="AspectFit"  >
+                            <Image.Style>
+                                <Style TargetType="Image">
+                                    <Style.Triggers >
+                                        <DataTrigger TargetType="Image" Binding="{Binding Today.type}" Value="Sunny">
+                                            <Setter Property="Source" Value="WeatherSunny.png"/>
+                                        </DataTrigger >
+                                        <DataTrigger TargetType="Image" Binding="{Binding Today.type}" Value="Storm">
+                                            <Setter Property="Source" Value="WeatherStorm.png"/>
+                                        </DataTrigger >
+                                        <DataTrigger TargetType="Image" Binding="{Binding Today.type}" Value="Cloudy">
+                                            <Setter Property="Source" Value="WeatherCloudy.png"/>
+                                        </DataTrigger >
+                                    </Style.Triggers>
+                                </Style>
+                            </Image.Style>
+
+                        </Image>
                         </StackLayout>
                     <Grid Grid.Row="2" Margin="0,5,0,0"   Grid.Column="1"  >
                             <Grid.RowDefinitions>
@@ -53,14 +88,30 @@
                         </Grid.RowDefinitions>
                         <Label Grid.Row="0"   Text="Today"  Style="{DynamicResource FontLabel}" VerticalOptions="End"  TextColor="DimGray" FontSize="16"></Label>
                         <StackLayout  Grid.Row="1"  Margin="0,0,0,0"   Orientation="Horizontal" VerticalOptions="Center" HorizontalOptions="Start" >
-                            <Label Text="1 0 2 &#186;" Style="{DynamicResource FontLabel}" VerticalOptions="Center" TextColor="DimGray" FontSize="38"></Label>
-                            <Label Text="8 8 &#186;" Style="{DynamicResource FontLabel}" VerticalOptions="End" TextColor="ForestGreen" FontSize="18"></Label>
+                            <Label Text="{Binding Today.MaxTemp}" Style="{DynamicResource FontLabel}" VerticalOptions="Center" TextColor="DimGray" FontSize="38"></Label>
+                            <Label Text="{Binding Today.MinTemp}" Style="{DynamicResource FontLabel}" VerticalOptions="End" TextColor="ForestGreen" FontSize="18"></Label>
                         </StackLayout>
-                        <Label Text="3 9 &#186; C" Grid.Row="2" Style="{DynamicResource FontLabel}" VerticalOptions="Start" TextColor="DimGray" FontSize="18"></Label>
+                        <Label Text="{Binding Today.MaxTempC}" Grid.Row="2" Style="{DynamicResource FontLabel}" VerticalOptions="Start" TextColor="DimGray" FontSize="18"></Label>
                     </Grid>
                     <!--Tommorrow-->
                     <StackLayout  Grid.Row="3" Grid.Column ="0" Margin="0,0,0,0"    VerticalOptions="Center" HorizontalOptions="Center" >
-                        <Image HeightRequest="90"   Aspect="AspectFit"  Source="WeatherCloudy.png" ></Image>
+                        <Image HeightRequest="90"   Aspect="AspectFit"   >
+                            <Image.Style>
+                                <Style TargetType="Image">
+                                    <Style.Triggers >
+                                        <DataTrigger TargetType="Image" Binding="{Binding Tommorrow.type}" Value="Sunny">
+                                            <Setter Property="Source" Value="WeatherSunny.png"/>
+                                        </DataTrigger >
+                                        <DataTrigger TargetType="Image" Binding="{Binding Tommorrow.type}" Value="Storm">
+                                            <Setter Property="Source" Value="WeatherStorm.png"/>
+                                        </DataTrigger >
+                                        <DataTrigger TargetType="Image" Binding="{Binding Tommorrow.type}" Value="Cloudy">
+                                            <Setter Property="Source" Value="WeatherCloudy.png"/>
+                                        </DataTrigger >
+                                    </Style.Triggers>
+                                </Style>
+                            </Image.Style>
+                        </Image>
                     </StackLayout>
                     <Grid Margin="0,5,0,0" Grid.Row="3"   Grid.Column="1"  >
                         <Grid.RowDefinitions>
@@ -70,14 +121,30 @@
                         </Grid.RowDefinitions>
                         <Label Text="Tommorrow" Grid.Row="0"   Style="{DynamicResource FontLabel}" VerticalOptions="End"  TextColor="DimGray" FontSize="16"></Label>
                         <StackLayout  Grid.Row="1"  Margin="0,0,0,0"   Orientation="Horizontal" VerticalOptions="Center" HorizontalOptions="Start" >
-                            <Label Text="1 0 2 &#186;" Style="{DynamicResource FontLabel}" VerticalOptions="Center" TextColor="DimGray" FontSize="38"></Label>
-                            <Label Text="8 8 &#186;" Style="{DynamicResource FontLabel}" VerticalOptions="End" TextColor="ForestGreen" FontSize="18"></Label>
+                            <Label Text="{Binding Tommorrow.MaxTemp}" Style="{DynamicResource FontLabel}" VerticalOptions="Center" TextColor="DimGray" FontSize="38"></Label>
+                            <Label Text="{Binding Tommorrow.MinTemp}" Style="{DynamicResource FontLabel}" VerticalOptions="End" TextColor="ForestGreen" FontSize="18"></Label>
                         </StackLayout>
-                        <Label Text="3 9 &#186; C" Grid.Row="2" Style="{DynamicResource FontLabel}" VerticalOptions="Start" TextColor="DimGray" FontSize="18"></Label>
+                        <Label Text="{Binding Tommorrow.MaxTempC}" Grid.Row="2" Style="{DynamicResource FontLabel}" VerticalOptions="Start" TextColor="DimGray" FontSize="18"></Label>
                     </Grid>
                     <!--Day 3-->
                     <StackLayout  Grid.Row="4" Grid.Column ="0" Margin="0,0,0,0"    VerticalOptions="Center" HorizontalOptions="Center" >
-                        <Image HeightRequest="90"   Aspect="AspectFit"  Source="WeatherStorm.png" ></Image>
+                        <Image HeightRequest="90"   Aspect="AspectFit"    >
+                            <Image.Style>
+                                <Style TargetType="Image">
+                                    <Style.Triggers >
+                                        <DataTrigger TargetType="Image" Binding="{Binding Day3.type}" Value="Sunny">
+                                            <Setter Property="Source" Value="WeatherSunny.png"/>
+                                        </DataTrigger >
+                                        <DataTrigger TargetType="Image" Binding="{Binding Day3.type}" Value="Storm">
+                                            <Setter Property="Source" Value="WeatherStorm.png"/>
+                                        </DataTrigger >
+                                        <DataTrigger TargetType="Image" Binding="{Binding Day3.type}" Value="Cloudy">
+                                            <Setter Property="Source" Value="WeatherCloudy.png"/>
+                                        </DataTrigger >
+                                    </Style.Triggers>
+                                </Style>
+                            </Image.Style>
+                        </Image>
                     </StackLayout>
                     <Grid Margin="0,5,0,0" Grid.Row="4"   Grid.Column="1"  >
                         <Grid.RowDefinitions>
@@ -87,14 +154,30 @@
                         </Grid.RowDefinitions>
                         <Label Text="Wednesday" Grid.Row="0"   Style="{DynamicResource FontLabel}" VerticalOptions="End"  TextColor="DimGray" FontSize="16"></Label>
                         <StackLayout  Grid.Row="1"  Margin="0,0,0,0"   Orientation="Horizontal" VerticalOptions="Center" HorizontalOptions="Start" >
-                            <Label Text="1 0 2 &#186;" Style="{DynamicResource FontLabel}" VerticalOptions="Center" TextColor="DimGray" FontSize="38"></Label>
-                            <Label Text="8 8 &#186;" Style="{DynamicResource FontLabel}" VerticalOptions="End" TextColor="ForestGreen" FontSize="18"></Label>
+                            <Label Text="{Binding Day3.MaxTemp}" Style="{DynamicResource FontLabel}" VerticalOptions="Center" TextColor="DimGray" FontSize="38"></Label>
+                            <Label Text="{Binding Day3.MinTemp}" Style="{DynamicResource FontLabel}" VerticalOptions="End" TextColor="ForestGreen" FontSize="18"></Label>
                         </StackLayout>
-                        <Label Text="3 9 &#186; C" Grid.Row="2" Style="{DynamicResource FontLabel}" VerticalOptions="Start" TextColor="DimGray" FontSize="18"></Label>
+                        <Label Text="{Binding Day3.MaxTempC}" Grid.Row="2" Style="{DynamicResource FontLabel}" VerticalOptions="Start" TextColor="DimGray" FontSize="18"></Label>
                     </Grid>
                     <!--Day 4-->
                     <StackLayout  Grid.Row="5" Grid.Column ="0" Margin="0,0,0,0"    VerticalOptions="Center" HorizontalOptions="Center" >
-                        <Image HeightRequest="90"   Aspect="AspectFit"  Source="WeatherSunny.png" ></Image>
+                        <Image HeightRequest="90"   Aspect="AspectFit"    >
+                            <Image.Style>
+                                <Style TargetType="Image">
+                                    <Style.Triggers >
+                                        <DataTrigger TargetType="Image" Binding="{Binding Day4.type}" Value="Sunny">
+                                            <Setter Property="Source" Value="WeatherSunny.png"/>
+                                        </DataTrigger >
+                                        <DataTrigger TargetType="Image" Binding="{Binding Day4.type}" Value="Storm">
+                                            <Setter Property="Source" Value="WeatherStorm.png"/>
+                                        </DataTrigger >
+                                        <DataTrigger TargetType="Image" Binding="{Binding Day4.type}" Value="Cloudy">
+                                            <Setter Property="Source" Value="WeatherCloudy.png"/>
+                                        </DataTrigger >
+                                    </Style.Triggers>
+                                </Style>
+                            </Image.Style>
+                        </Image>
                     </StackLayout>
                     <Grid Margin="0,5,0,0" Grid.Row="5"   Grid.Column="1"  >
                         <Grid.RowDefinitions>
@@ -104,14 +187,30 @@
                         </Grid.RowDefinitions>
                         <Label Text="Thursday" Grid.Row="0"   Style="{DynamicResource FontLabel}" VerticalOptions="End"  TextColor="DimGray" FontSize="16"></Label>
                         <StackLayout  Grid.Row="1"  Margin="0,0,0,0"   Orientation="Horizontal" VerticalOptions="Center" HorizontalOptions="Start" >
-                            <Label Text="1 0 2 &#186;" Style="{DynamicResource FontLabel}" VerticalOptions="Center" TextColor="DimGray" FontSize="38"></Label>
-                            <Label Text="8 8 &#186;" Style="{DynamicResource FontLabel}" VerticalOptions="End" TextColor="ForestGreen" FontSize="18"></Label>
+                            <Label Text="{Binding Day4.MaxTemp}" Style="{DynamicResource FontLabel}" VerticalOptions="Center" TextColor="DimGray" FontSize="38"></Label>
+                            <Label Text="{Binding Day4.MinTemp}" Style="{DynamicResource FontLabel}" VerticalOptions="End" TextColor="ForestGreen" FontSize="18"></Label>
                         </StackLayout>
-                        <Label Text="3 9 &#186; C" Grid.Row="2" Style="{DynamicResource FontLabel}" VerticalOptions="Start" TextColor="DimGray" FontSize="18"></Label>
+                        <Label Text="{Binding Day4.MaxTempC}" Grid.Row="2" Style="{DynamicResource FontLabel}" VerticalOptions="Start" TextColor="DimGray" FontSize="18"></Label>
                     </Grid>
                     <!--Day 5-->
                     <StackLayout  Grid.Row="6" Grid.Column ="0" Margin="0,0,0,0"    VerticalOptions="Center" HorizontalOptions="Center" >
-                        <Image HeightRequest="90"   Aspect="AspectFit"  Source="WeatherCloudy.png" ></Image>
+                        <Image HeightRequest="90"   Aspect="AspectFit"   >
+                            <Image.Style>
+                                <Style TargetType="Image">
+                                    <Style.Triggers >
+                                        <DataTrigger TargetType="Image" Binding="{Binding Day5.type}" Value="Sunny">
+                                            <Setter Property="Source" Value="WeatherSunny.png"/>
+                                        </DataTrigger >
+                                        <DataTrigger TargetType="Image" Binding="{Binding Day5.type}" Value="Storm">
+                                            <Setter Property="Source" Value="WeatherStorm.png"/>
+                                        </DataTrigger >
+                                        <DataTrigger TargetType="Image" Binding="{Binding Day5.type}" Value="Cloudy">
+                                            <Setter Property="Source" Value="WeatherCloudy.png"/>
+                                        </DataTrigger >
+                                    </Style.Triggers>
+                                </Style>
+                            </Image.Style>
+                        </Image>
                     </StackLayout>
                     <Grid Margin="0,5,0,0" Grid.Row="6"   Grid.Column="1"  >
                         <Grid.RowDefinitions>
@@ -121,16 +220,22 @@
                         </Grid.RowDefinitions>
                         <Label Text="Friday" Grid.Row="0"   Style="{DynamicResource FontLabel}" VerticalOptions="End"  TextColor="DimGray" FontSize="16"></Label>
                         <StackLayout  Grid.Row="1"  Margin="0,0,0,0"   Orientation="Horizontal" VerticalOptions="Center" HorizontalOptions="Start" >
-                            <Label Text="1 0 2 &#186;" Style="{DynamicResource FontLabel}" VerticalOptions="Center" TextColor="DimGray" FontSize="38"></Label>
-                            <Label Text="8 8 &#186;" Style="{DynamicResource FontLabel}" VerticalOptions="End" TextColor="ForestGreen" FontSize="18"></Label>
+                            <Label Text="{Binding Day5.MaxTemp}" Style="{DynamicResource FontLabel}" VerticalOptions="Center" TextColor="DimGray" FontSize="38"></Label>
+                            <Label Text="{Binding Day5.MinTemp}" Style="{DynamicResource FontLabel}" VerticalOptions="End" TextColor="ForestGreen" FontSize="18"></Label>
                         </StackLayout>
-                        <Label Text="3 9 &#186; C" Grid.Row="2" Style="{DynamicResource FontLabel}" VerticalOptions="Start" TextColor="DimGray" FontSize="18"></Label>
+                        <Label Text="{Binding Day5.MaxTempC}" Grid.Row="2" Style="{DynamicResource FontLabel}" VerticalOptions="Start" TextColor="DimGray" FontSize="18"></Label>
                     </Grid>
                 </Grid>
                 <StackLayout  Grid.Row="2" Margin="0,-5,0,0"    Grid.Column ="2" VerticalOptions="StartAndExpand" HorizontalOptions="StartAndExpand" >
-                    <Image  Aspect="AspectFill" Opacity="70" Source="AvLeftHeader.png" ></Image>
+                    <Image  Aspect="AspectFill" Opacity="70" Source="AvLeftHeader.png" >
+                        <Image.GestureRecognizers>
+                            <TapGestureRecognizer
+                             Command="{Binding OpenSettingsPage}"/>
+                        </Image.GestureRecognizers>
+                    </Image>
                 </StackLayout>
             </Grid>
         </AbsoluteLayout>
     </ContentPage.Content>
+
 </ContentPage>
