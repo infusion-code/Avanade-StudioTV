@@ -263,6 +263,7 @@ namespace AvanadeStudioTV.ViewModels
 			if (IsValidUSOrCanadianZipCode(Zip))
 			{
 				App.DataManager.SaveZipCode(Zip);
+				App.DataManager.GetWeatherForcastAsync();
 			}
 
 			else return;

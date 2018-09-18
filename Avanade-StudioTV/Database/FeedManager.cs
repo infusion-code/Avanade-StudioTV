@@ -7,6 +7,7 @@ using System.Linq;
 using AvanadeStudioTV.Network;
 using System.Threading.Tasks;
 using Xamarin.Forms;
+using System.Timers;
 
 namespace AvanadeStudioTV.Database
 {
@@ -15,21 +16,26 @@ namespace AvanadeStudioTV.Database
 	{
 
 
-		 
+		#region App Constants
 
 		public const string MSDN_CHANNEL9_IMAGE_URL = "https://sec.ch9.ms/content/feedimage.png";
 
 		public const string MIXED_CHANNEL_TITLE = "Channel 9 Video Mix";
 
-		
-		public const string WEATHER_API_KEY = "25785797d7664c8582201255181609";
+		public const double CHECK_WEATHER_INTERVAL = 60 * 60 * 3000; // 5000; //60 * 60 * 3000; //3 Hour interval in milliseconds to call weather API while app is running
 
-		//https://api.apixu.com/
-
+		//Using a free weather api account from https://api.apixu.com/
+		//example call:
 		//https://api.apixu.com/v1/forecast.json?key=25785797d7664c8582201255181609"
-		public const string WEATHER_API_FORCAST_URL = "https://api.apixu.com/v1/forecast.json?key=";             
+
+		public const string WEATHER_API_KEY = "25785797d7664c8582201255181609";
+ 
+		public const string WEATHER_API_FORCAST_URL = "https://api.apixu.com/v1/forecast.json?key=";
+
+		#endregion
+		
 		/// <summary>
-		/// Boolean to determine whether to show a set of shows from all active feeds (channels) 
+		/// Boolean to determine whether to show a set of shows from all active feeds (each feed represents a set of shows for a particular microsoft channel 9  show) 
 		/// </summary>
 		public bool IsMixedFeed { get; set; }
 
@@ -43,6 +49,8 @@ namespace AvanadeStudioTV.Database
 		public NetworkManager NetworkService { get; set; }
 
 		public WeatherModel WeatherForecast { get; set; }
+
+		private Timer WeatherTimer;
 
 		public Realm realm { get; set; }
 
@@ -64,7 +72,12 @@ namespace AvanadeStudioTV.Database
 		public FeedManager()
 		{
 			SetupDatabase();
+
+
+			
 			SetupNetworkService();
+		
+
 			if (Application.Current.Properties.ContainsKey("IsFullScreenView"))
 				IsFullScreenView = Application.Current.Properties["IsFullScreenView"] as bool?;
 			if (IsFullScreenView == null)
@@ -85,6 +98,25 @@ namespace AvanadeStudioTV.Database
 				ZipCode = Application.Current.Properties["ZipCode"] as string;
 			else ZipCode = DEFAULTZIP;
 
+			 
+			Task task = Task.Run(async () => await StartWeatherDataRetreivalAsync());
+
+
+		}
+
+		private async Task StartWeatherDataRetreivalAsync()
+       {
+			await GetWeatherForcastAsync();
+			WeatherTimer = new System.Timers.Timer(CHECK_WEATHER_INTERVAL);//in milliseconds
+			WeatherTimer.Elapsed += new ElapsedEventHandler( OnGetWeatherDataEvent);
+			WeatherTimer.Start();
+
+
+		}
+
+		private  async void OnGetWeatherDataEvent(object source, ElapsedEventArgs e)
+		{
+			await GetWeatherForcastAsync();
 
 		}
 
@@ -145,10 +177,18 @@ namespace AvanadeStudioTV.Database
 			//5 day
 			var url = WEATHER_API_FORCAST_URL + WEATHER_API_KEY +"&q=" +ZipCode + "&days=5";
 
-			WeatherForecast = await NetworkService.GetWeatherForcastAsync(url);
+			var model = await NetworkService.GetWeatherForcastAsync(url);
 
 
-			if (WeatherForecast != null) return true;
+			if (model?.forecast?.forecastday?.Count > 0 )
+			{
+				WeatherForecast = model;
+				 
+	              MessagingCenter.Send("obj", "WeatherUpdated");
+				 
+				return true;
+
+			}
 			else return false;
 		}
 

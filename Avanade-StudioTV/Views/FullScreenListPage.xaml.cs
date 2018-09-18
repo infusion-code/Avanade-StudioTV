@@ -23,24 +23,26 @@ namespace AvanadeStudioTV.Views
 			InitializeComponent();
 			ViewModel = new FullScreenListViewViewModel(this.Navigation);
 			
+
+			MessagingCenter.Subscribe<string>(this, "WeatherUpdated", (obj) =>
+			{
+				Device.BeginInvokeOnMainThread(() =>
+				{
+
+					ViewModel.SetupWeather();
+					this.ForceLayout();
+				});
+			});
+
 		}
 
 		protected override void OnAppearing()
 		{
 			base.OnAppearing();
-			Task.Run(() => App.DataManager.GetWeatherForcastAsync().ContinueWith(task => {
-				ViewModel.SetupWeather();
-				
-				Device.BeginInvokeOnMainThread(() =>
-				{
-					this.BindingContext = ViewModel;
-					this.ForceLayout();
-				});
 
-				 
-			}));
-
+			this.BindingContext = ViewModel;
 			ViewModel.GetNewsFeedAsync();
+
 
 			var timer = new System.Timers.Timer();
 			timer.Interval = 1000;// 1 second  
@@ -52,7 +54,7 @@ namespace AvanadeStudioTV.Views
 		{
 			Device.BeginInvokeOnMainThread(() =>
 			{
-				ClockLabel.Text = string.Format("{0:HH:mm:ss tt}", DateTime.Now);
+				ClockLabel.Text = string.Format("{0:h:mm:ss tt}", DateTime.Now);
 			});
 		}
 

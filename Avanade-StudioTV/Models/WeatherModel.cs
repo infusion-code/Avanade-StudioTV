@@ -2,6 +2,7 @@
 using Newtonsoft.Json.Converters;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Text;
 
 namespace AvanadeStudioTV.Models
@@ -113,14 +114,71 @@ namespace AvanadeStudioTV.Models
 	#endregion
 
 	#region DayWeatherModel
-	public class DayWeatherModel
+	public class DayWeatherModel :  INotifyPropertyChanged
 	{
-		public string Day { get; set; }
-		public WeatherType type { get; set; }
-		public string MaxTemp { get; set; }
+		public event PropertyChangedEventHandler PropertyChanged;
 
-		public string MinTemp { get; set; }
-		public string MaxTempC { get; set; }
+		private string _day;
+		public string Day
+		{
+			get { return _day; }
+			set
+			{
+				// Short implementation for simplicity reasons
+				_day = value;
+				OnPropertyChanged("Day");
+			}
+		}
+
+		private WeatherType _type;
+		public WeatherType type {
+			get { return _type; }
+			set
+			{
+				// Short implementation for simplicity reasons
+				_type = value;
+				OnPropertyChanged("type");
+			}
+		}
+		private string _maxTemp;
+		public string MaxTemp
+		{
+			get { return _maxTemp; }
+			set
+			{
+				// Short implementation for simplicity reasons
+				_maxTemp = value;
+				OnPropertyChanged("MaxTemp");
+			}
+		}
+
+		private string _minTemp;
+		public string MinTemp
+		{
+			get { return _minTemp; }
+			set
+			{
+				// Short implementation for simplicity reasons
+				_minTemp = value;
+				OnPropertyChanged("MinTemp");
+			}
+		}
+		private string _maxTempC;
+		public string MaxTempC
+		{
+			get { return _maxTempC; }
+			set
+			{
+				// Short implementation for simplicity reasons
+				_maxTempC = value;
+				OnPropertyChanged("MaxTempC");
+			}
+		}
+
+		protected void OnPropertyChanged(string propertyName)
+		{
+			PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+		}
 	}
 
 	public enum WeatherType

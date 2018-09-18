@@ -126,11 +126,10 @@ namespace AvanadeStudioTV.ViewModels
 			get => _today;
 			set
 			{
-				if (_today != value)
-				{
+				 
 					_today = value;
 					OnPropertyChanged("Today");
-				}
+				 
 			}
 		}
 
@@ -141,11 +140,10 @@ namespace AvanadeStudioTV.ViewModels
 			get => _tommorrow;
 			set
 			{
-				if (_tommorrow != value)
-				{
+				 
 					_tommorrow = value;
 					OnPropertyChanged("Tommmorrow");
-				}
+			 
 			}
 		}
 
@@ -157,11 +155,10 @@ namespace AvanadeStudioTV.ViewModels
 			get => _Day3;
 			set
 			{
-				if (_Day3 != value)
-				{
+				 
 					_Day3 = value;
 					OnPropertyChanged("Day3");
-				}
+			 
 			}
 		}
 
@@ -173,11 +170,10 @@ namespace AvanadeStudioTV.ViewModels
 			get => _Day4;
 			set
 			{
-				if (_Day4 != value)
-				{
+				 
 					_Day4 = value;
 					OnPropertyChanged("Day4");
-				}
+				 
 			}
 		}
 
@@ -189,11 +185,10 @@ namespace AvanadeStudioTV.ViewModels
 			get => _Day5;
 			set
 			{
-				if (_Day5 != value)
-				{
+				 
 					_Day5 = value;
 					OnPropertyChanged("Day5");
-				}
+				 
 			}
 		}
 
@@ -205,31 +200,29 @@ namespace AvanadeStudioTV.ViewModels
 
 
 				//Today
-					Today = new DayWeatherModel();
+;
 					Today.Day = DateTime.Now.DayOfWeek.ToString();
-			
 					Today.MaxTemp = string.Format("{0:0}°", App.DataManager.WeatherForecast?.current?.temp_f.ToString("N0")) ;
-				   // Add spaces between string to match design formatting
-				    Today.MaxTemp = Today.MaxTemp.Aggregate(string.Empty, (c, i) => c + i + ' ');
+				if (Today.MaxTemp == String.Empty) Today.MaxTemp = string.Format("{0:0}°", App.DataManager.WeatherForecast?.forecast?.forecastday[0]?.day?.maxtemp_f.ToString("N0"));
+				// Add spaces between string to match design formatting
+				Today.MaxTemp = Today.MaxTemp.Aggregate(string.Empty, (c, i) => c + i + ' ');
 					Today.MinTemp = string.Format("{0:0}°", App.DataManager.WeatherForecast?.forecast?.forecastday[0]?.day?.mintemp_f.ToString("N0"));
 					Today.MinTemp = Today.MinTemp.Aggregate(string.Empty, (c, i) => c + i + ' ');
 					Today.MaxTempC = string.Format("{0:0}°C", App.DataManager.WeatherForecast?.current?.temp_c.ToString("N0")) ;
 				//	Today.MaxTempC = Today.MaxTempC.Aggregate(string.Empty, (c, i) => c + i + ' ');
 					Today.type = GetWeatherType(App.DataManager.WeatherForecast?.current.condition);
 				//Tommorrow
-					Tommorrow = new DayWeatherModel();
-					Tommorrow.Day = DateTime.Now.DayOfWeek.ToString();
+				     Tommorrow.Day = DateTime.Now.AddDays(1).DayOfWeek.ToString();
 					Tommorrow.MaxTemp = string.Format("{0:0}°", App.DataManager.WeatherForecast?.forecast?.forecastday[1]?.day?.maxtemp_f.ToString("N0"));
 					Tommorrow.MaxTemp = Tommorrow.MaxTemp.Aggregate(string.Empty, (c, i) => c + i + ' ');
 
-				   Tommorrow.MinTemp = string.Format("{0:0}°", App.DataManager.WeatherForecast?.forecast?.forecastday[1]?.day?.mintemp_f.ToString("N0"));
+				    Tommorrow.MinTemp = string.Format("{0:0}°", App.DataManager.WeatherForecast?.forecast?.forecastday[1]?.day?.mintemp_f.ToString("N0"));
 					Tommorrow.MinTemp = Tommorrow.MinTemp.Aggregate(string.Empty, (c, i) => c + i + ' ');
 					Tommorrow.MaxTempC = string.Format("{0:0}°C", App.DataManager.WeatherForecast?.forecast?.forecastday[1]?.day?.maxtemp_c.ToString("N0"));
 					//Tommorrow.MaxTempC = Tommorrow.MaxTempC.Aggregate(string.Empty, (c, i) => c + i + ' ');
 					Tommorrow.type = GetWeatherType(App.DataManager.WeatherForecast.forecast?.forecastday[1].day?.condition);
-             //Day 3
-					Day3 = new DayWeatherModel();
-					Day3.Day = DateTime.Now.DayOfWeek.ToString();
+				//Day 3
+					Day3.Day = DateTime.Now.AddDays(2).DayOfWeek.ToString();
 					Day3.MaxTemp = string.Format("{0:0}°", App.DataManager.WeatherForecast?.forecast?.forecastday[2]?.day?.maxtemp_f.ToString("N0"));
 					Day3.MaxTemp = Day3.MaxTemp.Aggregate(string.Empty, (c, i) => c + i + ' ');
 					Day3.MinTemp = string.Format("{0:0}°", App.DataManager.WeatherForecast?.forecast?.forecastday[2]?.day?.mintemp_f.ToString("N0"));
@@ -237,9 +230,8 @@ namespace AvanadeStudioTV.ViewModels
 				    Day3.MaxTempC = string.Format("{0:0}°C",  App.DataManager.WeatherForecast?.forecast?.forecastday[2].day?.maxtemp_c.ToString("N0"));
 					//Day3.MaxTempC = Day3.MaxTemp.Aggregate(string.Empty, (c, i) => c + i + ' ');
 					Day3.type = GetWeatherType(App.DataManager.WeatherForecast.forecast?.forecastday[2].day?.condition);
-             //Day4
-					Day4 = new DayWeatherModel();
-					Day4.Day = DateTime.Now.DayOfWeek.ToString();
+				//Day4
+					Day4.Day = DateTime.Now.AddDays(3).DayOfWeek.ToString();
 					Day4.MaxTemp = string.Format("{0:0}°", App.DataManager.WeatherForecast?.forecast?.forecastday[3]?.day?.maxtemp_f.ToString("N0"));
 					Day4.MaxTemp = Day4.MaxTemp.Aggregate(string.Empty, (c, i) => c + i + ' ');
 					Day4.MinTemp = string.Format("{0:0}°", App.DataManager.WeatherForecast?.forecast?.forecastday[3]?.day?.mintemp_f.ToString("N0"));
@@ -247,9 +239,8 @@ namespace AvanadeStudioTV.ViewModels
 					Day4.MaxTempC = string.Format("{0:0}°C", App.DataManager.WeatherForecast?.forecast?.forecastday[3].day?.maxtemp_c.ToString("N0"));
 				//	Day4.MaxTempC = Day4.MaxTemp.Aggregate(string.Empty, (c, i) => c + i + ' ');
 					Day4.type = GetWeatherType(App.DataManager.WeatherForecast.forecast?.forecastday[3].day?.condition);
-             //Day5
-					Day5 = new DayWeatherModel();
-					Day5.Day = DateTime.Now.DayOfWeek.ToString();
+				//Day5
+					Day5.Day = DateTime.Now.AddDays(4).DayOfWeek.ToString();
 					Day5.MaxTemp = string.Format("{0:0}°", App.DataManager.WeatherForecast?.forecast?.forecastday[4]?.day?.maxtemp_f.ToString("N0"));
 					Day5.MaxTemp = Day5.MaxTemp.Aggregate(string.Empty, (c, i) => c + i + ' ');
 					Day5.MinTemp = string.Format("{0:0}°", App.DataManager.WeatherForecast?.forecast?.forecastday[4]?.day?.mintemp_f.ToString("N0"));
@@ -299,7 +290,19 @@ namespace AvanadeStudioTV.ViewModels
 		
 			openSettingsPage = new Command(OnOpenSettingsPage);
 
-			
+			Today = new DayWeatherModel();
+			Today.Day = DateTime.Now.DayOfWeek.ToString();
+			Tommorrow = new DayWeatherModel();
+			Tommorrow.Day = DateTime.Now.DayOfWeek.ToString();
+			Day3 = new DayWeatherModel();
+			Day3.Day = DateTime.Now.DayOfWeek.ToString();
+			Day4 = new DayWeatherModel();
+			Day4.Day = DateTime.Now.DayOfWeek.ToString();
+			Day5 = new DayWeatherModel();
+			Day5.Day = DateTime.Now.DayOfWeek.ToString();
+
+
+
 
 			SetupWeather();
 

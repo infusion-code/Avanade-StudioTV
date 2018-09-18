@@ -152,7 +152,7 @@
                             <RowDefinition Height="40*" />
                             <RowDefinition Height="30*" />
                         </Grid.RowDefinitions>
-                        <Label Text="Wednesday" Grid.Row="0"   Style="{DynamicResource FontLabel}" VerticalOptions="End"  TextColor="DimGray" FontSize="16"></Label>
+                        <Label Text="{Binding Day3.Day}" Grid.Row="0"   Style="{DynamicResource FontLabel}" VerticalOptions="End"  TextColor="DimGray" FontSize="16"></Label>
                         <StackLayout  Grid.Row="1"  Margin="0,0,0,0"   Orientation="Horizontal" VerticalOptions="Center" HorizontalOptions="Start" >
                             <Label Text="{Binding Day3.MaxTemp}" Style="{DynamicResource FontLabel}" VerticalOptions="Center" TextColor="DimGray" FontSize="38"></Label>
                             <Label Text="{Binding Day3.MinTemp}" Style="{DynamicResource FontLabel}" VerticalOptions="End" TextColor="ForestGreen" FontSize="18"></Label>
@@ -185,7 +185,7 @@
                             <RowDefinition Height="40*" />
                             <RowDefinition Height="30*" />
                         </Grid.RowDefinitions>
-                        <Label Text="Thursday" Grid.Row="0"   Style="{DynamicResource FontLabel}" VerticalOptions="End"  TextColor="DimGray" FontSize="16"></Label>
+                        <Label Text="{Binding Day4.Day}" Grid.Row="0"   Style="{DynamicResource FontLabel}" VerticalOptions="End"  TextColor="DimGray" FontSize="16"></Label>
                         <StackLayout  Grid.Row="1"  Margin="0,0,0,0"   Orientation="Horizontal" VerticalOptions="Center" HorizontalOptions="Start" >
                             <Label Text="{Binding Day4.MaxTemp}" Style="{DynamicResource FontLabel}" VerticalOptions="Center" TextColor="DimGray" FontSize="38"></Label>
                             <Label Text="{Binding Day4.MinTemp}" Style="{DynamicResource FontLabel}" VerticalOptions="End" TextColor="ForestGreen" FontSize="18"></Label>
@@ -218,7 +218,7 @@
                             <RowDefinition Height="40*" />
                             <RowDefinition Height="30*" />
                         </Grid.RowDefinitions>
-                        <Label Text="Friday" Grid.Row="0"   Style="{DynamicResource FontLabel}" VerticalOptions="End"  TextColor="DimGray" FontSize="16"></Label>
+                        <Label Text="{Binding Day5.Day}" Grid.Row="0"   Style="{DynamicResource FontLabel}" VerticalOptions="End"  TextColor="DimGray" FontSize="16"></Label>
                         <StackLayout  Grid.Row="1"  Margin="0,0,0,0"   Orientation="Horizontal" VerticalOptions="Center" HorizontalOptions="Start" >
                             <Label Text="{Binding Day5.MaxTemp}" Style="{DynamicResource FontLabel}" VerticalOptions="Center" TextColor="DimGray" FontSize="38"></Label>
                             <Label Text="{Binding Day5.MinTemp}" Style="{DynamicResource FontLabel}" VerticalOptions="End" TextColor="ForestGreen" FontSize="18"></Label>
