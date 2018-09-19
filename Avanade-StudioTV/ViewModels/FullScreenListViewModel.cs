@@ -19,6 +19,8 @@ namespace AvanadeStudioTV.ViewModels
     {
 		ICommand openSettingsPage;
 
+		public bool IsViewLoading;
+		public bool IsDataRefreshingFromNetwork;
 		public ICommand OpenSettingsPage
 		{
 			get { return openSettingsPage; }
@@ -26,9 +28,9 @@ namespace AvanadeStudioTV.ViewModels
 
 		public Timer KeepListPageVisibleTimer;
 		public const double LISTPAGE_VISIBLE_SCREEN_TIME = 10000; //10 sec
- 
 
 
+		
 		public List<string> Playlist { get; set; }
 
 	
@@ -50,6 +52,7 @@ namespace AvanadeStudioTV.ViewModels
         }
 
 		private INavigation Navigation;
+
 		private FullScreenVideoPage VideoPage;
 
 
@@ -79,7 +82,7 @@ namespace AvanadeStudioTV.ViewModels
                 if (selectedItem != value)
                 {
                     selectedItem = value;
-					StartVideo();
+					StartVideoOnFullScreenPage();
 					selectedItem = null;
 					OnPropertyChanged("SelectedItem");
                
@@ -192,6 +195,75 @@ namespace AvanadeStudioTV.ViewModels
 			}
 		}
 
+		public FullScreenListViewViewModel(INavigation navigation)
+		{
+			IsDataRefreshingFromNetwork = false;
+
+			//this.GetNewsFeedAsync();
+			Navigation = navigation;
+
+			openSettingsPage = new Command(OnOpenSettingsPage);
+
+			Today = new DayWeatherModel();
+			Today.Day = DateTime.Now.DayOfWeek.ToString();
+			Tommorrow = new DayWeatherModel();
+			Tommorrow.Day = DateTime.Now.DayOfWeek.ToString();
+			Day3 = new DayWeatherModel();
+			Day3.Day = DateTime.Now.DayOfWeek.ToString();
+			Day4 = new DayWeatherModel();
+			Day4.Day = DateTime.Now.DayOfWeek.ToString();
+			Day5 = new DayWeatherModel();
+			Day5.Day = DateTime.Now.DayOfWeek.ToString();
+
+
+
+
+			SetupWeather();
+
+
+			App.DataManager.NetworkDataLoaded += DataManager_NetworkDataLoaded;
+
+		
+
+			if (!IsDataRefreshingFromNetwork)
+			{
+				IsViewLoading = true;
+				SetNewsFeed();
+				IsViewLoading = false;
+			}
+
+
+		}
+
+		private void DataManager_NetworkDataLoaded(object sender, EventArgs e)
+		{
+			IsDataRefreshingFromNetwork = true;
+			IsViewLoading = true;
+			SetNewsFeed();
+			IsViewLoading = false;
+		}
+
+		public void SetNewsFeed()
+		{
+
+ 
+			List<Item> list = App.DataManager.CurrentPlaylist;
+
+			CurrentChannel = App.DataManager.CurrentChannel;
+
+			if (list != null && list.Count > 0)
+			{
+				FeedList?.Clear();
+				FeedList = new ObservableCollection<Item>(list);
+
+				this.SelectedItem = FeedList[App.DataManager.CurrentPlaylistIndex];
+
+
+			}
+
+			else ShowErrorMessage();
+		}
+
 		public void SetupWeather()
 		{
 			if (App.DataManager.WeatherForecast?.forecast?.forecastday?.Count > 0)
@@ -282,33 +354,7 @@ namespace AvanadeStudioTV.ViewModels
 
 		public event PropertyChangedEventHandler PropertyChanged;
 
-        public FullScreenListViewViewModel(INavigation navigation)
-        {
 
-			//this.GetNewsFeedAsync();
-			Navigation = navigation;
-		
-			openSettingsPage = new Command(OnOpenSettingsPage);
-
-			Today = new DayWeatherModel();
-			Today.Day = DateTime.Now.DayOfWeek.ToString();
-			Tommorrow = new DayWeatherModel();
-			Tommorrow.Day = DateTime.Now.DayOfWeek.ToString();
-			Day3 = new DayWeatherModel();
-			Day3.Day = DateTime.Now.DayOfWeek.ToString();
-			Day4 = new DayWeatherModel();
-			Day4.Day = DateTime.Now.DayOfWeek.ToString();
-			Day5 = new DayWeatherModel();
-			Day5.Day = DateTime.Now.DayOfWeek.ToString();
-
-
-
-
-			SetupWeather();
-
-
-
-		}
 
 		void OnOpenSettingsPage( )
 		{
@@ -316,28 +362,7 @@ namespace AvanadeStudioTV.ViewModels
 			this.Navigation.PushModalAsync(settings, true);
 		}
 
-		public async void GetNewsFeedAsync()
-		{
 
-			var result = App.DataManager.GetDataFromNetwork();
-			await result;
-
-			List<Item> list = App.DataManager.CurrentPlaylist;
-
-			CurrentChannel = App.DataManager.CurrentChannel;
-
-			if (list != null)
-			{
-				FeedList?.Clear();
-				FeedList = new ObservableCollection<Item>(list);
-
-				this.SelectedItem = FeedList[0];
-
-
-			}
-
-			else ShowErrorMessage();
-		}
 
 
 
@@ -351,27 +376,40 @@ namespace AvanadeStudioTV.ViewModels
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
-        public  void StartVideo()
+        public  void StartVideoOnFullScreenPage()
         {
-			//TODO Play video on full screen page from here
+			if (!IsViewLoading)
+			{
+				var index = FeedList.IndexOf(SelectedItem);
+				App.DataManager.CurrentPlaylistIndex = index;
 
+				{
+					//Tell Video Page to Load and play the video at this new index
+					MessagingCenter.Send("obj", "LaunchVideo");
+				}
+
+				Navigation.PopModalAsync(true);
+			}
 
 		}
 
 
-	
 
-		private Item  GetNextItem()
+
+		private Item GetNextItem()
 		{
 			var index = FeedList.IndexOf(SelectedItem);
 			if (FeedList.ElementAtOrDefault(index + 1) != null)
 			{
-				return FeedList[index + 1];
+				App.DataManager.CurrentPlaylistIndex += 1;
+
+				return FeedList[App.DataManager.CurrentPlaylistIndex];
 			}
 			//Loop playlist 
 			//TODO need implement multiple playlists here
 			else
 			{
+				App.DataManager.CurrentPlaylistIndex = 0;
 				return FeedList[0];
 			}
 

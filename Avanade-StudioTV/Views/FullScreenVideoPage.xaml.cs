@@ -42,10 +42,11 @@ namespace AvanadeStudioTV.Views
 
 			InitializeComponent();
 
-	 
+			IsInCurrentTitleMode = true;
 
 
 			ViewModel = new FullScreenVideoViewModel(Navigation, this);
+			ViewModel.GetNewsFeedAsync();
 			this.BindingContext = ViewModel;
 
 			StartAnimatingTitles();
@@ -116,7 +117,7 @@ namespace AvanadeStudioTV.Views
 		protected override void OnAppearing()
         {
             base.OnAppearing();
-			ViewModel.GetNewsFeedAsync();
+		
 
 			IsInCurrentTitleMode = true;
 
@@ -215,7 +216,7 @@ namespace AvanadeStudioTV.Views
 
 		}
 
-		public async void PlayVideo(string url)
+		public  void PlayVideo(string url)
         {
             Source = url;
             String pv = "PlayVideo('" + Source + "');";
@@ -255,7 +256,7 @@ namespace AvanadeStudioTV.Views
 
 			if (IsInCurrentTitleMode)
 			{
-				OpenFullScreenListPage();
+				OpenFullScreenListPageAsync();
 				//OpenSettingsPage();
 			}
 
@@ -273,11 +274,13 @@ namespace AvanadeStudioTV.Views
 
 		}
 
-		private void OpenFullScreenListPage()
+		private async Task OpenFullScreenListPageAsync()
 		{
-			var listPage = new FullScreenListPage();
-			this.Navigation.PushModalAsync(listPage);
+			VideoPlayerView.Stop();
 
+			var modalPage = new FullScreenListPage();
+			await Navigation.PushModalAsync(modalPage, true);
+		 
 		}
 
 		private void OpenSettingsPage()

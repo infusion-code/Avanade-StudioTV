@@ -54,6 +54,7 @@ namespace AvanadeStudioTV.Network
 				}
 				catch (Exception e)
 				{
+					var x = e;
 					//TODO add exception handling
 					return null;
 				}

@@ -173,7 +173,11 @@ namespace AvanadeStudioTV.Models
         public string Generator { get; set; }
         [XmlElement(ElementName = "item")]
         public List<Item> Item { get; set; }
-    }
+
+		//ahmed added after for change in scehma 
+		[XmlElement(ElementName = "thumbnail", Namespace = "http://search.yahoo.com/mrss/")]
+		public List<Thumbnail> Thumbnail { get; set; }
+	}
 
     [XmlRoot(ElementName = "rss")]
     public class Rss

@@ -238,9 +238,13 @@ namespace AvanadeStudioTV.ViewModels
 
 			var isValid  = await App.DataManager.ValidateChannel9FeedUrl(url);
 			if (isValid)
-			{ 
-			 NewFeed.ChannelName = App.DataManager.NetworkService.channel.Title;
-				NewFeed.imageUrl = App.DataManager.NetworkService.channel.Image.Url;
+			{
+				if (App.DataManager.NetworkService.channel?.Title != String.Empty)
+			       NewFeed.ChannelName = App.DataManager.NetworkService.channel?.Title;
+				if (App.DataManager.NetworkService.channel?.Image != null)
+					NewFeed.imageUrl = App.DataManager.NetworkService.channel.Image.Url;
+				else if  (App.DataManager.NetworkService.channel?.Thumbnail[0] != null)
+					NewFeed.imageUrl = App.DataManager.NetworkService.channel?.Thumbnail[0].Url;
 				return true;
 			}
 
@@ -269,6 +273,8 @@ namespace AvanadeStudioTV.ViewModels
 			else return;
 
 			SaveAsync();
+
+			
 
 			CheckAppLayout();
  
@@ -332,7 +338,7 @@ namespace AvanadeStudioTV.ViewModels
 				App.DataManager.AllFeeds = this.FeedList.ToList<RSSFeedViewData>();
 			});
 
-	
+			await App.DataManager.GetDataFromNetwork();
 		}
 
 		public async void GetNewsFeedAsync()

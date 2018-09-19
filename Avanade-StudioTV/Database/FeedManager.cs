@@ -39,10 +39,14 @@ namespace AvanadeStudioTV.Database
 		/// </summary>
 		public bool IsMixedFeed { get; set; }
 
+		public event EventHandler NetworkDataLoaded;  
+
 		public List<RSSFeedViewData> AllFeeds { get; set; }
 		public Channel CurrentChannel { get; set; }
 		public Item CurrentItem { get; set; }
 		public List<Item> CurrentPlaylist { get; set; }
+
+		public int CurrentPlaylistIndex { get; set; }
 
 		public bool? IsFullScreenView { get; set; }
 
@@ -228,6 +232,7 @@ namespace AvanadeStudioTV.Database
 				CurrentChannel = c;
 			}
 			else IsMixedFeed = false;
+			NetworkDataLoaded?.Invoke(this, EventArgs.Empty);
 			return true;
 		}
 
@@ -254,7 +259,7 @@ namespace AvanadeStudioTV.Database
 					}
 
 					//set parent channel properties
-					i.ChannelImageUrl = NetworkService.channel.Image.Url;
+					i.ChannelImageUrl = NetworkService.channel.Image?.Url  ?? NetworkService.channel.Thumbnail[0].Url;
 					i.ChannelTitle = NetworkService.channel.Title;
 					i.FormattedChannelTitle = FormatTitle(NetworkService.channel.Title);
 				}

@@ -16,12 +16,7 @@ namespace AvanadeStudioTV.ViewModels
 {
     public class FullScreenVideoViewModel : INotifyPropertyChanged
     {
-		ICommand openSettingsPage;
 
-		public ICommand OpenSettingsPage
-		{
-			get { return openSettingsPage; }
-		}
 	
 
         public List<string> Playlist { get; set; }
@@ -103,16 +98,18 @@ namespace AvanadeStudioTV.ViewModels
 			//this.GetNewsFeedAsync();
 			Navigation = navigation;
 			VideoPage = videopage;
-			openSettingsPage = new Command(OnOpenSettingsPage);
 
-	
+			MessagingCenter.Subscribe<string>(this, "LaunchVideo", (obj) =>
+			{
+				FeedList = new ObservableCollection<Item>(App.DataManager.CurrentPlaylist);
+				this.SelectedItem = FeedList[App.DataManager.CurrentPlaylistIndex];
+				this.NextItem = GetNextItem();
+			});
+
+
 		}
 
-		void OnOpenSettingsPage( )
-		{
-			var settings = new SettingsPage( this.Navigation);
-			this.Navigation.PushModalAsync(settings);
-		}
+
 
 		public async void GetNewsFeedAsync()
 		{
@@ -122,12 +119,14 @@ namespace AvanadeStudioTV.ViewModels
 
 			CurrentChannel = App.DataManager.CurrentChannel;
 
+			App.DataManager.CurrentPlaylistIndex = 0;
+
 			if (list != null)
 			{
 				
 				FeedList = new ObservableCollection<Item>(list);
 
-				this.SelectedItem = FeedList[0];
+				this.SelectedItem = FeedList[App.DataManager.CurrentPlaylistIndex];
 				this.NextItem = GetNextItem();
 
 			}
@@ -146,9 +145,8 @@ namespace AvanadeStudioTV.ViewModels
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
-
-        public  void StartVideo()
-        {
+		public void StartVideo()
+		{
 			if (selectedItem.Enclosure?.Url != String.Empty)
 			{
 				this.SelectedItem.BackgroundColor = "#009999";
@@ -162,27 +160,34 @@ namespace AvanadeStudioTV.ViewModels
 
 
 		}
-
-
 		public void VideoPage_VideoCompleted()
-        {
+		{
 
 			SelectedItem = GetNextItem();
 			NextItem = GetNextItem();
 
+			 
+			App.DataManager.CurrentPlaylistIndex = FeedList.IndexOf(SelectedItem);
+
 		}
+
+
 
 		private Item  GetNextItem()
 		{
 			var index = FeedList.IndexOf(SelectedItem);
-			if (FeedList.ElementAtOrDefault(index + 1) != null)
+			App.DataManager.CurrentPlaylistIndex = index;
+			if (FeedList.ElementAtOrDefault(App.DataManager.CurrentPlaylistIndex + 1) != null)
 			{
-				return FeedList[index + 1];
+				 
+
+				return FeedList[App.DataManager.CurrentPlaylistIndex + 1];
 			}
 			//Loop playlist 
 			//TODO need implement multiple playlists here
 			else
 			{
+			 
 				return FeedList[0];
 			}
 

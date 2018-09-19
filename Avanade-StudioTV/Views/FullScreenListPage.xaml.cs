@@ -17,6 +17,7 @@ namespace AvanadeStudioTV.Views
 	public partial class FullScreenListPage : ContentPage
 	{
 		public FullScreenListViewViewModel ViewModel;
+		 
 
 		public FullScreenListPage()
 		{
@@ -34,6 +35,8 @@ namespace AvanadeStudioTV.Views
 				});
 			});
 
+ 
+
 		}
 
 		protected override void OnAppearing()
@@ -41,7 +44,6 @@ namespace AvanadeStudioTV.Views
 			base.OnAppearing();
 
 			this.BindingContext = ViewModel;
-			ViewModel.GetNewsFeedAsync();
 
 
 			var timer = new System.Timers.Timer();
