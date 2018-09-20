@@ -21,74 +21,27 @@ namespace AvanadeStudioTV.ViewModels
 
         public List<string> Playlist { get; set; }
 
-	
+		private FeedManager _SharedData { get; set; }
+		public FeedManager SharedData
+		{
+			get => _SharedData;
+			set
+			{
+				if (_SharedData != value)
+				{
+					_SharedData = value;
+					OnPropertyChanged("SharedData");
+
+				}
+			}
+		}
 
 
-		ObservableCollection<Item> feedList = null;
-		public ObservableCollection<Item> FeedList
-        {
-            get => feedList;
-            set
-            {
-                if (feedList != value)
-                {
-                    feedList = value;
-                    OnPropertyChanged("FeedList");
-                }
-
-            }
-        }
 
 		private INavigation Navigation;
 		private FullScreenVideoPage VideoPage;
 
 
-		private Channel currentChannel = null;
-
-		public Channel CurrentChannel
-		{
-			get => currentChannel;
-			set
-			{
-				if (currentChannel != value)
-				{
-					currentChannel = value;
-					OnPropertyChanged("CurrentChannel");
-					 
-				}
-			}
-		}
-
-		private Item selectedItem = null;
-     
-        public Item SelectedItem
-        {
-            get => selectedItem;
-            set
-            {
-                if (selectedItem != value)
-                {
-                    selectedItem = value;
-                    OnPropertyChanged("SelectedItem");
-                   StartVideo();
-                }
-            }
-        }
-
-		private Item nextItem = null;
-
-		public Item NextItem
-		{
-			get => nextItem;
-			set
-			{
-				if (nextItem != value)
-				{
-					nextItem = value;
-					OnPropertyChanged("NextItem");
-				}
-			}
-		}
 
 		public event PropertyChangedEventHandler PropertyChanged;
 
@@ -99,39 +52,25 @@ namespace AvanadeStudioTV.ViewModels
 			Navigation = navigation;
 			VideoPage = videopage;
 
-			MessagingCenter.Subscribe<string>(this, "LaunchVideo", (obj) =>
+			MessagingCenter.Subscribe<string>(this, "LaunchVideo", async (obj) =>
 			{
-				FeedList = new ObservableCollection<Item>(App.DataManager.CurrentPlaylist);
-				this.SelectedItem = FeedList[App.DataManager.CurrentPlaylistIndex];
-				this.NextItem = GetNextItem();
+				StartVideo();
 			});
 
-
+			SharedData = App.DataManager;
 		}
 
 
 
-		public async void GetNewsFeedAsync()
+		public async void GetNewsFeedFromNetworkAsync()
 		{
-			var result =  App.DataManager.GetDataFromNetwork();
+			var result =  SharedData.GetDataFromNetwork();
 			await result;
-			List<Item> list = App.DataManager.CurrentPlaylist;
+ 
 
-			CurrentChannel = App.DataManager.CurrentChannel;
+			if (SharedData.FeedList.Count == 0) ShowErrorMessage();
 
-			App.DataManager.CurrentPlaylistIndex = 0;
-
-			if (list != null)
-			{
-				
-				FeedList = new ObservableCollection<Item>(list);
-
-				this.SelectedItem = FeedList[App.DataManager.CurrentPlaylistIndex];
-				this.NextItem = GetNextItem();
-
-			}
-
-			else ShowErrorMessage();
+			StartVideo();
 		}
 
  
@@ -147,50 +86,41 @@ namespace AvanadeStudioTV.ViewModels
         }
 		public void StartVideo()
 		{
-			if (selectedItem.Enclosure?.Url != String.Empty)
+			if (SharedData?.SelectedItem != null)
 			{
-				this.SelectedItem.BackgroundColor = "#009999";
-				VideoPage.ResetEvents();
-				VideoPage.VideoCompleted += VideoPage_VideoCompleted;
-				VideoPage.PlayVideo(selectedItem.Enclosure.Url);
-				VideoPage.ForceLayout();
-			}
+				if (SharedData?.SelectedItem?.Enclosure?.Url != String.Empty)
+				{
+					SharedData.SelectedItem.BackgroundColor = "#009999";
+					VideoPage.ResetEvents();
+					VideoPage.VideoCompleted += VideoPage_VideoCompleted;
+					VideoPage.PlayVideo(SharedData.SelectedItem.Enclosure.Url);
+					VideoPage.ForceLayout();
+					VideoPage.ShowAnimations = true;
 
-			else VideoPage_VideoCompleted();
+
+				}
+
+				else VideoPage_VideoCompleted(); 
+			}
 
 
 		}
 		public void VideoPage_VideoCompleted()
 		{
+			VideoPage.StopAnimatingTitles();
+			VideoPage.ShowAnimations = false;
+			SharedData.SelectedItem = SharedData.GetNextItem();
+			SharedData.NextItem = SharedData.GetNextItem();
 
-			SelectedItem = GetNextItem();
-			NextItem = GetNextItem();
+			StartVideo();
 
-			 
-			App.DataManager.CurrentPlaylistIndex = FeedList.IndexOf(SelectedItem);
-
-		}
-
-
-
-		private Item  GetNextItem()
-		{
-			var index = FeedList.IndexOf(SelectedItem);
-			App.DataManager.CurrentPlaylistIndex = index;
-			if (FeedList.ElementAtOrDefault(App.DataManager.CurrentPlaylistIndex + 1) != null)
-			{
-				 
-
-				return FeedList[App.DataManager.CurrentPlaylistIndex + 1];
-			}
-			//Loop playlist 
-			//TODO need implement multiple playlists here
-			else
-			{
-			 
-				return FeedList[0];
-			}
+		//	if (Navigation.ModalStack.Count == 0)
+		//	Navigation.PushModalAsync(new FullScreenListPage(true));
 
 		}
+
+
+
+
 	}
 }

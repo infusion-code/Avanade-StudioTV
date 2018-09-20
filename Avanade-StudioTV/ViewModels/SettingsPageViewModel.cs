@@ -290,7 +290,7 @@ namespace AvanadeStudioTV.ViewModels
 			{
 				if (isOriginallyFullScreen)
 				{
-					this.Navigation.PopModalAsync();
+					this.Navigation.PopModalAsync(true);
 				}
 				else
 				{
@@ -338,7 +338,7 @@ namespace AvanadeStudioTV.ViewModels
 				App.DataManager.AllFeeds = this.FeedList.ToList<RSSFeedViewData>();
 			});
 
-			await App.DataManager.GetDataFromNetwork();
+			
 		}
 
 		public async void GetNewsFeedAsync()

@@ -27,7 +27,7 @@
                 <Button Grid.Column="0" InputTransparent="False" Grid.Row="0" Text="Close" TextColor="White" IsVisible="False" Clicked="CloseButton_Clicked"></Button>
                 <!-- MAIN LIST OF FEEDS -->
                 <Grid Grid.Column="1" InputTransparent="False" Grid.Row="0" Grid.RowSpan="2" >
-                    <ListView IsEnabled="True" InputTransparent="False"  BackgroundColor="Transparent" Margin="0,5,0,0" x:Name="FeedListView" CachingStrategy="RecycleElement" SelectedItem="{Binding SelectedItem, Mode=TwoWay}" ItemsSource="{Binding FeedList}"  HasUnevenRows="true">
+                    <ListView IsEnabled="True" InputTransparent="False"  BackgroundColor="Transparent" Margin="0,5,0,0" x:Name="FeedListView" CachingStrategy="RecycleElement" SelectedItem="{Binding SharedData.SelectedItem, Mode=TwoWay}" ItemsSource="{Binding SharedData.FeedList}"  HasUnevenRows="true">
                         <ListView.ItemTemplate>
                             <DataTemplate>
                                 <Cell:BigFeedCell>

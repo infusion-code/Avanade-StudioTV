@@ -19,6 +19,7 @@ namespace AvanadeStudioTV.ViewModels
     {
 		ICommand openSettingsPage;
 
+		public int count;
 		public bool IsViewLoading;
 		public bool IsDataRefreshingFromNetwork;
 		public ICommand OpenSettingsPage
@@ -27,83 +28,29 @@ namespace AvanadeStudioTV.ViewModels
 		}
 
 		public Timer KeepListPageVisibleTimer;
-		public const double LISTPAGE_VISIBLE_SCREEN_TIME = 10000; //10 sec
+		 
 
+		private FeedManager _SharedData { get; set; }
+		public FeedManager SharedData
+		{
+			get => _SharedData;
+			set
+			{
+				if (_SharedData != value)
+				{
+					_SharedData = value;
+					OnPropertyChanged("SharedData");
 
-		
-		public List<string> Playlist { get; set; }
-
-	
-
-
-		ObservableCollection<Item> feedList = null;
-		public ObservableCollection<Item> FeedList
-        {
-            get => feedList;
-            set
-            {
-                if (feedList != value)
-                {
-                    feedList = value;
-                    OnPropertyChanged("FeedList");
-                }
-
-            }
-        }
+				}
+			}
+		}
+ 
 
 		private INavigation Navigation;
 
 		private FullScreenVideoPage VideoPage;
 
-
-		private Channel currentChannel = null;
-
-		public Channel CurrentChannel
-		{
-			get => currentChannel;
-			set
-			{
-				if (currentChannel != value)
-				{
-					currentChannel = value;
-					OnPropertyChanged("CurrentChannel");
-					 
-				}
-			}
-		}
-
-		private Item selectedItem = null;
-     
-        public Item SelectedItem
-        {
-            get => selectedItem;
-            set
-            {
-                if (selectedItem != value)
-                {
-                    selectedItem = value;
-					StartVideoOnFullScreenPage();
-					selectedItem = null;
-					OnPropertyChanged("SelectedItem");
-               
-                }
-            }
-        }
-
-		private Item nextItem = null;
-
-		public Item NextItem
-		{
-			get => nextItem;
-			set
-			{
-				if (nextItem != value)
-				{
-					nextItem = value;
-					OnPropertyChanged("NextItem");
-				}
-			}
-		}
+ 
 
 		#region WeatherData
 
@@ -194,10 +141,13 @@ namespace AvanadeStudioTV.ViewModels
 				 
 			}
 		}
+		#endregion
 
 		public FullScreenListViewViewModel(INavigation navigation)
 		{
-			IsDataRefreshingFromNetwork = false;
+			
+
+			SharedData = App.DataManager;
 
 			//this.GetNewsFeedAsync();
 			Navigation = navigation;
@@ -215,53 +165,59 @@ namespace AvanadeStudioTV.ViewModels
 			Day5 = new DayWeatherModel();
 			Day5.Day = DateTime.Now.DayOfWeek.ToString();
 
+			count = 0;
 
 
+		 
 
-			SetupWeather();
+			SharedData.SelectedItemChanged += SharedData_SelectedItemChanged;
 
-
-			App.DataManager.NetworkDataLoaded += DataManager_NetworkDataLoaded;
-
-		
-
-			if (!IsDataRefreshingFromNetwork)
+			MessagingCenter.Subscribe<string>(this, "Update", async(obj) =>
 			{
-				IsViewLoading = true;
-				SetNewsFeed();
-				IsViewLoading = false;
-			}
+				 
+				
+				await SharedData.GetDataFromNetwork();
+			 
+				SharedData.SelectedItemChanged += SharedData_SelectedItemChanged;
+			
+
+			});
+
+			MessagingCenter.Subscribe<string>(this, "WeatherUpdated", (obj) =>
+			{
+				 
+						 SetupWeather();
+				 
+			});
+
+
 
 
 		}
-
-		private void DataManager_NetworkDataLoaded(object sender, EventArgs e)
+		//Fired to load video
+		public void SharedData_SelectedItemChanged(object sender, EventArgs e)
 		{
-			IsDataRefreshingFromNetwork = true;
-			IsViewLoading = true;
-			SetNewsFeed();
-			IsViewLoading = false;
+			SharedData.NextItem = SharedData.GetNextItem();
+
+			if (Navigation.ModalStack.Count > 0)
+			{
+				this.Navigation.PopModalAsync(true);
+
+
+				{
+					//Reload video page with new videos
+					MessagingCenter.Send("obj", "LaunchVideo");
+				}
+
+			
+			}
 		}
 
 		public void SetNewsFeed()
 		{
-
  
-			List<Item> list = App.DataManager.CurrentPlaylist;
 
-			CurrentChannel = App.DataManager.CurrentChannel;
-
-			if (list != null && list.Count > 0)
-			{
-				FeedList?.Clear();
-				FeedList = new ObservableCollection<Item>(list);
-
-				this.SelectedItem = FeedList[App.DataManager.CurrentPlaylistIndex];
-
-
-			}
-
-			else ShowErrorMessage();
+			if (SharedData.FeedList.Count == 0 ) ShowErrorMessage();
 		}
 
 		public void SetupWeather()
@@ -350,7 +306,7 @@ namespace AvanadeStudioTV.ViewModels
 
 		}
 
-		#endregion
+		
 
 		public event PropertyChangedEventHandler PropertyChanged;
 
@@ -358,6 +314,8 @@ namespace AvanadeStudioTV.ViewModels
 
 		void OnOpenSettingsPage( )
 		{
+			//remove change
+			SharedData.SelectedItemChanged -= SharedData_SelectedItemChanged;
 			var settings = new SettingsPage( this.Navigation);
 			this.Navigation.PushModalAsync(settings, true);
 		}
@@ -380,8 +338,7 @@ namespace AvanadeStudioTV.ViewModels
         {
 			if (!IsViewLoading)
 			{
-				var index = FeedList.IndexOf(SelectedItem);
-				App.DataManager.CurrentPlaylistIndex = index;
+				 
 
 				{
 					//Tell Video Page to Load and play the video at this new index
@@ -394,25 +351,6 @@ namespace AvanadeStudioTV.ViewModels
 		}
 
 
-
-
-		private Item GetNextItem()
-		{
-			var index = FeedList.IndexOf(SelectedItem);
-			if (FeedList.ElementAtOrDefault(index + 1) != null)
-			{
-				App.DataManager.CurrentPlaylistIndex += 1;
-
-				return FeedList[App.DataManager.CurrentPlaylistIndex];
-			}
-			//Loop playlist 
-			//TODO need implement multiple playlists here
-			else
-			{
-				App.DataManager.CurrentPlaylistIndex = 0;
-				return FeedList[0];
-			}
-
-		}
+ 
 	}
 }

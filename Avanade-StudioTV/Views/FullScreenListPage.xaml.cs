@@ -10,6 +10,7 @@ using System.Timers;
 
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
+using System.Timers;
 
 namespace AvanadeStudioTV.Views
 {
@@ -17,25 +18,25 @@ namespace AvanadeStudioTV.Views
 	public partial class FullScreenListPage : ContentPage
 	{
 		public FullScreenListViewViewModel ViewModel;
-		 
+		private bool UseDisplayTimeout;
+		public System.Timers.Timer DisplayTimoutTimer;
 
-		public FullScreenListPage()
+		public FullScreenListPage(bool useDisplayTimeout)
 		{
+			UseDisplayTimeout = useDisplayTimeout;
+
 			InitializeComponent();
+
+
 			ViewModel = new FullScreenListViewViewModel(this.Navigation);
-			
 
-			MessagingCenter.Subscribe<string>(this, "WeatherUpdated", (obj) =>
+			if (UseDisplayTimeout)
 			{
-				Device.BeginInvokeOnMainThread(() =>
-				{
-
-					ViewModel.SetupWeather();
-					this.ForceLayout();
-				});
-			});
-
- 
+				DisplayTimoutTimer = new System.Timers.Timer();
+				DisplayTimoutTimer.Interval = App.DataManager.INTERSTITAL_SCREEN_DISPLAY_INTERVAL; // 5 second  
+				DisplayTimoutTimer.Elapsed += DisplayTimoutTimer_Elapsed;
+				DisplayTimoutTimer.Start();
+			}
 
 		}
 
@@ -43,13 +44,43 @@ namespace AvanadeStudioTV.Views
 		{
 			base.OnAppearing();
 
+			if (ViewModel == null ) ViewModel = new FullScreenListViewViewModel(this.Navigation);
+ 
+
 			this.BindingContext = ViewModel;
+
+
+			ViewModel.SetupWeather();
+
 
 
 			var timer = new System.Timers.Timer();
 			timer.Interval = 1000;// 1 second  
 			timer.Elapsed += Timer_Elapsed;
 			timer.Start();
+		}
+
+		protected override void OnDisappearing()
+		{
+			base.OnDisappearing();
+
+			this.BindingContext = null;
+
+			
+			 
+		}
+
+		private void DisplayTimoutTimer_Elapsed(object sender, ElapsedEventArgs e)
+		{
+			
+
+			Device.BeginInvokeOnMainThread(() =>
+			{
+				DisplayTimoutTimer.Stop();
+				DisplayTimoutTimer.Dispose();
+				 if (Navigation.ModalStack.Count > 0)
+				Navigation.PopModalAsync(true);
+			});
 		}
 
 		private void Timer_Elapsed(object sender, ElapsedEventArgs e)

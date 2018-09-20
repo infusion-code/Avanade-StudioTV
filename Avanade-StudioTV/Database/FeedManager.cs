@@ -8,15 +8,19 @@ using AvanadeStudioTV.Network;
 using System.Threading.Tasks;
 using Xamarin.Forms;
 using System.Timers;
+using System.ComponentModel;
+using System.Collections.ObjectModel;
 
 namespace AvanadeStudioTV.Database
 {
 
-	public class FeedManager
+	public class FeedManager : INotifyPropertyChanged
 	{
 
 
 		#region App Constants
+
+		public  double INTERSTITAL_SCREEN_DISPLAY_INTERVAL = 5000;
 
 		public const string MSDN_CHANNEL9_IMAGE_URL = "https://sec.ch9.ms/content/feedimage.png";
 
@@ -39,14 +43,69 @@ namespace AvanadeStudioTV.Database
 		/// </summary>
 		public bool IsMixedFeed { get; set; }
 
-		public event EventHandler NetworkDataLoaded;  
+		public event EventHandler NetworkDataLoaded;
+
+		public event EventHandler SelectedItemChanged;
+
 
 		public List<RSSFeedViewData> AllFeeds { get; set; }
 		public Channel CurrentChannel { get; set; }
-		public Item CurrentItem { get; set; }
+      public Item CurrentItem { get; set; }
+
 		public List<Item> CurrentPlaylist { get; set; }
 
 		public int CurrentPlaylistIndex { get; set; }
+
+		#region FeedList
+
+		ObservableCollection<Item> feedList = null;
+		public ObservableCollection<Item> FeedList
+		{
+			get => feedList;
+			set
+			{
+				if (feedList != value)
+				{
+					feedList = value;
+					OnPropertyChanged("FeedList");
+				}
+
+			}
+		}
+
+		private Item selectedItem = null;
+
+		public Item SelectedItem
+		{
+			get => selectedItem;
+			set
+			{
+				if (selectedItem != value)
+				{
+					selectedItem = value;
+					OnPropertyChanged("SelectedItem");
+					SelectedItemChanged?.Invoke(this, EventArgs.Empty);
+
+				}
+			}
+		}
+
+		private Item nextItem = null;
+
+		public Item NextItem
+		{
+			get => nextItem;
+			set
+			{
+				if (nextItem != value)
+				{
+					nextItem = value;
+					OnPropertyChanged("NextItem");
+				}
+			}
+		}
+
+		#endregion
 
 		public bool? IsFullScreenView { get; set; }
 
@@ -196,25 +255,54 @@ namespace AvanadeStudioTV.Database
 			else return false;
 		}
 
-		 
+		#region Data Feed Methods
+
+		public Item GetNextItem()
+		{
+			if (FeedList.Count > 0)
+			{
+				var index = FeedList.IndexOf(SelectedItem);
+
+				if (FeedList.ElementAtOrDefault(index + 1) != null)
+				{
+
+
+					return FeedList[index + 1];
+				}
+				//Loop playlist 
+				//TODO need implement multiple playlists here
+				else
+				{
+
+					return FeedList[0];
+				} 
+			}
+
+			return null;
+		}
 
 		public async Task<bool> GetDataFromNetwork()
 		{
+			
+
 			CurrentPlaylist = new List<Item>();
 			CurrentPlaylist.Clear();
 			var Channels = realm.All<RSSFeedData>().Where(r => r.isActiveFeed == true);
 			foreach (var singleChannel in Channels)
 			{
-				var channelFeed = ScrubPlaylist(await NetworkService.GetSyncFeedAsync(singleChannel.url));
-				if (channelFeed?.Count > 0)
+				var list = await NetworkService.GetSyncFeedAsync(singleChannel.url);
+				var channelList= ScrubPlaylist(list);
+				if (channelList?.Count > 0)
 				{
-					CurrentPlaylist.AddRange(channelFeed);
+					CurrentPlaylist.AddRange(channelList);
 					CurrentChannel = NetworkService.channel; 
 				}
 			
 			}
 			
-			CurrentPlaylist = CurrentPlaylist?.OrderByDescending(l => DateTime.Parse(l?.PubDate)).ToList();
+			var temp = CurrentPlaylist?.OrderByDescending(l => DateTime.Parse(l?.PubDate)).ToList();
+			var comparer = new ItemComparer();
+			CurrentPlaylist = CurrentPlaylist?.Distinct(comparer).ToList();
 
 			if (Channels.Count() > 1)
 			{
@@ -232,6 +320,17 @@ namespace AvanadeStudioTV.Database
 				CurrentChannel = c;
 			}
 			else IsMixedFeed = false;
+
+			//Set Feedlist and first video in collection for all views
+			FeedList?.Clear();
+			NextItem = null;
+			FeedList = new ObservableCollection<Item>(CurrentPlaylist);
+			//Whenever we get data from network reset the feed to start at first item
+			SelectedItem = FeedList[0]; 
+			NextItem = GetNextItem();
+
+
+
 			NetworkDataLoaded?.Invoke(this, EventArgs.Empty);
 			return true;
 		}
@@ -278,6 +377,8 @@ namespace AvanadeStudioTV.Database
 
 			return value;
 		}
+
+		#endregion
 
 		public async Task<bool> ValidateChannel9FeedUrl(string url)
 		{
@@ -347,5 +448,12 @@ namespace AvanadeStudioTV.Database
 
 
 		}
+
+		public event PropertyChangedEventHandler PropertyChanged;
+		protected void OnPropertyChanged(string propertyName)
+		{
+			PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+		}
+
 	}
 }
