@@ -138,6 +138,8 @@ namespace AvanadeStudioTV.Models
 
 		public string FormattedChannelTitle { get; set; }
 
+		public bool IsSelected { get; set; }
+
 
 	}
 

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:video="clr-namespace:FormsVideoLibrary"
+              xmlns:views="clr-namespace:AvanadeStudioTV.Views"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" x:Class="AvanadeStudioTV.Views.FullScreenVideoPage"
              xmlns:ffimageloading="clr-namespace:FFImageLoading.Forms;assembly=FFImageLoading.Forms"
              BackgroundImage = "BlackGradBack.png">
@@ -17,9 +18,11 @@
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="3*" />
                     <ColumnDefinition Width="55*" />
-                    <ColumnDefinition Width="42*" />
+                    <ColumnDefinition Width="40*" />
+                    <ColumnDefinition Width="2*" />
                 </Grid.ColumnDefinitions>
-                <video:VideoPlayer Grid.Row="0" Grid.Column="0" Grid.RowSpan="3" Grid.ColumnSpan="3" x:Name="VideoPlayerView"   />
+                <video:VideoPlayer Grid.Row="0" Grid.Column="0" Grid.RowSpan="3" Grid.ColumnSpan="4" x:Name="VideoPlayerView"   />
+                <Image Grid.Row="0" Grid.Column="2" Source="AvLeftHeader.png" WidthRequest="180" VerticalOptions="Start" HorizontalOptions="End" Margin="10,50,0,10"></Image>
                 
                 <!-- NOW PLAYING ITEM TITLE VIEW (HIDDEN VIEW THAT POPS UP)-->
                 <StackLayout  Grid.Row="1" Grid.Column="1" x:Name="TitleView"  Orientation="Horizontal" HorizontalOptions="FillAndExpand" VerticalOptions="StartAndExpand">
@@ -116,7 +119,9 @@
             </Grid>
 
 
-
+            <AbsoluteLayout x:Name="HiddenViewLayout" AbsoluteLayout.LayoutBounds="0,0,1,1" AbsoluteLayout.LayoutFlags="PositionProportional" >
+                <views:BetweenVideoView x:Name="HiddenView" ></views:BetweenVideoView>
+            </AbsoluteLayout>
 
 
         </AbsoluteLayout>

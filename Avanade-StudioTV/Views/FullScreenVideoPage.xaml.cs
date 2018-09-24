@@ -11,6 +11,10 @@ using AvanadeStudioTV.Models;
 using AvanadeStudioTV.ViewModels;
 using System.Timers;
 using System.Threading.Tasks;
+using Xamarin.Essentials;
+using System.Threading;
+using AvanadeStudioTV.Database;
+using System.Linq;
 
 namespace AvanadeStudioTV.Views
 {
@@ -19,9 +23,11 @@ namespace AvanadeStudioTV.Views
         public event VideoCompletedHandler VideoCompleted;
         public delegate void VideoCompletedHandler();
 		public FullScreenVideoViewModel ViewModel;
-		public Timer ShowTitleTimer;
-		public Timer HideTitleTimer;
+	
 		public const double TITLE_VISIBLE_SCREEN_TIME = 5000; //10 sec
+	 
+		public HiddenViewState HiddenViewStatus;
+		public TitleAnimationStatus TitleAnimationState;
 	 
 
 
@@ -40,23 +46,31 @@ namespace AvanadeStudioTV.Views
         {
              
 
-
 			InitializeComponent();
 
-			IsInCurrentTitleMode = true;
 
 
-			ViewModel = new FullScreenVideoViewModel(Navigation, this);
-
-			//First Time Launching Get Feed Data from Network First:
-			ViewModel.GetNewsFeedFromNetworkAsync();
-			this.BindingContext = ViewModel;
-
-			
-
+			HiddenView.FeedView.ItemSelected += FeedListView_ItemSelected;
+			//HiddenView.FeedView.ItemAppearing += FeedView_ItemAppearing;
+	
 
 
 		}
+
+		//private void FeedView_ItemAppearing(object sender, ItemVisibilityEventArgs e)
+		//{
+		//	if (ViewModel?.SharedData.NextItem != null)
+		//	{
+		//		if (ViewModel.SharedData.FeedList != null)
+		//		{
+		//			int i = ViewModel.SharedData.FeedList.IndexOf(ViewModel.SharedData.SelectedItem);
+		//			ViewModel.SharedData.FeedList.ToList().ForEach(c => c.IsSelected = false);
+		//			ViewModel.SharedData.FeedList[i].IsSelected = true;
+		//			//	FeedListView.ScrollTo(ViewModel.SharedData.FeedList[i], ScrollToPosition.Start, true);
+		//		}
+		//	}
+			 
+		//}
 
 		/// <summary>
 		/// When overridden, allows application developers to customize behavior immediately prior to the <see cref="T:Xamarin.Forms.Page" /> becoming visible.
@@ -66,10 +80,16 @@ namespace AvanadeStudioTV.Views
 		/// </remarks>
 		protected override void OnAppearing()
 		{
+			var metrics = DeviceDisplay.ScreenMetrics;
 			base.OnAppearing();
+	
+		   HiddenView.WidthRequest = metrics.Width;
+			HiddenView.HeightRequest = metrics.Height;
 
+			ViewModel = new FullScreenVideoViewModel(Navigation, this);
+			this.BindingContext = ViewModel;
 
-			IsInCurrentTitleMode = true;
+			
 
 
 			VideoPlayerView.HeightRequest = MainGrid.Height;
@@ -78,8 +98,51 @@ namespace AvanadeStudioTV.Views
 
 			TitleView.Opacity = 0;
 			NextShowView.Opacity = 0;
-			 ShowAnimations = true;
-			ShowAnimatedViews();
+
+
+
+
+
+			HiddenView.TranslationY =metrics.Height;
+		}
+
+		public async void   AnimateHiddenViewUp()
+		{
+			if (HiddenViewStatus != HiddenViewState.Visible)
+			{
+
+				var metrics = DeviceDisplay.ScreenMetrics;
+				await HiddenView.TranslateTo(0, 0, 2000, Easing.SpringOut);
+				HiddenView.FeedView.ScrollTo(HiddenView.FeedView.SelectedItem, ScrollToPosition.Start, true);
+				 
+
+				HiddenViewStatus = HiddenViewState.Visible;
+			}
+		}
+
+		public  async void AnimateHiddenViewDown()
+		{
+			if (HiddenViewStatus != HiddenViewState.Collapsed)
+			{
+				var metrics = DeviceDisplay.ScreenMetrics;
+				await HiddenView.TranslateTo(0, metrics.Height, 2000, Easing.SpringOut);
+				ViewModel?.StartVideo();
+				HiddenViewStatus = HiddenViewState.Collapsed;
+			}
+		}
+
+		protected override void OnDisappearing()
+		{
+			base.OnDisappearing();
+			
+
+			this.BindingContext = null;
+
+			this.ViewModel = null;
+
+			
+
+
 
 		}
 
@@ -88,7 +151,18 @@ namespace AvanadeStudioTV.Views
             VideoCompleted = delegate { };
         }
 
- 
+		public void FeedListView_ItemSelected(object sender, SelectedItemChangedEventArgs e)
+		{
+			if (Navigation.ModalStack.Count == 0)
+			{ 
+		    ViewModel.SharedData.NextItem = ViewModel.SharedData.GetNextItem();
+			AnimateHiddenViewDown();
+			}
+
+		}
+
+
+
 		internal void PlayIntro()
 		{
 			 
@@ -98,7 +172,9 @@ namespace AvanadeStudioTV.Views
 				this.ForceLayout();
 
 				VideoPlayerView.VideoEnded += VideoPlayerView_IntroVideoEnded;
+
  
+
 		}
 
 		private void VideoPlayerView_IntroVideoEnded(object sender, EventArgs e)
@@ -128,46 +204,30 @@ namespace AvanadeStudioTV.Views
 		{
 			TitleView.Opacity = 0;
 			NextShowView.Opacity = 0;
-			SetupTimers();
+			 
+
 			
+
 		}
 
 		public void StopAnimatingTitles()
 		{
+		 
 			TitleView.Opacity = 0;
 			NextShowView.Opacity = 0;
 
-			ViewExtensions.CancelAnimations(TitleView);
-			ViewExtensions.CancelAnimations(NextShowView);
-
-
-
-
 		}
 
-		private void SetupTimers()
-		{
-			//Show Title
-			ShowTitleTimer = new System.Timers.Timer();
-			ShowTitleTimer.Elapsed += new ElapsedEventHandler(_ShowTitle_timer_Elapsed);
-			//5 second inteval
-			ShowTitleTimer.Interval = 5000;
-			ShowTitleTimer.Start();
 
-		}
-
-	 
-
-		private async void _ShowTitle_timer_Elapsed(object sender, ElapsedEventArgs e)
-		{
-			await ShowAnimatedViews();			
  
-		}
 
 		public async Task ShowAnimatedViews()
 		{
-			while (ShowAnimations)
+	 
+			while (true)
 			{
+
+				ViewModel.SharedData.TitleAnimationState  = TitleAnimationStatus.Playing;
 
 				await TitleView.FadeTo(1, 2000, Easing.Linear);
 				await TitleView.FadeTo(1, 10000, Easing.Linear); //stay for 10 sec
@@ -180,6 +240,7 @@ namespace AvanadeStudioTV.Views
 				await NextShowView.FadeTo(0, 2000, Easing.Linear);
 
 				await NextShowView.FadeTo(0, 2, Easing.Linear); //wait 2 seconds
+ 
 
 			}
 
@@ -206,30 +267,17 @@ namespace AvanadeStudioTV.Views
 	 
 
 	
-
-        /// <summary>
-        /// When overridden, allows the application developer to customize behavior as the <see cref="T:Xamarin.Forms.Page" /> disappears.
-        /// </summary>
-        /// <remarks>
-        /// To be added.
-        /// </remarks>
-        protected override void OnDisappearing()
-        {
-            base.OnDisappearing();
-			StopAnimatingTitles();
-
-		}
-
+ 
 		private void TitleView_Tapped(object sender, EventArgs e)
 		{
 
-			OpenFullScreenListPageAsync();
+			 AnimateHiddenViewUp();
 		}
 
 
 		private void NextVideoView_Tapped(object sender, EventArgs e)
 		{
-			OpenFullScreenListPageAsync();
+			OpenHiddenView();
 			//
 			//		ViewModel.VideoPage_VideoCompleted();
 			//	ViewModel.StartVideo();
@@ -239,22 +287,15 @@ namespace AvanadeStudioTV.Views
 
  
 
-		private async Task OpenFullScreenListPageAsync()
+		private void OpenHiddenView()
 		{
 			VideoPlayerView.Stop();
 
-			var modalPage = new FullScreenListPage(false);
-			await Navigation.PushModalAsync(modalPage, true);
-		 
+			AnimateHiddenViewUp();
+
+
 		}
 
-
-		//not used on full screen page
-		private void OpenSettingsPage()
-		{
-			var settings = new SettingsPage(this.Navigation);
-			this.Navigation.PushModalAsync(settings);
-
-		}
+ 
 	}
 }

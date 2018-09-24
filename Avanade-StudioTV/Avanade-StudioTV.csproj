@@ -30,6 +30,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Remove="Models\FeedItem.cs" />
+    <Compile Remove="ViewModels\FullScreenListViewModel.cs" />
+    <Compile Remove="Views\FullScreenListView.xaml.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Remove="Views\FullScreenListView.xaml" />
   </ItemGroup>
   <ItemGroup>
     <Compile Update="Views\BigFeedCell.xaml.cs">
@@ -43,7 +48,7 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Update="Views\FullScreenListPage.xaml">
+    <EmbeddedResource Update="Views\BetweenVideoView.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="Views\SettingsPage.xaml">

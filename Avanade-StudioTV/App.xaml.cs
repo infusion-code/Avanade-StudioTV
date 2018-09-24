@@ -43,7 +43,8 @@ namespace Avanade_StudioTV
 
 		protected override void OnStart()
         {
-            // Handle when your app starts
+			 DataManager.GetDataFromNetwork();
+			 DataManager.TitleAnimationState = TitleAnimationStatus.NotPlaying;
         }
 
         protected override void OnSleep()
