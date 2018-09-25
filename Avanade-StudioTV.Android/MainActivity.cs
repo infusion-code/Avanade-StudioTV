@@ -25,7 +25,8 @@ namespace Avanade_StudioTV.Droid
 
             FormsWebViewRenderer.Initialize();
             HtmlLabelRenderer.Initialize();
-            global::Xamarin.Forms.Forms.Init(this, bundle);
+			FFImageLoading.Forms.Platform.CachedImageRenderer.Init(enableFastRenderer: true);
+			global::Xamarin.Forms.Forms.Init(this, bundle);
 
             //init libraries
             Xamarin.Essentials.Platform.Init(this, bundle);

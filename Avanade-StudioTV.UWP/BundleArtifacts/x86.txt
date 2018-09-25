@@ -1,1 +1,1 @@
-MainPackage=C:\Users\ahmed.c.khan\Documents\AvanadeProjects\Avanade-StudioTV\Avanade-StudioTV.UWP\bin\x86\Debug\Avanade-StudioTV.UWP_1.0.4.0_x86_Debug.appx
+MainPackage=C:\Users\ahmed.c.khan\Documents\AvanadeProjects\Avanade-StudioTV\Avanade-StudioTV.UWP\bin\x86\Release\Avanade-StudioTV.UWP_2.0.18.0_x86.appx

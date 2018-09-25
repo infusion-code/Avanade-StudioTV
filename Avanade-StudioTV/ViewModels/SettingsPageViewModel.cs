@@ -12,6 +12,7 @@ using Realms;
 using System.Linq;
 using Avanade_StudioTV;
 using System.Threading.Tasks;
+using System.Text.RegularExpressions;
 
 namespace AvanadeStudioTV.ViewModels
 {
@@ -24,9 +25,23 @@ namespace AvanadeStudioTV.ViewModels
 
 		private RSSFeedViewModel RSSViewModel;
 
-		private bool _isChecked;
-		private string _textCheckBox;
+		private bool isOriginallyFullScreen;
 
+		private bool _isFullScreen;
+		public bool IsFullScreen
+		{
+			get => _isFullScreen;
+			set
+			{
+				_isFullScreen = value;
+				App.DataManager.IsFullScreenView = _isFullScreen;
+				App.DataManager.SaveFullScreenMode();
+				OnPropertyChanged("IsFullScreen");
+			}
+		}
+
+
+		private bool _isChecked;
 		public bool IsChecked
 		{
 			get => _isChecked;
@@ -38,6 +53,7 @@ namespace AvanadeStudioTV.ViewModels
 			}
 		}
 
+		private string _textCheckBox;
 		public string TextCheckBox
 		{
 			get => _textCheckBox;
@@ -49,6 +65,44 @@ namespace AvanadeStudioTV.ViewModels
 			}
 		}
 
+		private string _zip;
+		public string Zip
+		{
+			get => _zip;
+			set
+			{
+				 
+				_zip = value;
+				 OnPropertyChanged("Zip");
+ 
+
+			}
+		}
+
+
+
+		private bool IsValidUSOrCanadianZipCode(string zipCode)
+		{
+			var _usZipRegEx = @"^\d{5}(?:[-\s]\d{4})?$";
+			var _caZipRegEx = @"^([ABCEGHJKLMNPRSTVXY]\d[ABCEGHJKLMNPRSTVWXYZ])\ {0,1}(\d[ABCEGHJKLMNPRSTVWXYZ]\d)$";
+
+			var validZipCode = true;
+			if ((!Regex.Match(zipCode, _usZipRegEx).Success) && (!Regex.Match(zipCode, _caZipRegEx).Success))
+			{
+				validZipCode = false;
+			}
+
+			if (!validZipCode)
+			{
+				Application.Current.MainPage.DisplayAlert("Error", "Cannot validate Zip or Postal Code, Please use a valid US or Canadian value", "OK");
+			}
+
+			return validZipCode;
+
+
+		    
+	    }
+ 
 
 
 		public Command OnCheckedChanged { get; set; }
@@ -60,8 +114,7 @@ namespace AvanadeStudioTV.ViewModels
 		}
 
 	
-
-		public MasterPage Master { get; set; }
+		 
 
         public List<string> Playlist { get; set; }
 
@@ -123,12 +176,15 @@ namespace AvanadeStudioTV.ViewModels
 			}
 		}
 
-		public SettingsPageViewModel(INavigation navigation, MasterPage master)
+		public SettingsPageViewModel(INavigation navigation, bool isFullScreenView)
 		{
-			
+			this.isOriginallyFullScreen = isFullScreenView;
+			this.IsFullScreen = (bool) App.DataManager.IsFullScreenView;
+			this.Zip = App.DataManager.ZipCode;
+
 			this.NewFeed = new RSSFeedViewData();
 			this.NewFeed.isActiveFeed = true;
-			this.Master = master;
+			 
 			this.GetNewsFeedAsync();
 			Navigation = navigation;
 
@@ -161,18 +217,20 @@ namespace AvanadeStudioTV.ViewModels
 				this.FeedList.Add(NewFeed);
 				NewFeed = new RSSFeedViewData();
 				 SaveAsync();
-				GetNewsFeedAsync();
+				
 				return true;
 			}
 
 			else
 			{
-				await this.Master.DisplayAlert("ERROR READING FEED", "Please Correct Feed URL or Desc, Should be a valid Channel 9 RSS Feed Url with a Show Name in the Description", "OK");
+				await Application.Current.MainPage.DisplayAlert("ERROR READING FEED", "Please Correct Feed URL or Desc, Should be a valid Channel 9 RSS Feed Url with a Show Name in the Description", "OK");
 				return false;
 			}
 		}
 
-		
+	 
+
+
 
 		private async Task<bool> ValidateFeed(string url)
 		{
@@ -180,9 +238,13 @@ namespace AvanadeStudioTV.ViewModels
 
 			var isValid  = await App.DataManager.ValidateChannel9FeedUrl(url);
 			if (isValid)
-			{ 
-			 NewFeed.ChannelName = App.DataManager.NetworkService.channel.Title;
-				NewFeed.imageUrl = App.DataManager.NetworkService.channel.Image.Url;
+			{
+				if (App.DataManager.NetworkService.channel?.Title != String.Empty)
+			       NewFeed.ChannelName = App.DataManager.NetworkService.channel?.Title;
+				if (App.DataManager.NetworkService.channel?.Image != null)
+					NewFeed.imageUrl = App.DataManager.NetworkService.channel.Image.Url;
+				else if  (App.DataManager.NetworkService.channel?.Thumbnail[0] != null)
+					NewFeed.imageUrl = App.DataManager.NetworkService.channel?.Thumbnail[0].Url;
 				return true;
 			}
 
@@ -201,14 +263,51 @@ namespace AvanadeStudioTV.ViewModels
 
 		private void OnCloseSettingsPage(object obj)
 		{
-		 
-			SaveAsync();
-			 
-			this.Navigation.PopModalAsync();
 
+			if (IsValidUSOrCanadianZipCode(Zip))
+			{
+				App.DataManager.SaveZipCode(Zip);
+				App.DataManager.GetWeatherForcastAsync();
+			}
+
+			else return;
+
+			SaveAsync();
+
+			
+
+			CheckAppLayout();
+ 
 			{
 				//Reload video page with new videos
 				MessagingCenter.Send("obj", "Update");
+			}
+		}
+
+		private void CheckAppLayout()
+		{
+			if (IsFullScreen)
+			{
+				{
+					App.DataManager.TitleAnimationState = TitleAnimationStatus.NotPlaying;
+					Application.Current.MainPage = new FullScreenVideoPage();
+				
+				}
+			}
+
+		   else
+			{
+				if (!isOriginallyFullScreen)
+				{
+					this.Navigation.PopModalAsync();
+				}
+
+				else
+				{
+					Application.Current.MainPage = new MasterPage();
+					
+				}
+
 			}
 		}
 
@@ -235,14 +334,12 @@ namespace AvanadeStudioTV.ViewModels
 				App.DataManager.AllFeeds = this.FeedList.ToList<RSSFeedViewData>();
 			});
 
-	
+		 await	App.DataManager.GetDataFromNetwork();
 		}
 
 		public async void GetNewsFeedAsync()
         {
-			var result = await App.DataManager.GetDataFromNetwork();
-
-		   var list =  App.DataManager.CurrentPlaylist;
+			//var result = await App.DataManager.GetDataFromNetwork();
 
 			var all = new ObservableCollection<RSSFeedViewData>(App.DataManager.AllFeeds);
 
@@ -266,7 +363,7 @@ namespace AvanadeStudioTV.ViewModels
 
 					else
 					{
-						 this.Master.DisplayAlert("Error", "Cannot remove last Feed, Please add another feed first", "OK");
+						 Application.Current.MainPage.DisplayAlert("Error", "Cannot remove last Feed, Please add another feed first", "OK");
 
 					}
 				});

@@ -6,11 +6,12 @@ using System.Threading.Tasks;
 using Xamarin.Essentials;
 using Realms;
 
-
+using AvanadeStudioTV;
 using AvanadeStudioTV.Models;
 using AvanadeStudioTV.Database;
 using System.Runtime.Serialization;
 using System.Linq;
+using Newtonsoft.Json;
 
 namespace AvanadeStudioTV.Network
 {
@@ -53,15 +54,43 @@ namespace AvanadeStudioTV.Network
 				}
 				catch (Exception e)
 				{
+					var x = e;
 					//TODO add exception handling
 					return null;
 				}
             }
             return null;
         }
- 
 
+		public async Task<WeatherModel> GetWeatherForcastAsync(string url)
+		{
  
+			if (this.IsConnected())
+			{
+				try
+				{
+					
+					var uri = new Uri(url);
+					HttpClient client = new HttpClient();
+					HttpResponseMessage response = await client.GetAsync(uri);
+					String responseJson = await response.Content.ReadAsStringAsync();
+
+
+					WeatherModel model = JsonConvert.DeserializeObject<WeatherModel>(responseJson);
+
+					return model;
+				}
+				catch (Exception e)
+				{
+					//TODO add exception handling
+					return null;
+				}
+			}
+			return null;
+		}
+
+
+
 
 		public bool IsConnected()
         {

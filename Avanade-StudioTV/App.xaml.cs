@@ -18,7 +18,19 @@ namespace Avanade_StudioTV
 
 			InitalizeData();
 
-            MainPage = new MasterPage();
+		    
+
+			if ((bool)DataManager.IsFullScreenView)
+			{
+
+				MainPage = new    FullScreenVideoPage(); //new SettingsPage(null); // FullScreenListPage(); //new FullScreenVideoPage();
+
+			}
+
+			else
+			{
+				MainPage = new MasterPage();
+			}
         }
 
 		//using Realm to persist data - initalize if no feeds created by user first:
@@ -31,7 +43,8 @@ namespace Avanade_StudioTV
 
 		protected override void OnStart()
         {
-            // Handle when your app starts
+			 DataManager.GetDataFromNetwork();
+			 DataManager.TitleAnimationState = TitleAnimationStatus.NotPlaying;
         }
 
         protected override void OnSleep()
