@@ -26,6 +26,20 @@ namespace AvanadeStudioTV.Views
 
 		}
 
+		protected override void OnDisappearing()
+		{
+			base.OnDisappearing();
+
+			this.BindingContext = null;
+
+			this.ViewModel = null;
+
+			GC.Collect(GC.MaxGeneration, GCCollectionMode.Forced);
+
+
+
+		}
+
 
 	}
 }

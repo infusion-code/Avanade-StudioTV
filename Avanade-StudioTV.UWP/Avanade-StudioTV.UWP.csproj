@@ -118,9 +118,12 @@
       <SubType>Designer</SubType>
     </AppxManifest>
     <Content Include="AddChannelButton.PNG" />
+    <Content Include="Assets\BadgeLogo.scale-100.png" />
+    <Content Include="Assets\BadgeLogo.scale-125.png" />
     <Content Include="Assets\Fonts\FontAwesome4.otf">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="TVLogo.PNG" />
     <Content Include="WeatherCloudy.png" />
     <Content Include="WeatherStorm.png" />
     <Content Include="WeatherSunny.png" />

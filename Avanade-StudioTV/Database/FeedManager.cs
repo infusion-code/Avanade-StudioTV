@@ -20,13 +20,23 @@ namespace AvanadeStudioTV.Database
 
 		#region App Constants
 
-		public  double INTERSTITAL_SCREEN_DISPLAY_INTERVAL = 5000;
+		//used for hiddenview titles on full screen
+		public  uint HIDETITLES_DISPLAY_INTERVAL = 30000;
+
+		public uint NEXTVIEW_DISPLAY_INTERVAL = 6000;
+
+		public uint TITLEVIEW_DISPLAY_INTERVAL =  12000;
+
+		//end
+
+		//used to display BetweenVideoView on full screen in between videos:
+		public  double INTERSTITAL_SCREEN_DISPLAY_INTERVAL = 30000;
 
 		public const string MSDN_CHANNEL9_IMAGE_URL = "https://sec.ch9.ms/content/feedimage.png";
 
 		public const string MIXED_CHANNEL_TITLE = "Channel 9 Video Mix";
 
-		public const double CHECK_WEATHER_INTERVAL = 60 * 60 * 3000; // 5000; //60 * 60 * 3000; //3 Hour interval in milliseconds to call weather API while app is running
+		public const double CHECK_WEATHER_INTERVAL = 60 * 60 * 3000; // 5000; //60 * 60 * 3000; //currently set as a 3 Hour interval in milliseconds to call weather API every interval while app is running
 
 		//Using a free weather api account from https://api.apixu.com/
 		//example call:
@@ -50,7 +60,7 @@ namespace AvanadeStudioTV.Database
 
 		public List<RSSFeedViewData> AllFeeds { get; set; }
 		public Channel CurrentChannel { get; set; }
-      public Item CurrentItem { get; set; }
+        public Item CurrentItem { get; set; }
 
 		public List<Item> CurrentPlaylist { get; set; }
 
@@ -73,6 +83,24 @@ namespace AvanadeStudioTV.Database
 			}
 		}
 
+		private TitleAnimationStatus _TitleAnimationState;
+
+		public TitleAnimationStatus TitleAnimationState
+		{
+			get => _TitleAnimationState;
+			set
+			{
+				if (_TitleAnimationState != value)
+				{
+					_TitleAnimationState = value;
+
+					OnPropertyChanged("TitleAnimationState");
+					 
+
+				}
+			}
+		}
+
 		private Item selectedItem = null;
 
 		public Item SelectedItem
@@ -83,12 +111,16 @@ namespace AvanadeStudioTV.Database
 				if (selectedItem != value)
 				{
 					selectedItem = value;
+
+					
+
 					OnPropertyChanged("SelectedItem");
 					SelectedItemChanged?.Invoke(this, EventArgs.Empty);
 
 				}
 			}
 		}
+
 
 		private Item nextItem = null;
 
@@ -99,8 +131,11 @@ namespace AvanadeStudioTV.Database
 			{
 				if (nextItem != value)
 				{
+					
 					nextItem = value;
+				
 					OnPropertyChanged("NextItem");
+				 
 				}
 			}
 		}
@@ -180,6 +215,18 @@ namespace AvanadeStudioTV.Database
 		private  async void OnGetWeatherDataEvent(object source, ElapsedEventArgs e)
 		{
 			await GetWeatherForcastAsync();
+
+		}
+
+		public void SetFeedListNotSelected()
+		{
+			if (FeedList?.Count != 0)
+			{
+				foreach (Item i in FeedList)
+				{
+					i.IsSelected = false;
+				} 
+			}
 
 		}
 
@@ -300,6 +347,7 @@ namespace AvanadeStudioTV.Database
 			
 			}
 			
+			//Need to remove duplicates here caused by network call - TODO: need to debug
 			var temp = CurrentPlaylist?.OrderByDescending(l => DateTime.Parse(l?.PubDate)).ToList();
 			var comparer = new ItemComparer();
 			CurrentPlaylist = CurrentPlaylist?.Distinct(comparer).ToList();
@@ -320,23 +368,34 @@ namespace AvanadeStudioTV.Database
 				CurrentChannel = c;
 			}
 			else IsMixedFeed = false;
+			try
+			{
+				//Set Feedlist and first video in collection for all views
+				//FeedList?.Clear();
+				NextItem = null;
+				FeedList = new ObservableCollection<Item>(CurrentPlaylist);
+				//Whenever we get data from network reset the feed to start at first item
+				SelectedItem = FeedList[0];
+				NextItem = GetNextItem();
 
-			//Set Feedlist and first video in collection for all views
-			FeedList?.Clear();
-			NextItem = null;
-			FeedList = new ObservableCollection<Item>(CurrentPlaylist);
-			//Whenever we get data from network reset the feed to start at first item
-			SelectedItem = FeedList[0]; 
-			NextItem = GetNextItem();
 
 
-
-			NetworkDataLoaded?.Invoke(this, EventArgs.Empty);
+				NetworkDataLoaded?.Invoke(this, EventArgs.Empty);
+			}
+			catch (Exception ex)
+			{
+				var x = ex;
+				return false;
+			}
 			return true;
 		}
 
      
-
+		/// <summary>
+		/// Housekeeping to set titles and choose an image for feed items
+		/// </summary>
+		/// <param name="list"></param>
+		/// <returns></returns>
 		private List<Item> ScrubPlaylist(List<Item> list)
 		{
 			if (list != null)
@@ -367,6 +426,11 @@ namespace AvanadeStudioTV.Database
 			return null;
 		}
 
+		/// <summary>
+		/// Set a double spaced title
+		/// </summary>
+		/// <param name="value"></param>
+		/// <returns></returns>
 		public string FormatTitle(string value )
 		{
 			if (  value != String.Empty)
@@ -380,6 +444,11 @@ namespace AvanadeStudioTV.Database
 
 		#endregion
 
+		/// <summary>
+		/// Checks if the feed xml is valid for use in this video player
+		/// </summary>
+		/// <param name="url"></param>
+		/// <returns></returns>
 		public async Task<bool> ValidateChannel9FeedUrl(string url)
 		{
 			var feedItem = await NetworkService.GetSyncFeedAsync(url);
@@ -398,7 +467,7 @@ namespace AvanadeStudioTV.Database
 
 		private void InitalizeDataOnFirstUse()
 		{
-
+			//Note Here are Database paths for the realm db file: 
 			//iOS Realm Path: /Users/ahmedkhan/Library/Developer/CoreSimulator/Devices/3B877EAC-84BB-4615-823A-8C9BAD0F6DDA/data/Containers/Data/Application/6361196D-D732-4D73-8790-9F4F77F7E873/Documents
 
 			//C:\Users\ahmed.c.khan\AppData\Local\Packages\4851a6aa-f693-4d96-bc70-404b1b69937d_5zacrfw33hrb4\LocalState\default.realm
@@ -455,5 +524,11 @@ namespace AvanadeStudioTV.Database
 			PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
 		}
 
+	}
+
+	public enum TitleAnimationStatus
+	{
+		Playing,
+		NotPlaying
 	}
 }

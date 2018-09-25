@@ -288,12 +288,8 @@ namespace AvanadeStudioTV.ViewModels
 		{
 			if (IsFullScreen)
 			{
-				if (isOriginallyFullScreen)
 				{
-					this.Navigation.PopModalAsync(true);
-				}
-				else
-				{
+					App.DataManager.TitleAnimationState = TitleAnimationStatus.NotPlaying;
 					Application.Current.MainPage = new FullScreenVideoPage();
 				
 				}
@@ -338,7 +334,7 @@ namespace AvanadeStudioTV.ViewModels
 				App.DataManager.AllFeeds = this.FeedList.ToList<RSSFeedViewData>();
 			});
 
-			
+		 await	App.DataManager.GetDataFromNetwork();
 		}
 
 		public async void GetNewsFeedAsync()

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Xml.Serialization;
 using System.Collections.Generic;
+using System.ComponentModel;
 
 namespace AvanadeStudioTV.Models
 {
@@ -96,7 +97,7 @@ namespace AvanadeStudioTV.Models
 	}
 
 	[XmlRoot(ElementName = "item")]
-	public class Item
+	public class Item : INotifyPropertyChanged
 	{
 		[XmlElement(ElementName = "title")]
 		public string Title { get; set; }
@@ -138,6 +139,28 @@ namespace AvanadeStudioTV.Models
 
 		public string FormattedChannelTitle { get; set; }
 
+		private bool _isSelected;
+		public bool IsSelected
+		{
+			get { return _isSelected; }
+			set
+			{
+				if (_isSelected != value)
+				{
+					_isSelected = value;
+					OnPropertyChanged("IsSelected");
+				}
+			}
+		}
+
+		 
+
+		protected void OnPropertyChanged(string propertyName)
+		{
+			PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+		}
+
+		public event PropertyChangedEventHandler PropertyChanged;
 
 	}
 
