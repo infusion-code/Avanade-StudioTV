@@ -20,7 +20,17 @@ namespace AvanadeStudioTV.Database
 
 		#region App Constants
 
-		public  double INTERSTITAL_SCREEN_DISPLAY_INTERVAL = 10000;
+		//used for hiddenview titles on full screen
+		public  uint HIDETITLES_DISPLAY_INTERVAL = 30000;
+
+		public uint NEXTVIEW_DISPLAY_INTERVAL = 6000;
+
+		public uint TITLEVIEW_DISPLAY_INTERVAL =  12000;
+
+		//end
+
+		//used to display BetweenVideoView on full screen in between videos:
+		public  double INTERSTITAL_SCREEN_DISPLAY_INTERVAL = 30000;
 
 		public const string MSDN_CHANNEL9_IMAGE_URL = "https://sec.ch9.ms/content/feedimage.png";
 
@@ -101,7 +111,9 @@ namespace AvanadeStudioTV.Database
 				if (selectedItem != value)
 				{
 					selectedItem = value;
-			 
+
+					
+
 					OnPropertyChanged("SelectedItem");
 					SelectedItemChanged?.Invoke(this, EventArgs.Empty);
 
@@ -123,7 +135,7 @@ namespace AvanadeStudioTV.Database
 					nextItem = value;
 				
 					OnPropertyChanged("NextItem");
-					//nextItem.IsSelected = false;
+				 
 				}
 			}
 		}
@@ -203,6 +215,18 @@ namespace AvanadeStudioTV.Database
 		private  async void OnGetWeatherDataEvent(object source, ElapsedEventArgs e)
 		{
 			await GetWeatherForcastAsync();
+
+		}
+
+		public void SetFeedListNotSelected()
+		{
+			if (FeedList?.Count != 0)
+			{
+				foreach (Item i in FeedList)
+				{
+					i.IsSelected = false;
+				} 
+			}
 
 		}
 

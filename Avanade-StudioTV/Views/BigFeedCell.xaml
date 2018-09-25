@@ -22,7 +22,7 @@
         <Image Grid.Row="0" Grid.Column="0" Grid.RowSpan="4" Source="{Binding Thumbnail[0].Url}" VerticalOptions="CenterAndExpand"  Aspect="AspectFit" />
 
         <Label Grid.Row="0" Grid.Column="1"  VerticalOptions="End"  FormattedText="{Binding FormattedChannelTitle}"   Margin="5"   FontSize="16" TextColor = "WhiteSmoke"  />
-        <Label Grid.Row="1" Grid.Column="1" Text="N E X T  U P: " Margin="5" 
+        <Label Grid.Row="1" Grid.Column="1" Text="N O W  P L A Y I N G: " Margin="5" 
                FontSize="25" TextColor = "WhiteSmoke"
                FontAttributes="Bold" Style="{DynamicResource FontLabel}"
                             IsVisible="{Binding IsSelected}" />

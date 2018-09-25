@@ -22,6 +22,7 @@ namespace AvanadeStudioTV.Views
         protected override void OnBindingContextChanged()
         {
             base.OnBindingContextChanged();
+		
  
         }
     }

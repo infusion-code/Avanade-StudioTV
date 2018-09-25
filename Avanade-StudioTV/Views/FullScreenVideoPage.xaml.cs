@@ -154,9 +154,14 @@ namespace AvanadeStudioTV.Views
 		public void FeedListView_ItemSelected(object sender, SelectedItemChangedEventArgs e)
 		{
 			if (Navigation.ModalStack.Count == 0)
-			{ 
-		    ViewModel.SharedData.NextItem = ViewModel.SharedData.GetNextItem();
-			AnimateHiddenViewDown();
+
+			{
+				ViewModel.SharedData.SetFeedListNotSelected();
+				ViewModel.SharedData.SelectedItem.IsSelected = true;
+
+			   ViewModel.SharedData.NextItem = ViewModel.SharedData.GetNextItem();
+			 
+		    	AnimateHiddenViewDown();
 			}
 
 		}
@@ -230,16 +235,16 @@ namespace AvanadeStudioTV.Views
 				ViewModel.SharedData.TitleAnimationState  = TitleAnimationStatus.Playing;
 
 				await TitleView.FadeTo(1, 2000, Easing.Linear);
-				await TitleView.FadeTo(1, 10000, Easing.Linear); //stay for 10 sec
+				await TitleView.FadeTo(1, ViewModel.SharedData.TITLEVIEW_DISPLAY_INTERVAL, Easing.Linear); //stay for 10 sec
 				await TitleView.FadeTo(0, 2000, Easing.Linear);
 
 				await TitleView.FadeTo(0, 2000, Easing.Linear); //wait for 2 sec
 
 				await NextShowView.FadeTo(1, 2000, Easing.Linear);
-				await NextShowView.FadeTo(1, 5000, Easing.Linear);
+				await NextShowView.FadeTo(1, ViewModel.SharedData.NEXTVIEW_DISPLAY_INTERVAL, Easing.Linear);
 				await NextShowView.FadeTo(0, 2000, Easing.Linear);
 
-				await NextShowView.FadeTo(0, 2, Easing.Linear); //wait 2 seconds
+				await NextShowView.FadeTo(0, ViewModel.SharedData.HIDETITLES_DISPLAY_INTERVAL, Easing.Linear); //wait 10 seconds
  
 
 			}

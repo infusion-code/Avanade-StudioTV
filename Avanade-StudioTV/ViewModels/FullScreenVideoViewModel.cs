@@ -310,7 +310,7 @@ namespace AvanadeStudioTV.ViewModels
 				if (SharedData?.SelectedItem?.Enclosure?.Url != String.Empty)
 				{
 					SharedData.SelectedItem.BackgroundColor = "#009999";
-					SharedData.SelectedItem.IsSelected = false;
+					SharedData.SelectedItem.IsSelected = true;
 					VideoPage.ResetEvents();
 					VideoPage.VideoCompleted += VideoPage_VideoCompleted;
 					VideoPage.PlayVideo(SharedData.SelectedItem.Enclosure.Url);
@@ -330,10 +330,13 @@ namespace AvanadeStudioTV.ViewModels
 		}
 		public void  VideoPage_VideoCompleted()
 		{
-
+			SharedData.SelectedItem.IsSelected = false;
 
 			SharedData.SelectedItem = SharedData.GetNextItem();
-			
+
+			SharedData.SelectedItem.IsSelected = true;
+
+
 			SharedData.NextItem = SharedData.GetNextItem();
 			 
 
