@@ -1,4 +1,5 @@
-﻿using AvanadeStudioTV.Database;
+﻿using Avanade_StudioTV;
+using AvanadeStudioTV.Database;
 using AvanadeStudioTV.ViewModels;
 using AvanadeStudioTV.Views;
 using System;
@@ -16,12 +17,26 @@ namespace AvanadeStudioTV.Views
 	public partial class SettingsPage : ContentPage
 	{
 	   public SettingsPageViewModel ViewModel;
-		public SettingsPage (MasterPage master, INavigation nav, RSSFeedViewModel rvm)
+		public SettingsPage ( INavigation nav )
 		{
 			InitializeComponent ();
 
-		   ViewModel = new SettingsPageViewModel(nav, master);
+		   ViewModel = new SettingsPageViewModel(nav, (bool) App.DataManager.IsFullScreenView);
 			this.BindingContext = ViewModel;
+
+		}
+
+		protected override void OnDisappearing()
+		{
+			base.OnDisappearing();
+
+			this.BindingContext = null;
+
+			this.ViewModel = null;
+
+			GC.Collect(GC.MaxGeneration, GCCollectionMode.Forced);
+
+
 
 		}
 

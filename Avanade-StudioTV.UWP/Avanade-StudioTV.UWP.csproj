@@ -118,9 +118,15 @@
       <SubType>Designer</SubType>
     </AppxManifest>
     <Content Include="AddChannelButton.PNG" />
+    <Content Include="Assets\BadgeLogo.scale-100.png" />
+    <Content Include="Assets\BadgeLogo.scale-125.png" />
     <Content Include="Assets\Fonts\FontAwesome4.otf">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="TVLogo.PNG" />
+    <Content Include="WeatherCloudy.png" />
+    <Content Include="WeatherStorm.png" />
+    <Content Include="WeatherSunny.png" />
     <None Include="Avanade-StudioTV.UWP_TemporaryKey.pfx" />
   </ItemGroup>
   <ItemGroup>
@@ -169,7 +175,8 @@
     <Content Include="Assets\Wide310x150Logo.scale-400.png" />
     <Content Include="AvanadeLogoBig.jpg" />
     <Content Include="AvanadeStudioIntro.mp4" />
-    <Content Include="AvLeftHeader.png" />
+    <Content Include="AvanadeWhiteLogo.PNG" />
+    <Content Include="AvLeftHeaderRedOld.png" />
     <Content Include="BlackGradBack.png" />
     <Content Include="CellBack.png" />
     <Content Include="Checked.png" />
@@ -181,7 +188,11 @@
     <Content Include="Assets\Square44x44Logo.scale-200.png" />
     <Content Include="Assets\Square44x44Logo.targetsize-24_altform-unplated.png" />
     <Content Include="Assets\Wide310x150Logo.scale-200.png" />
+    <Content Include="AvLeftHeader.png" />
+    <Content Include="StudioFlatBackground.png" />
+    <Content Include="StudioFooter.png" />
     <Content Include="StudioTVcircle.png" />
+    <Content Include="TitleBackground.png" />
     <Content Include="Unchecked.png" />
     <Content Include="video.html" />
   </ItemGroup>
@@ -214,6 +225,21 @@
     </PackageReference>
     <PackageReference Include="Xam.Plugin.WebView">
       <Version>2.1.3</Version>
+    </PackageReference>
+    <PackageReference Include="Xamarin.FFImageLoading">
+      <Version>2.4.3.840</Version>
+    </PackageReference>
+    <PackageReference Include="Xamarin.FFImageLoading.Forms">
+      <Version>2.4.3.840</Version>
+    </PackageReference>
+    <PackageReference Include="Xamarin.FFImageLoading.Svg">
+      <Version>2.4.3.840</Version>
+    </PackageReference>
+    <PackageReference Include="Xamarin.FFImageLoading.Svg.Forms">
+      <Version>2.4.3.840</Version>
+    </PackageReference>
+    <PackageReference Include="Xamarin.FFImageLoading.Transformations">
+      <Version>2.4.3.840</Version>
     </PackageReference>
     <PackageReference Include="Xamarin.Forms">
       <Version>3.1.0.697729</Version>

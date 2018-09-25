@@ -9,7 +9,8 @@
                 VerticalOptions="CenterAndExpand" 
                 HorizontalOptions="CenterAndExpand" />
             <Button Text="CLOSE" FontSize="Medium" TextColor="WhiteSmoke" Command="{Binding CloseSettingsPage}"  />
-            <Frame HasShadow="True" CornerRadius="25"   Margin= "100,10,400,0" BackgroundColor="Transparent" BorderColor="WhiteSmoke">
+            <StackLayout Orientation="Horizontal">
+            <Frame HasShadow="True" CornerRadius="25" WidthRequest="1000"   Margin= "50,10,50,0" BackgroundColor="Transparent" BorderColor="WhiteSmoke">
                  
                     <StackLayout Orientation="Horizontal" HorizontalOptions="FillAndExpand" VerticalOptions="Start">
                     <Image Source ="https://sec.ch9.ms/content/feedimage.png"   Aspect="AspectFit" HeightRequest="100" />
@@ -33,21 +34,41 @@
                         <Entry Grid.Row="3" Grid.Column="0" WidthRequest="4600" BackgroundColor="White" TextColor="Black"  Margin="2,0,0,0" VerticalOptions="Start"  HorizontalOptions="Start"   Text="{Binding NewFeed.url} " FontSize="12"></Entry>
 
 
-                        <controls:Checkbox  Grid.Row="1" Grid.Column="1" Margin="2,0,0,0"  
+                        <!--<controls:Checkbox  Grid.Row="1" Grid.Column="1" Margin="2,0,0,0"  
                                 VerticalOptions="StartAndExpand" 
                                 HorizontalOptions="StartAndExpand" 
                                 Checked="{Binding NewFeed.isActiveFeed}" 
                                 Text="{Binding TextCheckBox}" 
                                 Command="{Binding OnCheckedChanged}">
-                            </controls:Checkbox>
+                            </controls:Checkbox>-->
 
                         <Button Grid.Row="3" Grid.Column="1" Margin="2,0,0,0"  HeightRequest="80" WidthRequest="100" HorizontalOptions="StartAndExpand" VerticalOptions="StartAndExpand" FontSize="13" FontAttributes="Bold" BackgroundColor="Transparent" Text="Add Channel" TextColor="WhiteSmoke" Command="{Binding AddFeedCommand}" />
-                       
+
+
+
                     </Grid>
 
                     </StackLayout>
                  
             </Frame>
+                <Frame HasShadow="True" CornerRadius="25" WidthRequest="400"  Margin= "10,10,20,0" BackgroundColor="Transparent" BorderColor="WhiteSmoke">
+                    <StackLayout Orientation="Vertical">
+                        <controls:Checkbox  Grid.Row="2" Grid.Column="1" Margin="2,0,0,0"  
+                                VerticalOptions="StartAndExpand" 
+                                HorizontalOptions="StartAndExpand" 
+                                Checked="{Binding IsFullScreen}" 
+                                Text="Use Full Screen Mode (On Windows)" 
+                               >
+                        </controls:Checkbox>
+                        <StackLayout Orientation="Horizontal" >
+                            <Label Grid.Row="0" Grid.Column="0" Margin="2,0,0,0" VerticalOptions="End"  HorizontalOptions="Start" TextColor="WhiteSmoke" Text="Local Zip Code (For Weather):" FontSize="11"></Label>
+                            <Entry Grid.Row="1" Grid.Column="0" WidthRequest="120" BackgroundColor="White" TextColor="Black"  Margin="2,0,0,0" VerticalOptions="Start"  HorizontalOptions="Start"   Text="{Binding Zip} " FontSize="12"></Entry>
+
+
+                        </StackLayout>
+                    </StackLayout>
+                </Frame>
+            </StackLayout>
             <ListView BackgroundColor="Transparent" Margin= "100,10,400,0" x:Name="FeedListView" CachingStrategy="RecycleElement" SelectedItem="{Binding SelectedItem, Mode=TwoWay}" ItemsSource="{Binding FeedList}"  HasUnevenRows="true">
                 <ListView.ItemTemplate>
                     <DataTemplate>

@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:video="clr-namespace:FormsVideoLibrary"
+              xmlns:views="clr-namespace:AvanadeStudioTV.Views"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" x:Class="AvanadeStudioTV.Views.FullScreenVideoPage"
+             xmlns:ffimageloading="clr-namespace:FFImageLoading.Forms;assembly=FFImageLoading.Forms"
+             BackgroundImage = "BlackGradBack.png">
+
+
+    <ContentPage.Content>
+        <AbsoluteLayout  x:Name="MainLayout">
+            <Grid   x:Name = "MainGrid" AbsoluteLayout.LayoutBounds="1,1,1,1" AbsoluteLayout.LayoutFlags="All">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="78*" />
+                    <RowDefinition Height="12*" />
+                    <RowDefinition Height="10*" />
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="3*" />
+                    <ColumnDefinition Width="55*" />
+                    <ColumnDefinition Width="40*" />
+                    <ColumnDefinition Width="2*" />
+                </Grid.ColumnDefinitions>
+                <video:VideoPlayer Grid.Row="0" Grid.Column="0" Grid.RowSpan="3" Grid.ColumnSpan="4" x:Name="VideoPlayerView"   />
+                <Image Grid.Row="0" Grid.Column="2" Source="AvLeftHeader.png" WidthRequest="180" VerticalOptions="Start" HorizontalOptions="End" Margin="10,50,0,10"></Image>
+                
+                <!-- NOW PLAYING ITEM TITLE VIEW (HIDDEN VIEW THAT POPS UP)-->
+                <StackLayout  Grid.Row="1" Grid.Column="1" x:Name="TitleView"  Orientation="Horizontal" HorizontalOptions="FillAndExpand" VerticalOptions="StartAndExpand">
+                    <StackLayout.GestureRecognizers>
+                        <TapGestureRecognizer x:Name="TitleGestureRecognizer"
+                        Tapped="TitleView_Tapped"
+                           NumberOfTapsRequired="1" />
+                    </StackLayout.GestureRecognizers>
+                    <ffimageloading:CachedImage  HeightRequest="250" Margin="0,0,0,0"
+                                                VerticalOptions="StartAndExpand" Source="{Binding SharedData.SelectedItem.ChannelImageUrl}"
+                                                ErrorPlaceholder="AvanadeWhiteLogo.PNG" LoadingPlaceholder ="AvanadeWhiteLogo.PNG"  
+                                                Aspect="AspectFit" >
+
+
+                    </ffimageloading:CachedImage>
+
+
+                    <BoxView Margin="20,0,0,0"
+                               VerticalOptions="FillAndExpand"
+                               HorizontalOptions="Start"
+                               WidthRequest="10"
+                         HeightRequest="100"
+                            
+                               Color="{DynamicResource AvanadeOrange}"/>
+                    <Grid Margin="17,0,0,0" VerticalOptions="StartAndExpand" HorizontalOptions="FillAndExpand">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="4*" />
+                            <RowDefinition Height="13*" />
+                            <RowDefinition Height="83*" />
+
+
+
+
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="90*" />
+                            <ColumnDefinition Width="10*" />
+                        </Grid.ColumnDefinitions>
+                        <Image Source ="BlackGradBack.png" Opacity=".25" Margin="3,0,0,0" Aspect="Fill" Grid.Row="0" VerticalOptions="StartAndExpand" Grid.Column="0" Grid.RowSpan="3" Grid.ColumnSpan="3" />
+
+                        <Label Grid.Row="1" Grid.Column="0" Margin="5,0,0,0" VerticalOptions="FillAndExpand" VerticalTextAlignment="End" Style="{DynamicResource FontLabel}"   HorizontalOptions="Start" TextColor="White" Text="N O W  P L A Y I N G" FontSize="12" FontAttributes="Bold"></Label>
+                        <Label Grid.Row="2" Grid.Column="0" Margin="5,0,0,0" VerticalOptions="Center" VerticalTextAlignment="Center" Style="{DynamicResource FontLabel}"  HorizontalOptions="Start"  TextColor="White" Text="{Binding SharedData.SelectedItem.Title} " FontSize="Large"></Label>
+
+                    </Grid>
+                </StackLayout>
+                
+                <!-- NEXT ITEM TITLE VIEW (HIDDEN VIEW THAT POPS UP)-->
+                <StackLayout Grid.Row="1" Grid.Column="1"  x:Name="NextShowView"  Orientation="Horizontal" HorizontalOptions="FillAndExpand" VerticalOptions="StartAndExpand">
+                    <StackLayout.GestureRecognizers>
+                        <TapGestureRecognizer x:Name="NextVideoGestureRecognizer"
+                        Tapped="NextVideoView_Tapped"
+                           NumberOfTapsRequired="1" />
+                    </StackLayout.GestureRecognizers>
+
+                    <ffimageloading:CachedImage   HeightRequest="250" Margin="0,0,0,0"
+                                                VerticalOptions="StartAndExpand" Source="{Binding SharedData.NextItem.ChannelImageUrl}"
+                                                ErrorPlaceholder="AvanadeWhiteLogo.PNG" LoadingPlaceholder ="AvanadeWhiteLogo.PNG"  
+                                                Aspect="AspectFit" >
+
+                    </ffimageloading:CachedImage>
+
+
+                    <BoxView Margin="20,0,0,0"
+                               VerticalOptions="FillAndExpand"
+                               HorizontalOptions="Start"
+                               WidthRequest="10"
+                         HeightRequest="100"
+                            
+                               Color="{DynamicResource AvanadeOrange}"/>
+                    <Grid Margin="17,0,0,0" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="4*" />
+                            <RowDefinition Height="13*" />
+                            <RowDefinition Height="83*" />
+
+
+
+
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="90*" />
+                            <ColumnDefinition Width="10*" />
+                        </Grid.ColumnDefinitions>
+                        <Image Source ="BlackGradBack.png" Opacity=".25" Margin="3,0,0,0" Aspect="Fill" Grid.Row="0" VerticalOptions="StartAndExpand" Grid.Column="0" Grid.RowSpan="3" Grid.ColumnSpan="3" />
+
+
+                        <Label Grid.Row="1" Grid.Column="0" Margin="5,0,0,0" VerticalOptions="FillAndExpand" VerticalTextAlignment="End" Style="{DynamicResource FontLabel}"   HorizontalOptions="Start" TextColor="White" Text="N E X T  U P" FontSize="14" FontAttributes="Bold"></Label>
+                        <Label Grid.Row="2" Grid.Column="0" Margin="5,0,0,0" VerticalOptions="Center" VerticalTextAlignment="Center" Style="{DynamicResource FontLabel}"  HorizontalOptions="Start"  TextColor="White" Text="{Binding SharedData.NextItem.Title} " FontSize="Large"></Label>
+
+
+                    </Grid>
+
+                </StackLayout>
+            </Grid>
+
+
+            <AbsoluteLayout x:Name="HiddenViewLayout" AbsoluteLayout.LayoutBounds="0,0,1,1" AbsoluteLayout.LayoutFlags="PositionProportional" >
+                <views:BetweenVideoView x:Name="HiddenView" ></views:BetweenVideoView>
+            </AbsoluteLayout>
+
+
+        </AbsoluteLayout>
+
+
+    </ContentPage.Content>
+</ContentPage>

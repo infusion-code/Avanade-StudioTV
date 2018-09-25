@@ -134,7 +134,12 @@ namespace FormsVideoLibrary.UWP
         void SetAreTransportControlsEnabled()
         {
             Control.AreTransportControlsEnabled = Element.AreTransportControlsEnabled;
-        }
+
+			Control.TransportControls.IsCompact = true;
+
+		 
+
+		}
 
         async void SetSource()
         {

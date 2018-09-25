@@ -19,7 +19,7 @@
             <Frame HasShadow="False" Grid.Row="1" CornerRadius="25" Padding="2" BackgroundColor="Transparent">
                 <Frame HasShadow="False" CornerRadius="23" BackgroundColor= "Transparent" Padding="12">
                     <StackLayout Orientation="Horizontal" HorizontalOptions="FillAndExpand" VerticalOptions="Start">
-                        <Image Source ="StudioTVcircle.png"   Aspect="AspectFill" />
+                        <Image Source ="{Binding SelectedItem.ChannelImageUrl}"   Aspect="AspectFill" />
                         <Grid VerticalOptions="CenterAndExpand" HorizontalOptions="StartAndExpand">
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="70*" />

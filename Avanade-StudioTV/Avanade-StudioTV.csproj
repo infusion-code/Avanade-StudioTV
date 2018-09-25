@@ -17,23 +17,40 @@
     <PackageReference Include="HtmlAgilityPack" Version="1.8.6" />
     <PackageReference Include="Realm" Version="3.1.0" />
     <PackageReference Include="Xam.Plugin.HtmlLabel" Version="3.0.1.3-beta" />
+    <PackageReference Include="Xamarin.FFImageLoading" Version="2.4.3.840" />
+    <PackageReference Include="Xamarin.FFImageLoading.Forms" Version="2.4.3.840" />
+    <PackageReference Include="Xamarin.FFImageLoading.Svg" Version="2.4.3.840" />
+    <PackageReference Include="Xamarin.FFImageLoading.Svg.Forms" Version="2.4.3.840" />
     <PackageReference Include="Xamarin.Forms" Version="3.1.0.697729" />
     <PackageReference Include="Xamarin.Essentials" Version="0.9.1-preview" />
     <PackageReference Include="Xam.Plugin.WebView" Version="2.1.3" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Models\" />
     <Folder Include="Network\" />
   </ItemGroup>
   <ItemGroup>
     <Compile Remove="Models\FeedItem.cs" />
+    <Compile Remove="ViewModels\FullScreenListViewModel.cs" />
+    <Compile Remove="Views\FullScreenListView.xaml.cs" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Remove="Views\FullScreenListView.xaml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Update="Views\BigFeedCell.xaml.cs">
+      <DependentUpon>BigFeedCell.xaml</DependentUpon>
+    </Compile>
     <Compile Update="Views\SettingsCell.xaml.cs">
       <DependentUpon>SettingsCell.xaml</DependentUpon>
     </Compile>
+    <Compile Update="Views\FullScreenVideoPage.xaml.cs">
+      <DependentUpon>FullScreenVideoPage.xaml</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Update="Views\BetweenVideoView.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
     <EmbeddedResource Update="Views\SettingsPage.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
